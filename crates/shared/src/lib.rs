@@ -17,6 +17,8 @@ pub use swc_ecma_transforms_typescript;
 pub use swc_ecma_minifier;
 pub use swc_ecma_visit;
 pub use swc_ecma_preset_env;
+pub use swc_ecma_transforms_testing;
+pub use testing;
 pub extern crate napi;
 pub extern crate napi_derive;
 pub use serde;

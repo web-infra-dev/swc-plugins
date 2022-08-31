@@ -2,10 +2,12 @@ use std::sync::Arc;
 
 use shared::{swc::Compiler, swc_common::{SourceMap, sync::Lazy}};
 
-pub mod pass;
 pub mod transform;
 pub mod minify;
 
+/**
+ * Provide compiler
+ */
 pub static COMPILER: Lazy<Arc<Compiler>> = Lazy::new(|| {
   let cm = Arc::new(SourceMap::default());
 

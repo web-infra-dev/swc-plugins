@@ -1,9 +1,12 @@
 [package]
+edition = "2021"
 name = "transform"
 version = "0.1.0"
-edition = "2021"
 
 [dependencies]
 regex = "1.6.0"
-shared = { path = "../shared" }
 serde = "1.0.143"
+shared = {path = "../shared"}
+modularize_imports = {path = "../modularize_imports"}
+plugin_import = {path = "../plugin_import"}
+either = "1.8.0"

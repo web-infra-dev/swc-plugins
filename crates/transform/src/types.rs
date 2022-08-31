@@ -1,10 +1,19 @@
+use std::collections::HashMap;
+
+use modularize_imports::PackageConfig;
 use shared::{
   serde::Deserialize,
   swc::config::{Options},
 };
+use plugin_import::PluginImportItem;
 
-#[derive(Debug, Deserialize)]
+/**
+ * Internal any plugin
+ */
+#[derive(Debug, Deserialize, Default)]
+#[serde(rename_all="camelCase")]
 pub struct Extensions {
+    pub modularize_imports: Option<HashMap<String, PackageConfig>>,
     pub plugin_import: Option<Vec<PluginImportItem>>
 }
 
@@ -16,15 +25,4 @@ pub struct TransformConfig {
 
   /// Internal rust-swc Plugins
   pub extensions: Extensions
-}
-
-#[derive(Debug, Deserialize)]
-pub struct PluginImportItem {
-  pub source: String,
-
-  pub transform_es: String,
-  pub transform_style: String,
-
-  pub ignore_components: Option<Vec<String>>,
-  pub lower: bool,
 }

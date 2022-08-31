@@ -1,6 +1,6 @@
 {
-  "name": "@modern-js/modern-swc-win32-x64-msvc",
-  "version": "0.0.0-alpha.0",
+  "name": "@v-editor/modern-swc-win32-x64-msvc",
+  "version": "0.0.0",
   "os": [
     "win32"
   ],
@@ -13,6 +13,6 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">= 12"
+    "node": ">= 10"
   }
 }

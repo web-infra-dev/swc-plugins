@@ -1,0 +1,16 @@
+[package]
+edition = "2021"
+name = "plugin_import"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+handlebars = "4.3.3"
+regex = "1.6.0"
+shared = {path = "../shared"}
+serde = "1.0.144"
+
+[dev-dependencies]
+swc_ecma_transforms_testing = "0.108.0"
+testing_macros = "0.2.7"

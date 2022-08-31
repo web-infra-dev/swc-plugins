@@ -1,7 +1,6 @@
 use core::transform::transform;
 
 use shared::swc::config::Options;
-use transform::types::Extensions;
 
 #[test]
 fn test() {
@@ -19,9 +18,7 @@ fn test() {
       .unwrap(),
       ..Default::default()
     },
-    extensions: Extensions {
-      plugin_import: None,
-    },
+    extensions: Default::default(),
   };
 
   let res = transform(config, code).unwrap();
