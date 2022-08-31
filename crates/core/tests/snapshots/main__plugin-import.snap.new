@@ -1,0 +1,10 @@
+---
+source: crates/core/tests/main.rs
+assertion_line: 20
+expression: res.code
+---
+const a = {};
+const b = {
+    ...a
+};
+

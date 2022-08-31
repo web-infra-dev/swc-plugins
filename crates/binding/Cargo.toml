@@ -1,0 +1,20 @@
+[package]
+edition = "2021"
+name = "modern_swc_binding"
+version = "0.1.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[features]
+dev = []
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+shared = {path = "../shared"}
+transform = {path = "../transform"}
+core = { path="../core" }
+napi-build = "2.0.1"
+napi = "2.8.0"
+miette = { version = "5.3.0", features = ["fancy"] }

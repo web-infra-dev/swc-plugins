@@ -1,0 +1,51 @@
+{
+  "name": "@modern-js/modern-swc",
+  "description": "SWC support for modern-js",
+  "homepage": "https://modernjs.dev",
+  "bugs": "https://github.com/modern-js-dev/modern.js/issues",
+  "repository": "modern-js-dev/modern.js",
+  "license": "MIT",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": "./index.js",
+    "./binding": "./binding.js",
+    "./loader": "./dist/loader.js",
+    "./plugin": "./dist/plugin.js"
+  },
+  "version": "0.0.1",
+  "devDependencies": {
+    "@napi-rs/cli": "^2.10.1",
+    "@swc/cli": "^0.1.57",
+    "@swc/core": "^1.2.220",
+    "@types/node": "^18.7.1",
+    "@types/webpack": "^5.28.0",
+    "vitest": "^0.22.0"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "scripts": {
+    "artifacts": "napi artifacts",
+    "build": "npm run napi:prod && npm run artifacts",
+    "build:dev": "npm run napi",
+    "prepublishOnly": "napi prepublish -t npm",
+    "test": "vitest run",
+    "test:dev": "vitest",
+    "version": "napi version",
+    "napi:prod": "napi build --cargo-cwd crates/binding --js index.js --js-package-name modern-swc --platform --release",
+    "napi": "napi build --cargo-cwd crates/binding --platform --js index.js"
+  },
+  "napi": {
+    "name": "modern-swc",
+    "triples": {
+      "defaults": false,
+      "additional": [
+        "aarch64-apple-darwin",
+        "x86_64-apple-darwin",
+        "x86_64-unknown-linux-gnu",
+        "x86_64-pc-windows-msvc"
+      ]
+    }
+  }
+}

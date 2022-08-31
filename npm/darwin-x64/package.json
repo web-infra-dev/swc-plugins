@@ -1,0 +1,18 @@
+{
+  "name": "@modern-js/modern-swc-darwin-x64",
+  "version": "0.0.0-alpha.0",
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "modern-swc.darwin-x64.node",
+  "files": [
+    "modern-swc.darwin-x64.node"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 12"
+  }
+}
