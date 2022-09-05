@@ -1,6 +1,6 @@
 {
-  "name": "@v-editor/modern-swc-darwin-x64",
-  "version": "0.0.0",
+  "name": "@modern-js/modern-swc-darwin-x64",
+  "version": "0.0.1",
   "os": [
     "darwin"
   ],
@@ -11,8 +11,15 @@
   "files": [
     "modern-swc.darwin-x64.node"
   ],
-  "license": "MIT",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "engines": {
     "node": ">= 10"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   }
 }

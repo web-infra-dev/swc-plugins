@@ -1,15 +1,15 @@
 {
-  "name": "@modern-js/modern-swc-darwin-arm64",
+  "name": "@modern-js/modern-swc-freebsd-x64",
   "version": "0.0.1",
   "os": [
-    "darwin"
+    "freebsd"
   ],
   "cpu": [
-    "arm64"
+    "x64"
   ],
-  "main": "modern-swc.darwin-arm64.node",
+  "main": "modern-swc.freebsd-x64.node",
   "files": [
-    "modern-swc.darwin-arm64.node"
+    "modern-swc.freebsd-x64.node"
   ],
   "description": "",
   "keywords": [],

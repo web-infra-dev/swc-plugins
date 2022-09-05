@@ -1,6 +1,6 @@
 {
-  "name": "@v-editor/modern-swc-win32-x64-msvc",
-  "version": "0.0.0",
+  "name": "@modern-js/modern-swc-win32-x64-msvc",
+  "version": "0.0.1",
   "os": [
     "win32"
   ],
@@ -11,8 +11,15 @@
   "files": [
     "modern-swc.win32-x64-msvc.node"
   ],
-  "license": "MIT",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "engines": {
     "node": ">= 10"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   }
 }

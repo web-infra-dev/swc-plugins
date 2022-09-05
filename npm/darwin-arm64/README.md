@@ -1,3 +1,3 @@
-# `@v-editor/modern-swc-darwin-arm64`
+# `@modern-js/modern-swc-darwin-arm64`
 
-This is the **aarch64-apple-darwin** binary for `@v-editor/modern-swc`
+This is the **aarch64-apple-darwin** binary for `@modern-js/modern-swc`

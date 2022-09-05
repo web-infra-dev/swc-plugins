@@ -1,3 +1,3 @@
-# `@v-editor/modern-swc-linux-arm64-musl`
+# `@modern-js/modern-swc-linux-arm64-musl`
 
-This is the **aarch64-unknown-linux-musl** binary for `@v-editor/modern-swc`
+This is the **aarch64-unknown-linux-musl** binary for `@modern-js/modern-swc`

@@ -1,15 +1,15 @@
 {
-  "name": "@modern-js/modern-swc-darwin-arm64",
+  "name": "@modern-js/modern-swc-linux-arm-gnueabihf",
   "version": "0.0.1",
   "os": [
-    "darwin"
+    "linux"
   ],
   "cpu": [
-    "arm64"
+    "arm"
   ],
-  "main": "modern-swc.darwin-arm64.node",
+  "main": "modern-swc.linux-arm-gnueabihf.node",
   "files": [
-    "modern-swc.darwin-arm64.node"
+    "modern-swc.linux-arm-gnueabihf.node"
   ],
   "description": "",
   "keywords": [],
