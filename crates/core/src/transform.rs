@@ -1,6 +1,7 @@
 use crate::get_compiler;
 use shared::{
   anyhow::Result,
+  napi::Env,
   swc::{self, try_with_handler, HandlerOpts, TransformOutput},
   swc_common::FileName,
   swc_ecma_transforms_base::pass::noop,
@@ -8,7 +9,7 @@ use shared::{
 
 use transform::{pass::internal_transform_pass, types::TransformConfig};
 
-pub fn transform(config: TransformConfig, code: &str) -> Result<TransformOutput> {
+pub fn transform(env: Option<Env>, mut config: TransformConfig, code: &str) -> Result<TransformOutput> {
   let compiler = get_compiler();
   let cm = compiler.cm.clone();
 
@@ -23,10 +24,8 @@ pub fn transform(config: TransformConfig, code: &str) -> Result<TransformOutput>
         fm,
         None,
         handler,
-        &swc::config::Options {
-          ..config.swc.clone()
-        },
-        |_, _| internal_transform_pass(&config),
+        &swc::config::Options { ..config.swc.clone() },
+        |_, _| internal_transform_pass(env, &mut config),
         |_, _| noop(),
       )
     })

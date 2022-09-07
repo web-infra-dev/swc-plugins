@@ -21,6 +21,6 @@ fn test() {
     extensions: Default::default(),
   };
 
-  let res = transform(config, code).unwrap();
+  let res = transform(None, config, code).unwrap();
   insta::assert_snapshot!("plugin-import", res.code);
 }

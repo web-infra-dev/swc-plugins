@@ -901,9 +901,9 @@ dependencies = [
 
 [[package]]
 name = "napi"
-version = "2.8.0"
+version = "2.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d57c55276d633b92dcfce3c8c0c83d3f9ebf02ebfd61bc06bdc817210ea562e"
+checksum = "0e2f9ad803cde148d81d0ca9e5fd4d80773d15e992d09e3a44f62f41b9af4558"
 dependencies = [
  "bitflags",
  "ctor",
@@ -2641,6 +2641,7 @@ version = "0.1.0"
 dependencies = [
  "either",
  "modularize_imports",
+ "napi",
  "plugin_import",
  "regex",
  "serde",

@@ -32,7 +32,7 @@ use regex::{Captures, Regex};
 use serde::{Deserialize, Serialize};
 use shared::{
   swc_ecma_ast::{ImportDecl, ImportDefaultSpecifier, ImportSpecifier, ModuleExportName, Str, ModuleDecl, ModuleItem, Module},
-  swc_ecma_visit::{noop_fold_type, Fold},
+  swc_ecma_visit::{noop_fold_type, Fold}, napi_derive::napi, napi,
 };
 use swc_cached::regex::CachedRegex;
 
@@ -46,6 +46,7 @@ pub struct Config {
 
 #[derive(Clone, Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
+#[napi(object)]
 pub struct PackageConfig {
   pub transform: String,
   #[serde(default)]

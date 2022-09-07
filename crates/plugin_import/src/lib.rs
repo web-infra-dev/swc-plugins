@@ -1,35 +1,18 @@
 mod visit;
 
 use crate::visit::IdentComponent;
-use handlebars::Handlebars;
-use serde::{self, Deserialize, Serialize};
+use serde::{self, Serialize};
+use shared::napi::{Env, JsFunction};
 use shared::swc_ecma_ast::{
   self, Ident, ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleItem,
   Str,
 };
 use shared::swc_ecma_visit::{as_folder, Fold, VisitMut, VisitWith};
+use shared::{napi, napi_derive::napi};
 use shared::{swc_atoms::JsWord, swc_common::DUMMY_SP};
 
-pub fn plugin_import<'a>(config: &'a Vec<PluginImportItem>) -> impl Fold + 'a {
-  let config = config
-    .iter()
-    .map(|item| {
-      let mut handlebars = Handlebars::new();
-
-      handlebars
-        .register_template_string(&format!("{}-es", item.source), &item.transform_es)
-        .unwrap();
-      if let Some(ref transform_style) = item.transform_style {
-        handlebars
-          .register_template_string(&format!("{}-style", item.source), transform_style)
-          .unwrap();
-      }
-
-      (item, handlebars)
-    })
-    .collect();
-
-  as_folder(ImportPlugin { config })
+pub fn plugin_import<'a>(config: Vec<PluginImportConfig>, env: Env) -> impl Fold + 'a {
+  as_folder(ImportPlugin { config, env })
 }
 
 pub struct EsSpec {
@@ -37,24 +20,12 @@ pub struct EsSpec {
   default_spec: String,
 }
 
-pub struct ImportPlugin<'a> {
-  pub config: Vec<(&'a PluginImportItem, Handlebars<'a>)>,
+pub struct ImportPlugin {
+  pub config: Vec<PluginImportConfig>,
+  pub env: Env,
 }
 
-impl<'a> ImportPlugin<'a> {
-  fn transform(&self, handlebars: &'a Handlebars, tpl: &str, member: &str) -> String {
-    #[derive(Serialize)]
-    struct Data<'a> {
-      member: &'a str,
-    }
-    let data = Data { member };
-    handlebars
-      .render(tpl, &data)
-      .expect("render template failed")
-  }
-}
-
-impl<'a> VisitMut for ImportPlugin<'a> {
+impl VisitMut for ImportPlugin {
   fn visit_mut_module(&mut self, module: &mut Module) {
     // let s = serde_json::to_string_pretty(&module).expect("failed to serialize");
 
@@ -83,50 +54,72 @@ impl<'a> VisitMut for ImportPlugin<'a> {
       let item_index = module.body.iter().position(|citem| citem == item).unwrap();
       if let ModuleItem::ModuleDecl(ModuleDecl::Import(var)) = item {
         let source = &*var.src.value;
-        if let Some((child_config, handlebars)) = config.iter().find(|&(c, _)| c.source == source) {
+        if let Some(child_config) = config.iter().find(|&c| c.from_source == source) {
           for specifier in &var.specifiers {
             match specifier {
               ImportSpecifier::Named(ref s) => {
                 let ident: String = s.local.sym.to_string();
                 if match_ident(&s.local) {
-                  // replace style
-                  let ignore_component = &child_config.ignore_components;
 
-                  let css_ident = if child_config.snake_case {
-                    camel2snake(&ident)
-                  } else {
-                    ident.clone()
-                  };
-                  let mut need_replace = true;
-                  if let Some(block_list) = ignore_component {
-                    need_replace = !block_list.iter().map(|c| c.as_str()).any(|x| x == ident);
-                  }
-                  if need_replace && child_config.transform_style.is_some() {
-                    let import_css_source =
-                      self.transform(handlebars, &format!("{}-style", source), &css_ident);
-                    specifiers_css.push(import_css_source);
+                  if let Some(ref css) = child_config.replace_css {
+                    let ignore_component = &css.ignore_style_component;
+                    let need_lower = css.lower.unwrap_or(false);
+                    let css_ident = if need_lower {
+                      camel2snake(&ident)
+                    } else {
+                      ident.clone()
+                    };
+                    let mut need_replace = true;
+                    if let Some(block_list) = ignore_component {
+                      need_replace = !block_list.iter().map(|c| c.as_str()).any(|x| x == ident);
+                    }
+                    if need_replace {
+                      let import_css_source = css
+                        .replace_expr
+                        .call(None, &[self.env.create_string(css_ident.as_str()).unwrap()])
+                        .unwrap()
+                        .coerce_to_string()
+                        .unwrap()
+                        .into_utf8()
+                        .unwrap()
+                        .as_str()
+                        .unwrap()
+                        .to_string();
+                      specifiers_css.push(import_css_source);
+                    }
                   }
 
-                  // replace es
-                  let ignore_component = &child_config.ignore_components;
-
-                  let mut js_ident = ident.clone();
-                  if child_config.snake_case {
-                    js_ident = camel2snake(&js_ident);
-                  }
-                  let mut need_replace = true;
-                  if let Some(block_list) = ignore_component {
-                    need_replace = !block_list.iter().map(|c| c.as_str()).any(|x| x == ident);
-                  }
-                  if need_replace {
-                    let import_es_source =
-                      self.transform(handlebars, &format!("{}-es", source), &js_ident);
-                    specifiers_es.push(EsSpec {
-                      source: import_es_source,
-                      default_spec: ident,
-                    });
-                    if !specifiers_rm_es.iter().any(|&c| c == item_index) {
-                      specifiers_rm_es.push(item_index);
+                  if let Some(ref js_config) = child_config.replace_js {
+                    let ignore_component = &js_config.ignore_es_component;
+                    let need_lower = js_config.lower.unwrap_or(false);
+                    let js_ident = if need_lower {
+                      camel2snake(&ident)
+                    } else {
+                      ident.clone()
+                    };
+                    let mut need_replace = true;
+                    if let Some(block_list) = ignore_component {
+                      need_replace = !block_list.iter().map(|c| c.as_str()).any(|x| x == ident);
+                    }
+                    if need_replace {
+                      let import_es_source = js_config
+                        .replace_expr
+                        .call(None, &[self.env.create_string(js_ident.as_str()).unwrap()])
+                        .unwrap()
+                        .coerce_to_string()
+                        .unwrap()
+                        .into_utf8()
+                        .unwrap()
+                        .as_str()
+                        .unwrap()
+                        .to_string();
+                      specifiers_es.push(EsSpec {
+                        source: import_es_source,
+                        default_spec: ident,
+                      });
+                      if !specifiers_rm_es.iter().any(|&c| c == item_index) {
+                        specifiers_rm_es.push(item_index);
+                      }
                     }
                   }
                 }
@@ -191,19 +184,29 @@ impl<'a> VisitMut for ImportPlugin<'a> {
   }
 }
 
-#[derive(Debug, Deserialize, Clone)]
-#[serde(rename_all="camelCase")]
-pub struct PluginImportItem {
-  pub source: String,
+#[napi(object)]
+pub struct PluginImportConfig {
+  pub from_source: String,
+  pub replace_css: Option<ReplaceCssConfig>,
+  pub replace_js: Option<ReplaceSpecConfig>,
+}
 
-  pub transform_es: String, // template syntax: foo/lib/{{member}}
-  #[serde(default)]
-  pub transform_style: Option<String>, // template syntax: foo/lib/{{member}}
+#[napi(object)]
+#[derive(Serialize)]
+pub struct ReplaceSpecConfig {
+  #[serde(skip_serializing)]
+  pub replace_expr: JsFunction,
+  pub ignore_es_component: Option<Vec<String>>,
+  pub lower: Option<bool>,
+}
 
-  #[serde(default)]
-  pub ignore_components: Option<Vec<String>>,
-  #[serde(default)]
-  pub snake_case: bool,
+#[napi(object)]
+#[derive(Serialize)]
+pub struct ReplaceCssConfig {
+  pub ignore_style_component: Option<Vec<String>>,
+  #[serde(skip_serializing)]
+  pub replace_expr: JsFunction,
+  pub lower: Option<bool>,
 }
 
 // camelCase -> snake_case
