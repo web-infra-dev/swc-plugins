@@ -243,8 +243,8 @@ name = "core"
 version = "0.1.0"
 dependencies = [
  "insta",
+ "pass",
  "shared",
- "transform",
 ]
 
 [[package]]
@@ -881,8 +881,8 @@ dependencies = [
  "miette 5.3.0",
  "napi",
  "napi-build",
+ "pass",
  "shared",
- "transform",
 ]
 
 [[package]]
@@ -1080,6 +1080,19 @@ dependencies = [
  "redox_syscall",
  "smallvec",
  "windows-sys",
+]
+
+[[package]]
+name = "pass"
+version = "0.1.0"
+dependencies = [
+ "either",
+ "modularize_imports",
+ "napi",
+ "plugin_import",
+ "regex",
+ "serde",
+ "shared",
 ]
 
 [[package]]
@@ -2633,19 +2646,6 @@ dependencies = [
  "tracing",
  "tracing-core",
  "tracing-log",
-]
-
-[[package]]
-name = "transform"
-version = "0.1.0"
-dependencies = [
- "either",
- "modularize_imports",
- "napi",
- "plugin_import",
- "regex",
- "serde",
- "shared",
 ]
 
 [[package]]

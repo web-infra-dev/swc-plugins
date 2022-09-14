@@ -13,7 +13,7 @@ dev = []
 
 [dependencies]
 shared = {path = "../shared"}
-transform = {path = "../transform"}
+pass = {path = "../pass"}
 core = { path="../core" }
 napi-build = "2.0.1"
 napi = "2.8.0"

@@ -6,7 +6,7 @@ use shared::{swc_common::chain, swc_ecma_transforms_base::pass::noop, swc_ecma_v
 use modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use plugin_import::plugin_import;
 
-pub fn internal_transform_pass(env: Option<Env>, config: &mut TransformConfig) -> impl Fold + '_ {
+pub fn internal_transform_pass<'a>(env: Option<Env>, config: &'a mut TransformConfig) -> impl Fold + 'a {
   let modularize_imports = config
     .extensions
     .modularize_imports
@@ -21,7 +21,7 @@ pub fn internal_transform_pass(env: Option<Env>, config: &mut TransformConfig) -
   let plugin_import = config
     .extensions
     .plugin_import
-    .take()
+    .as_ref()
     .map(|config| Either::Left(plugin_import(config, env.unwrap())))
     .unwrap_or(Either::Right(noop()));
 

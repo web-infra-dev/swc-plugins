@@ -11,7 +11,6 @@ use crate::create_output;
 pub struct Minifier {
   code: String,
   filename: String,
-  map: Option<String>,
   config: JsMinifyOptions,
 }
 
@@ -22,9 +21,8 @@ impl Task for Minifier {
   fn compute(&mut self) -> napi::Result<Self::Output> {
     core::minify::minify(
       &self.config,
-      self.code.clone(),
       self.filename.clone(),
-      self.map.clone(),
+      self.code.clone(),
     )
     .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
   }
@@ -38,14 +36,12 @@ impl Task for Minifier {
 #[napi(ts_return_type = "Promise<{ code: string, map?: string }>")]
 pub fn minify(
   config: String,
-  code: String,
   filename: String,
-  map: Option<String>,
+  code: String,
 ) -> AsyncTask<Minifier> {
   AsyncTask::new(Minifier {
     code,
     filename,
-    map,
     config: serde_json::from_str(&config).unwrap(),
   })
 }

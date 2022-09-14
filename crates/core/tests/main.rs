@@ -1,12 +1,15 @@
 use core::transform::transform;
 
+use pass::types::Extensions;
 use shared::swc::config::Options;
 
 #[test]
 fn test() {
   let code = "const a = {};
   const b = { ...a }";
-  let config = transform::types::TransformConfig {
+  let mut extension: Extensions = Default::default();
+
+  let config = pass::types::TransformConfig {
     swc: Options {
       config: shared::serde_json::from_str(
         r#"{
@@ -18,7 +21,7 @@ fn test() {
       .unwrap(),
       ..Default::default()
     },
-    extensions: Default::default(),
+    extensions: &mut extension,
   };
 
   let res = transform(None, config, code).unwrap();

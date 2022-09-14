@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 shared = { path = "../shared" }
-transform = { path = "../transform" }
+pass = { path = "../pass" }
 
 [dev-dependencies]
 insta = "1.18.2"

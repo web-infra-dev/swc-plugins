@@ -1,7 +1,7 @@
 mod visit;
 
 use crate::visit::IdentComponent;
-use serde::{self, Serialize};
+use serde::{self, Serialize, Deserialize};
 use shared::napi::{Env, JsFunction};
 use shared::swc_ecma_ast::{
   self, Ident, ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleItem,
@@ -11,7 +11,7 @@ use shared::swc_ecma_visit::{as_folder, Fold, VisitMut, VisitWith};
 use shared::{napi, napi_derive::napi};
 use shared::{swc_atoms::JsWord, swc_common::DUMMY_SP};
 
-pub fn plugin_import<'a>(config: Vec<PluginImportConfig>, env: Env) -> impl Fold + 'a {
+pub fn plugin_import<'a>(config: &'a Vec<PluginImportConfig>, env: Env) -> impl Fold + 'a {
   as_folder(ImportPlugin { config, env })
 }
 
@@ -20,12 +20,12 @@ pub struct EsSpec {
   default_spec: String,
 }
 
-pub struct ImportPlugin {
-  pub config: Vec<PluginImportConfig>,
+pub struct ImportPlugin<'a> {
+  pub config: &'a Vec<PluginImportConfig>,
   pub env: Env,
 }
 
-impl VisitMut for ImportPlugin {
+impl<'a> VisitMut for ImportPlugin<'a> {
   fn visit_mut_module(&mut self, module: &mut Module) {
     // let s = serde_json::to_string_pretty(&module).expect("failed to serialize");
 
@@ -191,10 +191,17 @@ pub struct PluginImportConfig {
   pub replace_js: Option<ReplaceSpecConfig>,
 }
 
+/* 
+safety: js_function is Option, if is Some then should be running in single thread env
+ */
+unsafe impl Send for PluginImportConfig {}
+unsafe impl Sync for PluginImportConfig {}
+
 #[napi(object)]
 #[derive(Serialize)]
 pub struct ReplaceSpecConfig {
   #[serde(skip_serializing)]
+  #[napi(ts_type = "(member: string) => string")]
   pub replace_expr: JsFunction,
   pub ignore_es_component: Option<Vec<String>>,
   pub lower: Option<bool>,
@@ -203,9 +210,10 @@ pub struct ReplaceSpecConfig {
 #[napi(object)]
 #[derive(Serialize)]
 pub struct ReplaceCssConfig {
-  pub ignore_style_component: Option<Vec<String>>,
   #[serde(skip_serializing)]
+  #[napi(ts_type = "(member: string) => string")]
   pub replace_expr: JsFunction,
+  pub ignore_style_component: Option<Vec<String>>,
   pub lower: Option<bool>,
 }
 

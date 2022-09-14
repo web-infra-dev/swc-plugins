@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use crate::get_compiler;
 use shared::{
   anyhow::Result,
@@ -7,7 +9,7 @@ use shared::{
   swc_ecma_transforms_base::pass::noop,
 };
 
-use transform::{pass::internal_transform_pass, types::TransformConfig};
+use pass::{internal_transform_pass, types::TransformConfig};
 
 pub fn transform(env: Option<Env>, mut config: TransformConfig, code: &str) -> Result<TransformOutput> {
   let compiler = get_compiler();
@@ -15,9 +17,8 @@ pub fn transform(env: Option<Env>, mut config: TransformConfig, code: &str) -> R
 
   try_with_handler(cm.clone(), HandlerOpts::default(), |handler| {
     compiler.run_transform(handler, true, || {
-      let source_filename = "test";
       let fm = cm.new_source_file(
-        FileName::Custom(source_filename.to_string()),
+        FileName::Real(PathBuf::from(&config.swc.filename)),
         code.to_string(),
       );
       compiler.process_js_with_custom_pass(
