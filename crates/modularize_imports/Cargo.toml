@@ -16,6 +16,7 @@ regex = "1.5"
 serde = "1"
 shared = {path = "../shared"}
 swc_cached = "0.1.1"
+heck = "0.4.0"
 
 [dev-dependencies]
 swc_ecma_transforms_testing = "0.108.0"

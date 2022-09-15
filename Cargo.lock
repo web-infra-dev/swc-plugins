@@ -517,6 +517,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "heck"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2540771e65fc8cb83cd6e8a237f70c319bd5c29f78ed1084ba5d50eeac86f7f9"
+
+[[package]]
 name = "hermit-abi"
 version = "0.1.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -890,6 +896,7 @@ name = "modularize_imports"
 version = "0.11.0"
 dependencies = [
  "handlebars",
+ "heck",
  "once_cell",
  "regex",
  "serde",
@@ -1212,6 +1219,7 @@ name = "plugin_import"
 version = "0.1.0"
 dependencies = [
  "handlebars",
+ "heck",
  "regex",
  "serde",
  "shared",

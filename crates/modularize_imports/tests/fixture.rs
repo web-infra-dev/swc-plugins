@@ -44,6 +44,14 @@ fn modularize_imports_fixture(input: PathBuf) {
                             skip_default_conversion: true,
                         },
                     ),
+                     (
+                        "my-library-3".to_string(),
+                        PackageConfig {
+                            transform: "my-library-3/{{ snakeCase member }}".into(),
+                            prevent_full_import: false,
+                            skip_default_conversion: false,
+                        },
+                    ),
                 ]
                 .into_iter()
                 .collect(),

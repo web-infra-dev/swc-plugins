@@ -27,12 +27,18 @@ use std::borrow::Cow;
 use std::collections::HashMap;
 
 use handlebars::{Context, Handlebars, Helper, HelperResult, Output, RenderContext};
+use heck::ToKebabCase;
 use once_cell::sync::Lazy;
 use regex::{Captures, Regex};
 use serde::{Deserialize, Serialize};
 use shared::{
-  swc_ecma_ast::{ImportDecl, ImportDefaultSpecifier, ImportSpecifier, ModuleExportName, Str, ModuleDecl, ModuleItem, Module},
-  swc_ecma_visit::{noop_fold_type, Fold}, napi_derive::napi, napi,
+  napi,
+  napi_derive::napi,
+  swc_ecma_ast::{
+    ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleExportName,
+    ModuleItem, Str,
+  },
+  swc_ecma_visit::{noop_fold_type, Fold},
 };
 use swc_cached::regex::CachedRegex;
 
@@ -203,6 +209,9 @@ pub fn modularize_imports(config: Config) -> impl Fold {
   folder
     .renderer
     .register_helper("camelCase", Box::new(helper_camel_case));
+  folder
+    .renderer
+    .register_helper("kebabCase", Box::new(helper_kebab_case));
   for (mut k, v) in config.packages {
     // XXX: Should we keep this hack?
     if !k.starts_with('^') && !k.ends_with('$') {
@@ -259,5 +268,19 @@ fn helper_camel_case(
     Cow::Owned(fst.to_lowercase().chain(it).collect::<String>())
   };
   out.write(value.as_ref())?;
+  Ok(())
+}
+
+fn helper_kebab_case(
+  h: &Helper<'_, '_>,
+  _: &Handlebars<'_>,
+  _: &Context,
+  _: &mut RenderContext<'_, '_>,
+  out: &mut dyn Output,
+) -> HelperResult {
+  // get parameter from helper or throw an error
+  let param = h.param(0).and_then(|v| v.value().as_str()).unwrap_or("");
+  let value = param.to_kebab_case();
+  out.write(&value)?;
   Ok(())
 }

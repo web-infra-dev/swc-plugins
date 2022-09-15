@@ -1,41 +1,37 @@
-use shared::swc_ecma_ast::{Ident, JSXElement, JSXElementName, TsEntityName, TsTypeRef};
+use std::collections::HashSet;
+
+use shared::swc_ecma_ast::{Ident, TsTypeRef, Id, ImportDecl};
 use shared::swc_ecma_visit::Visit;
 use shared::swc_ecma_visit::VisitWith;
 
 #[derive(Default)]
 pub struct IdentComponent {
-  pub component_name_jsx_ident: Vec<(String, u32)>,
-  pub ident_list: Vec<(String, u32)>,
-  pub ts_type_ident_list: Vec<(String, u32)>,
+  pub ident_set: HashSet<Id>,
+  pub type_ident_set: HashSet<Id>,
+  pub in_ts_type_ref: bool,
 }
 
+///
+/// track ident reference
+///
 impl Visit for IdentComponent {
-  fn visit_jsx_element(&mut self, jsx: &JSXElement) {
-    let mut component_name = match &jsx.opening.name {
-      JSXElementName::Ident(ident) => (ident.to_string(), ident.span.ctxt.as_u32()),
-      JSXElementName::JSXMemberExpr(member) => {
-        (member.prop.to_string(), member.prop.span.ctxt.as_u32())
-      }
-      JSXElementName::JSXNamespacedName(space) => {
-        (space.name.to_string(), space.name.span.ctxt.as_u32())
-      }
-    };
-    component_name.0 = component_name.0.replace("#0", "");
-    self.component_name_jsx_ident.push(component_name);
-    jsx.children.visit_with(self);
-  }
+  // need to skip import decl
+  fn visit_import_decl(&mut self, _: &ImportDecl) {}
 
   fn visit_ident(&mut self, ident: &Ident) {
-    self
-      .ident_list
-      .push((ident.sym.to_string(), ident.span.ctxt.as_u32()));
+    if self.in_ts_type_ref {
+      self.type_ident_set.insert(ident.to_id());
+    } else {
+      self.ident_set.insert(ident.to_id());
+    }
   }
 
-  fn visit_ts_type_ref(&mut self, ts_type: &TsTypeRef) {
-    if let TsEntityName::Ident(ident) = &ts_type.type_name {
-      self
-        .ident_list
-        .push((ident.sym.to_string(), ident.span.ctxt.as_u32()));
-    }
+  fn visit_ts_type_ref(&mut self, type_ref: &TsTypeRef) {
+    let store_in_ts_type_ref = self.in_ts_type_ref;
+    self.in_ts_type_ref = true;
+
+    type_ref.type_name.visit_with(self);
+
+    self.in_ts_type_ref = store_in_ts_type_ref;
   }
 }
