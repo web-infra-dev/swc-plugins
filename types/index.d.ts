@@ -1,16 +1,16 @@
 /**
  * Internal plugins
  */
-export interface Extensions<Async extends boolean> {
+export interface Extensions {
   modularizeImports?: import("../crates/modularize_imports").config;
-  pluginImport?: import("../crates/plugin_import").config<Async>;
+  pluginImport?: import("../crates/plugin_import").config;
 }
 
-export interface TransformConfig<Async extends boolean> {
+export interface TransformConfig {
   /** Raw swc options */
-  swc: import("./swcTypes").Options;
+  swc?: import("./swcTypes").Options;
   /** Internal rust-swc Plugins */
-  extensions: Extensions<Async>;
+  extensions?: Extensions;
 }
 
 export function minify(
@@ -26,11 +26,15 @@ export interface Output {
 }
 
 export function transformSync(
-  config: TransformConfig<false>,
-  code: string
+  code: string,
+  filename: string,
+  map?: string,
+  config?: TransformConfig
 ): Output;
 
 export function transform(
-  config: TransformConfig<true>,
-  code: string
+  code: string,
+  filename: string,
+  map?: string,
+  config?: TransformConfig
 ): Promise<Output>;

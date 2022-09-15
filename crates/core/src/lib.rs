@@ -1,9 +1,12 @@
 use std::sync::Arc;
 
-use shared::{swc::Compiler, swc_common::{SourceMap, sync::Lazy}};
+use shared::{
+  swc::Compiler,
+  swc_common::{sync::Lazy, SourceMap},
+};
 
-pub mod transform;
 pub mod minify;
+pub mod transform;
 
 /**
  * Provide compiler

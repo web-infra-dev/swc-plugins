@@ -6,7 +6,7 @@
   "repository": "modern-js-dev/modern.js",
   "license": "MIT",
   "main": "./index.js",
-  "types": "./index.d.ts",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": "./index.js",
     "./binding": "./binding.js",

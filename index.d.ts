@@ -51,5 +51,5 @@ interface TransformConfigAsync extends TransformConfigNapi {
   extensions: Omit<Extensions, "pluginImport">
 }
 
-export function transformSync(config: TransformConfigNapi, code: string): Output;
+export function transformSync(config: TransformConfigAsync, code: string): Output;
 export function transform(config: TransformConfigAsync, code: string): Promise<Output>;

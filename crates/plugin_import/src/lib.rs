@@ -9,7 +9,7 @@ use std::collections::HashSet;
 
 use crate::visit::IdentComponent;
 use serde::{self, Serialize};
-use shared::napi::{Env, JsFunction, JsString};
+use shared::napi::{Env, JsFunction, JsString, NapiRaw};
 use shared::swc_common::{BytePos, Span, SyntaxContext};
 use shared::swc_ecma_ast::{
   self, Ident, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier, ImportSpecifier, Module,
@@ -19,7 +19,7 @@ use shared::swc_ecma_visit::{as_folder, Fold, VisitMut, VisitWith};
 use shared::{napi, napi_derive::napi};
 use shared::{swc_atoms::JsWord, swc_common::DUMMY_SP};
 
-pub fn plugin_import<'a>(config: &'a Vec<PluginImportConfig>, env: Env) -> impl Fold + 'a {
+pub fn plugin_import<'a>(config: &'a Vec<PluginImportConfig>, env: Option<Env>) -> impl Fold + 'a {
   let mut renderer = handlebars::Handlebars::new();
 
   renderer.register_helper(
@@ -116,7 +116,7 @@ struct EsSpec {
 
 pub struct ImportPlugin<'a> {
   pub config: &'a Vec<PluginImportConfig>,
-  pub env: Env,
+  pub env: Option<Env>,
   pub renderer: handlebars::Handlebars<'a>,
 }
 
@@ -182,7 +182,11 @@ impl<'a> VisitMut for ImportPlugin<'a> {
                         .map(|replace_expr| {
                           call_js(
                             &replace_expr,
-                            &[self.env.create_string(css_ident.as_str()).unwrap()],
+                            &[self
+                              .env
+                              .expect("using js function can only be run on sync api")
+                              .create_string(css_ident.as_str())
+                              .unwrap()],
                           )
                         })
                         .or_else(|| {
@@ -230,7 +234,14 @@ impl<'a> VisitMut for ImportPlugin<'a> {
                         .replace_expr
                         .as_ref()
                         .map(|replace_expr| {
-                          call_js(replace_expr, &[self.env.create_string(&js_ident).unwrap()])
+                          call_js(
+                            replace_expr,
+                            &[self
+                              .env
+                              .expect("using js function can only be run on sync api")
+                              .create_string(&js_ident)
+                              .unwrap()],
+                          )
                         })
                         .or_else(|| {
                           js_config.replace_tpl.as_ref().map(|_| {
@@ -406,7 +417,7 @@ pub struct ReplaceCssConfig {
 }
 
 fn call_js(js_fn: &JsFunction, args: &[JsString]) -> Either<String, ()> {
-  let js_return = js_fn.call(None, &args).unwrap();
+  let js_return = js_fn.call_without_args(None).unwrap();
 
   match js_return.get_type() {
     Ok(ty) => {

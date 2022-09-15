@@ -1,13 +1,10 @@
 use core::transform::transform;
-
-use pass::types::Extensions;
 use shared::swc::config::Options;
 
 #[test]
 fn test() {
   let code = "const a = {};
   const b = { ...a }";
-  let mut extension: Extensions = Default::default();
 
   let config = pass::types::TransformConfig {
     swc: Options {
@@ -21,9 +18,9 @@ fn test() {
       .unwrap(),
       ..Default::default()
     },
-    extensions: &mut extension,
+    extensions: Default::default(),
   };
 
-  let res = transform(None, config, code).unwrap();
+  let res = transform(None, code, &config).unwrap();
   insta::assert_snapshot!("plugin-import", res.code);
 }

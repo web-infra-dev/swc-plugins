@@ -1,23 +1,20 @@
-export type config<Async extends boolean> = ImportItem<Async>[];
+export type config = ImportItem[];
 
-export interface ImportItem<Async extends boolean> {
+export interface ImportItem {
   fromSource: string;
-  replace_js?: {
-    ignore_es_component?: string[];
-    replace_expr?: Async extends true
-      ? never
-      : (member: string) => string | false;
-    replace_tpl?: string;
+  replaceJs?: {
+    ignoreEsComponent?: string[];
+    replaceExpr?: (member: string) => (string | false);
+    replaceTpl?: string;
     lower?: boolean;
-    camel2_dash_component_name?: boolean;
+    camel2DashComponentName?: boolean;
+    transformToDefaultImport?: boolean;
   };
-  replace_css?: {
-    ignore_style_component?: string[];
-    replace_expr?: Async extends true
-      ? never
-      : (member: string) => string | false;
-    replace_tpl?: string;
+  replaceCss?: {
+    ignoreStyleComponent?: string[];
+    replaceExpr?: (member: string) => (string | false);
+    replaceTpl?: string;
     lower?: boolean;
-    camel2_dash_component_name?: boolean;
+    camel2DashComponentName?: boolean;
   };
 }

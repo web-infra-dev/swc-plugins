@@ -24,9 +24,9 @@ pub struct TransformConfigNapi {
   pub extensions: Extensions,
 }
 
-pub struct TransformConfig<'a> {
+pub struct TransformConfig {
   pub swc: Options,
 
   /// Internal rust-swc Plugins
-  pub extensions: &'a Extensions,
+  pub extensions: Extensions,
 }
