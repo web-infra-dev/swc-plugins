@@ -9,7 +9,7 @@ use std::collections::HashSet;
 
 use crate::visit::IdentComponent;
 use serde::{self, Serialize};
-use shared::napi::{Env, JsFunction, JsString, NapiRaw};
+use shared::napi::{Env, JsFunction, JsString, Ref};
 use shared::swc_common::{BytePos, Span, SyntaxContext};
 use shared::swc_ecma_ast::{
   self, Ident, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier, ImportSpecifier, Module,
@@ -19,7 +19,119 @@ use shared::swc_ecma_visit::{as_folder, Fold, VisitMut, VisitWith};
 use shared::{napi, napi_derive::napi};
 use shared::{swc_atoms::JsWord, swc_common::DUMMY_SP};
 
-pub fn plugin_import<'a>(config: &'a Vec<PluginImportConfig>, env: Option<Env>) -> impl Fold + 'a {
+/* ====== Bindings ====== */
+/*
+safety: js_function is Option, if is Some then will be running only in single thread env
+ */
+unsafe impl Send for PluginImportConfigNapi {}
+unsafe impl Sync for PluginImportConfigNapi {}
+
+#[napi(object)]
+pub struct PluginImportConfigNapi {
+  pub from_source: String,
+  pub replace_css: Option<ReplaceCssConfigNapi>,
+  pub replace_js: Option<ReplaceJsConfigNapi>,
+}
+
+#[napi(object)]
+#[derive(Serialize)]
+pub struct ReplaceJsConfigNapi {
+  #[serde(skip_serializing)]
+  pub replace_expr: Option<JsFunction>,
+  pub replace_tpl: Option<String>,
+  pub ignore_es_component: Option<Vec<String>>,
+  pub lower: Option<bool>,
+  pub camel2_dash_component_name: Option<bool>,
+  pub transform_to_default_import: Option<bool>,
+}
+
+#[napi(object)]
+#[derive(Serialize)]
+pub struct ReplaceCssConfigNapi {
+  pub ignore_style_component: Option<Vec<String>>,
+  #[serde(skip_serializing)]
+  pub replace_expr: Option<JsFunction>,
+  pub replace_tpl: Option<String>,
+  pub lower: Option<bool>,
+  pub camel2_dash_component_name: Option<bool>,
+}
+
+/* ======= Real struct ======= */
+pub struct PluginImportConfig {
+  pub from_source: String,
+  pub replace_css: Option<ReplaceCssConfig>,
+  pub replace_js: Option<ReplaceJsConfig>,
+}
+
+pub struct ReplaceJsConfig {
+  pub replace_expr: Option<Ref<()>>,
+  pub replace_tpl: Option<String>,
+  pub ignore_es_component: Option<Vec<String>>,
+  pub lower: Option<bool>,
+  pub camel2_dash_component_name: Option<bool>,
+  pub transform_to_default_import: Option<bool>,
+}
+
+pub struct ReplaceCssConfig {
+  pub ignore_style_component: Option<Vec<String>>,
+  pub replace_expr: Option<Ref<()>>,
+  pub replace_tpl: Option<String>,
+  pub lower: Option<bool>,
+  pub camel2_dash_component_name: Option<bool>,
+}
+
+pub fn from_napi_config(env: Env, c: PluginImportConfigNapi) -> PluginImportConfig {
+  let PluginImportConfigNapi {
+    from_source,
+    replace_css,
+    replace_js,
+  } = c;
+
+  PluginImportConfig {
+    from_source,
+    replace_css: replace_css.map(|replace_css| {
+      let ReplaceCssConfigNapi {
+        ignore_style_component,
+        replace_expr,
+        replace_tpl,
+        lower,
+        camel2_dash_component_name,
+      } = replace_css;
+
+      ReplaceCssConfig {
+        ignore_style_component,
+        replace_expr: replace_expr.as_ref().map(|js_fn| env.create_reference(js_fn).unwrap()),
+        replace_tpl,
+        lower,
+        camel2_dash_component_name,
+      }
+    }),
+    replace_js: replace_js.map(|replace_js| {
+      let ReplaceJsConfigNapi {
+        ignore_es_component,
+        replace_expr,
+        replace_tpl,
+        lower,
+        camel2_dash_component_name,
+        transform_to_default_import,
+      } = replace_js;
+
+      ReplaceJsConfig {
+        ignore_es_component,
+        replace_expr: replace_expr.as_ref().map(|js_fn| env.create_reference(js_fn).unwrap()),
+        replace_tpl,
+        lower,
+        camel2_dash_component_name,
+        transform_to_default_import,
+      }
+    }),
+  }
+}
+
+pub fn plugin_import<'a>(
+  config: &'a Vec<PluginImportConfig>,
+  env: Option<Env>,
+) -> impl Fold + 'a {
   let mut renderer = handlebars::Handlebars::new();
 
   renderer.register_helper(
@@ -181,6 +293,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
                         .as_ref()
                         .map(|replace_expr| {
                           call_js(
+                            self.env.unwrap(),
                             &replace_expr,
                             &[self
                               .env
@@ -235,6 +348,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
                         .as_ref()
                         .map(|replace_expr| {
                           call_js(
+                            self.env.unwrap(),
                             replace_expr,
                             &[self
                               .env
@@ -380,44 +494,11 @@ impl<'a> VisitMut for ImportPlugin<'a> {
   }
 }
 
-#[napi(object)]
-pub struct PluginImportConfig {
-  pub from_source: String,
-  pub replace_css: Option<ReplaceCssConfig>,
-  pub replace_js: Option<ReplaceJsConfig>,
-}
-
-/*
-safety: js_function is Option, if is Some then will be running only in single thread env
- */
-unsafe impl Send for PluginImportConfig {}
-unsafe impl Sync for PluginImportConfig {}
-
-#[napi(object)]
-#[derive(Serialize)]
-pub struct ReplaceJsConfig {
-  #[serde(skip_serializing)]
-  pub replace_expr: Option<JsFunction>,
-  pub replace_tpl: Option<String>,
-  pub ignore_es_component: Option<Vec<String>>,
-  pub lower: Option<bool>,
-  pub camel2_dash_component_name: Option<bool>,
-  pub transform_to_default_import: Option<bool>,
-}
-
-#[napi(object)]
-#[derive(Serialize)]
-pub struct ReplaceCssConfig {
-  pub ignore_style_component: Option<Vec<String>>,
-  #[serde(skip_serializing)]
-  pub replace_expr: Option<JsFunction>,
-  pub replace_tpl: Option<String>,
-  pub lower: Option<bool>,
-  pub camel2_dash_component_name: Option<bool>,
-}
-
-fn call_js(js_fn: &JsFunction, args: &[JsString]) -> Either<String, ()> {
-  let js_return = js_fn.call_without_args(None).unwrap();
+fn call_js(env: Env, js_fn: &Ref<()>, args: &[JsString]) -> Either<String, ()> {
+  let f: JsFunction = env
+    .get_reference_value(js_fn)
+    .expect("failed to get reference, this may be a internal error");
+  let js_return = f.call(None, args).unwrap();
 
   match js_return.get_type() {
     Ok(ty) => {

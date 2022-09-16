@@ -1,5 +1,9 @@
-use core::transform::transform;
-use shared::swc::config::Options;
+use core::transform;
+use shared::{
+  swc::{config::Options, Compiler},
+  swc_common::SourceMap,
+};
+use std::sync::Arc;
 
 #[test]
 fn test() {
@@ -21,6 +25,14 @@ fn test() {
     extensions: Default::default(),
   };
 
-  let res = transform(None, code, &config).unwrap();
+  let res = transform(
+    None,
+    Arc::new(Compiler::new(Arc::new(SourceMap::default()))),
+    &config,
+    "".into(),
+    code,
+    None,
+  )
+  .unwrap();
   insta::assert_snapshot!("plugin-import", res.code);
 }

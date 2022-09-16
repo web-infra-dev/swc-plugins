@@ -13,28 +13,36 @@ export interface TransformConfig {
   extensions?: Extensions;
 }
 
-export function minify(
-  config: string,
-  filename: string,
-  code: string,
-  map?: string
-): Promise<{ code: string; map?: string }>;
+export interface TransformConfigNapi {
+  /** Raw swc options */
+  swc?: string;
+  /** Internal rust-swc Plugins */
+  extensions?: Extensions;
+}
 
 export interface Output {
   code: string;
   map?: string;
 }
 
-export function transformSync(
-  code: string,
-  filename: string,
-  map?: string,
-  config?: TransformConfig
-): Output;
+export class Compiler {
+  constructor(config: TransformConfigNapi);
 
-export function transform(
-  code: string,
-  filename: string,
-  map?: string,
-  config?: TransformConfig
-): Promise<Output>;
+  transformSync(filename: string, code: string, map?: string): Output;
+
+  transform(filename: string, code: string, map?: string): Promise<Output>;
+
+  minify(
+    config: string,
+    filename: string,
+    code: string,
+    map?: string
+  ): Promise<{ code: string; map?: string }>;
+
+  minifySync(
+    config: string,
+    filename: string,
+    code: string,
+    map?: string
+  ): { code: string; map?: string };
+}

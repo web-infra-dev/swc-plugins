@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use modularize_imports::PackageConfig;
-use plugin_import::PluginImportConfig;
+use plugin_import::{PluginImportConfigNapi, PluginImportConfig};
 use shared::{napi, napi_derive::napi, swc::config::Options};
 
 /**
@@ -9,6 +9,12 @@ use shared::{napi, napi_derive::napi, swc::config::Options};
  */
 #[derive(Default)]
 #[napi(object)]
+pub struct ExtensionsNapi {
+  pub modularize_imports: Option<HashMap<String, PackageConfig>>,
+  pub plugin_import: Option<Vec<PluginImportConfigNapi>>,
+}
+
+#[derive(Default)]
 pub struct Extensions {
   pub modularize_imports: Option<HashMap<String, PackageConfig>>,
   pub plugin_import: Option<Vec<PluginImportConfig>>,
@@ -21,7 +27,7 @@ pub struct TransformConfigNapi {
   pub swc: String,
 
   /// Internal rust-swc Plugins
-  pub extensions: Extensions,
+  pub extensions: ExtensionsNapi,
 }
 
 pub struct TransformConfig {

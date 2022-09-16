@@ -236,8 +236,6 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { minify, transformSync, transform } = nativeBinding
+const { Compiler } = nativeBinding
 
-module.exports.minify = minify
-module.exports.transformSync = transformSync
-module.exports.transform = transform
+module.exports.Compiler = Compiler
