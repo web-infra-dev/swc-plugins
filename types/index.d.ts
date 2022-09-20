@@ -4,6 +4,7 @@
 export interface Extensions {
   modularizeImports?: import("../crates/modularize_imports").config;
   pluginImport?: import("../crates/plugin_import").config;
+  reactUtils?: import("../crates/react_utils").config;
 }
 
 export interface TransformConfig {

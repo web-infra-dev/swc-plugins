@@ -7,8 +7,7 @@ edition = "2021"
 
 [dependencies]
 serde_json = "1.0.71"
-serde = "1.0.71"
-serde_derive = "1.0.143"
+serde = {version= "1.0.71", features=["derive"]}
 swc = "0.223.0"
 swc_ecma_parser = "0.118.3"
 swc_common = "0.27.0"

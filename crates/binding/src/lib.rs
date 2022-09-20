@@ -56,6 +56,7 @@ impl JsCompiler {
     let ExtensionsNapi {
       modularize_imports,
       plugin_import,
+      react_utils,
     } = config.extensions;
 
     let config = TransformConfig {
@@ -68,7 +69,8 @@ impl JsCompiler {
             .map(|c| from_napi_config(env, c))
             .collect::<Vec<_>>()
         }),
-      },
+        react_utils,
+      }
     };
 
     // TODO figure out this ordering
@@ -159,6 +161,7 @@ impl JsCompiler {
   #[napi]
   pub fn release(&self) {
     let mut compilers = COMPILERS.write();
+    compilers.remove(&self.id);
   }
 }
 

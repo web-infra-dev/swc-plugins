@@ -21,5 +21,5 @@ pub use swc_ecma_transforms_testing;
 pub use testing;
 pub extern crate napi;
 pub extern crate napi_derive;
-pub use serde;
-pub use serde_derive;
+pub extern crate serde;
+

@@ -1097,6 +1097,7 @@ dependencies = [
  "modularize_imports",
  "napi",
  "plugin_import",
+ "react_utils",
  "regex",
  "serde",
  "shared",
@@ -1383,6 +1384,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "react_utils"
+version = "0.1.0"
+dependencies = [
+ "shared",
+]
+
+[[package]]
 name = "redox_syscall"
 version = "0.2.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1571,7 +1579,6 @@ dependencies = [
  "napi",
  "napi-derive",
  "serde",
- "serde_derive",
  "serde_json",
  "swc",
  "swc_atoms 0.4.8",
