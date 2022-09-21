@@ -2,16 +2,15 @@ use std::{path::PathBuf, sync::Arc};
 
 use shared::{
   anyhow::Result,
-  napi::Env,
   swc::{self, try_with_handler, Compiler, HandlerOpts, TransformOutput},
   swc_common::FileName,
   swc_ecma_transforms_base::pass::noop,
 };
 
-use pass::{internal_transform_pass, types::TransformConfig};
+use crate::pass::{internal_transform_pass};
+use crate::types::TransformConfig;
 
 pub fn transform(
-  env: Option<Env>,
   compiler: Arc<Compiler>,
   config: &TransformConfig,
   filename: String,
@@ -35,7 +34,7 @@ pub fn transform(
         None,
         handler,
         &swc_config,
-        |_, _| internal_transform_pass(env, &config),
+        |_, _| internal_transform_pass(&config),
         |_, _| noop(),
       )
     })

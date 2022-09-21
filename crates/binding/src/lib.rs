@@ -1,34 +1,32 @@
+mod binding_types;
+mod tsfn;
+use binding_types::{FromNapi, TransformConfigNapi};
 use napi::{
   bindgen_prelude::{AsyncTask, Buffer},
   Env, JsObject, Result, Status, Task,
 };
-use pass::{
-  from_napi_config,
-  types::{Extensions, ExtensionsNapi, TransformConfig, TransformConfigNapi},
-};
+
+use napi_derive::napi;
 use shared::{
-  napi,
-  napi_derive::napi,
   serde_json,
-  swc::{
-    config::{JsMinifyOptions, Options},
-    Compiler as SwcCompiler, TransformOutput,
-  },
+  swc::{config::JsMinifyOptions, Compiler as SwcCompiler, TransformOutput},
   swc_common::{
     sync::{Lazy, RwLock},
     SourceMap,
   },
 };
 
+use core::types::TransformConfig;
 use std::{
   collections::HashMap,
   sync::{
     atomic::{AtomicU32, Ordering},
+
     Arc,
   },
 };
 
-// ===== Low level internal struct under the hood =====
+// ===== Internal Rust struct under the hood =====
 pub struct Compiler {
   pub config: TransformConfig,
   pub swc_compiler: Arc<SwcCompiler>,
@@ -41,8 +39,8 @@ pub static COMPILERS: Lazy<Arc<RwLock<HashMap<u32, Compiler>>>> =
 static ID: AtomicU32 = AtomicU32::new(0);
 
 // ========== API exposed to js ==========
-
 // this id maps to a real struct in COMPILERS
+
 #[napi(js_name = "Compiler")]
 pub struct JsCompiler {
   pub id: u32,
@@ -52,37 +50,14 @@ pub struct JsCompiler {
 impl JsCompiler {
   #[napi(constructor)]
   pub fn new(env: Env, config: TransformConfigNapi) -> Self {
-    let swc_options: Options = serde_json::from_slice(config.swc.to_vec().as_slice())
-      .map_err(|e| napi::Error::new(Status::InvalidArg, e.to_string()))
-      .unwrap();
-
-    let ExtensionsNapi {
-      modularize_imports,
-      plugin_import,
-      react_utils,
-    } = config.extensions;
-
-    let config = TransformConfig {
-      swc: swc_options,
-      extensions: Extensions {
-        modularize_imports,
-        plugin_import: plugin_import.map(|configs| {
-          configs
-            .into_iter()
-            .map(|c| from_napi_config(env, c))
-            .collect::<Vec<_>>()
-        }),
-        react_utils,
-      },
-    };
-
     let id = ID.fetch_add(1, Ordering::Relaxed);
 
     let mut compilers = COMPILERS.write();
     compilers.insert(
       id,
       Compiler {
-        config,
+        config: FromNapi::from_napi(config, env)
+        .unwrap(),
         swc_compiler: Arc::new(SwcCompiler::new(Arc::new(SourceMap::default()))),
       },
     );
@@ -108,7 +83,6 @@ impl JsCompiler {
   #[napi]
   pub fn transform_sync(
     &self,
-    env: Env,
     filename: String,
     code: Buffer,
     map: Option<Buffer>,
@@ -120,7 +94,6 @@ impl JsCompiler {
       .expect("Compiler is released, maybe you are using compiler after call release()");
 
     core::transform(
-      Some(env),
       compiler.swc_compiler.clone(),
       &compiler.config,
       filename.clone(),
@@ -161,7 +134,6 @@ pub fn minify_sync(config: Buffer, filename: String, code: Buffer) -> Result<Out
 }
 
 // ======= Napi boiler plate code =======
-
 #[napi(object)]
 pub struct Output {
   pub code: Buffer,
@@ -195,7 +167,6 @@ impl Task for TransformTask {
       .expect("Compiler is released, maybe you are using compiler after call release()");
 
     core::transform(
-      None,
       compiler.swc_compiler.clone(),
       &compiler.config,
       self.filename.clone(),

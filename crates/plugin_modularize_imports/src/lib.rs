@@ -32,8 +32,6 @@ use once_cell::sync::Lazy;
 use regex::{Captures, Regex};
 use serde::{Deserialize, Serialize};
 use shared::{
-  napi,
-  napi_derive::napi,
   swc_ecma_ast::{
     ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleExportName,
     ModuleItem, Str,
@@ -52,7 +50,6 @@ pub struct Config {
 
 #[derive(Clone, Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-#[napi(object)]
 pub struct PackageConfig {
   pub transform: String,
   #[serde(default)]

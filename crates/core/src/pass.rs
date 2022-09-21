@@ -1,13 +1,15 @@
 use crate::types::TransformConfig;
-use either::Either;
-use napi::Env;
-use react_utils::react_utils;
-use shared::{swc_common::chain, swc_ecma_transforms_base::pass::noop, swc_ecma_visit::Fold};
+use shared::{
+  swc_common::{chain, pass::Either},
+  swc_ecma_transforms_base::pass::noop,
+  swc_ecma_visit::Fold,
+};
 
-use modularize_imports::{modularize_imports, Config as ModularizedConfig};
+use plugin_react_utils::react_utils;
+use plugin_modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use plugin_import::plugin_import;
 
-pub fn internal_transform_pass<'a>(env: Option<Env>, config: &'a TransformConfig) -> impl Fold + 'a {
+pub fn internal_transform_pass<'a>(config: &'a TransformConfig) -> impl Fold + 'a {
   let extensions = &config.extensions;
 
   let modularize_imports = extensions
@@ -23,7 +25,7 @@ pub fn internal_transform_pass<'a>(env: Option<Env>, config: &'a TransformConfig
   let plugin_import = extensions
     .plugin_import
     .as_ref()
-    .map(|config| Either::Left(plugin_import(config, env)))
+    .map(|config| Either::Left(plugin_import(config)))
     .unwrap_or(Either::Right(noop()));
 
   let react_utils = if let Some(c) = &extensions.react_utils {

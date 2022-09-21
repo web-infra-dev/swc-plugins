@@ -26,5 +26,3 @@ swc_atoms = "0.4.8"
 swc_ecma_transforms_testing = "0.108.0"
 testing = "0.29.4"
 anyhow = "1.0.62"
-napi = { version = "2.0.0", features = ["napi7"] }
-napi-derive = {version = "2.0.0", features = ["type-def"]}

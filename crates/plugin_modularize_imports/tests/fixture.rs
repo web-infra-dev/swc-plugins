@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use modularize_imports::{modularize_imports, PackageConfig};
+use plugin_modularize_imports::{modularize_imports, PackageConfig};
 use shared::swc_ecma_parser::{EsConfig, Syntax};
 use shared::swc_ecma_transforms_testing::test_fixture;
 use shared::testing::fixture;
@@ -18,7 +18,7 @@ fn modularize_imports_fixture(input: PathBuf) {
     test_fixture(
         syntax(),
         &|_tr| {
-            modularize_imports(modularize_imports::Config {
+            modularize_imports(plugin_modularize_imports::Config {
                 packages: vec![
                     (
                         "react-bootstrap".to_string(),

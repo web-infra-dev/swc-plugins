@@ -2,9 +2,9 @@
  * Internal plugins
  */
 export interface Extensions {
-  modularizeImports?: import("../crates/modularize_imports").config;
+  modularizeImports?: import("../crates/plugin_modularize_imports").config;
   pluginImport?: import("../crates/plugin_import").config;
-  reactUtils?: import("../crates/react_utils").config;
+  reactUtils?: import("../crates/plugin_react_utils").config;
 }
 
 export interface TransformConfig {
