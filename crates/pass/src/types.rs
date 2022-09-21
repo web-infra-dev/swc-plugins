@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use modularize_imports::PackageConfig;
+use napi::bindgen_prelude::Buffer;
 use plugin_import::{PluginImportConfigNapi, PluginImportConfig};
 use react_utils::ReactUtilsConfig;
 use shared::{napi, napi_derive::napi, swc::config::Options};
@@ -26,8 +27,7 @@ pub struct Extensions {
 #[napi(object)]
 pub struct TransformConfigNapi {
   /// Raw swc options
-  #[napi(ts_type = "import('./types').SwcOptions")]
-  pub swc: String,
+  pub swc: Buffer,
 
   /// Internal rust-swc Plugins
   pub extensions: ExtensionsNapi,

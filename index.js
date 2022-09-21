@@ -236,6 +236,8 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { Compiler } = nativeBinding
+const { Compiler, minify, minifySync } = nativeBinding
 
 module.exports.Compiler = Compiler
+module.exports.minify = minify
+module.exports.minifySync = minifySync

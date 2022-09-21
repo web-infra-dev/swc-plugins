@@ -2,20 +2,17 @@ use std::{path::PathBuf, sync::Arc};
 
 use shared::{
   anyhow::Result,
-  swc::{config::JsMinifyOptions, try_with_handler, HandlerOpts, TransformOutput, Compiler},
-  swc_common::FileName,
+  swc::{config::JsMinifyOptions, try_with_handler, Compiler, HandlerOpts, TransformOutput},
+  swc_common::{FileName, sync::Lazy},
 };
 
-pub fn minify(
-  compiler: Arc<Compiler>,
-  config: &JsMinifyOptions,
-  filename: String,
-  src: String,
-) -> Result<TransformOutput> {
-  let cm = compiler.cm.clone();
-  let fm = cm.new_source_file(FileName::Real(PathBuf::from(filename)), src);
+static COMPILER: Lazy<Arc<Compiler>> = Lazy::new(|| Arc::new(Compiler::new(Default::default())));
+
+pub fn minify(config: &JsMinifyOptions, filename: String, src: &str) -> Result<TransformOutput> {
+  let cm = COMPILER.cm.clone();
+  let fm = cm.new_source_file(FileName::Real(PathBuf::from(filename)), src.to_string());
 
   try_with_handler(cm, HandlerOpts::default(), |handler| {
-    compiler.minify(fm, handler, config)
+    COMPILER.minify(fm, handler, config)
   })
 }
