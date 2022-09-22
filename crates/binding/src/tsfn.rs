@@ -6,9 +6,16 @@ use std::{
   sync::mpsc::{channel, Sender},
 };
 
-use napi::{sys::{self, ThreadsafeFunctionCallMode}, threadsafe_function::{ErrorStrategy, ThreadSafeCallContext}, Env, check_status};
+use napi::{
+  check_status,
+  sys::{self, ThreadsafeFunctionCallMode},
+  threadsafe_function::ThreadSafeCallContext,
+  Env,
+};
 
-
+/// Work Flow
+/// create_threadsafe_function() to create a `tsfn` pointer
+/// call_
 unsafe extern "C" fn thread_finalize_cb<T: 'static, R: 'static>(
   _raw_env: sys::napi_env,
   finalize_data: *mut c_void,
@@ -20,13 +27,13 @@ unsafe extern "C" fn thread_finalize_cb<T: 'static, R: 'static>(
   ));
 }
 
-unsafe extern "C" fn call_js_cb<T: 'static, R: 'static, ES: ErrorStrategy::T, F>(
+unsafe extern "C" fn call_js_cb<T: 'static, R: 'static, F>(
   raw_env: sys::napi_env,
   _js_callback: sys::napi_value, // null
   context: *mut c_void,          // rust closure
   data: *mut c_void,             // invoke args
 ) where
-  F: Fn(ThreadSafeCallContext<(T, Sender<R>)>),
+  F: Fn(ThreadSafeCallContext<T>) -> R,
 {
   // env and/or callback can be null when shutting down
   if raw_env.is_null() {
@@ -35,16 +42,17 @@ unsafe extern "C" fn call_js_cb<T: 'static, R: 'static, ES: ErrorStrategy::T, F>
 
   let ctx = context.cast::<F>();
 
-  // call传入的参数
-  let (params, sender): (T, Sender<R>) = match ES::VALUE {
-    ErrorStrategy::CalleeHandled::VALUE => *Box::<(T, Sender<R>)>::from_raw(data.cast()),
-    ErrorStrategy::Fatal::VALUE => *Box::<(T, Sender<R>)>::from_raw(data.cast()),
-  };
+  // Arguments provided by call_napi_threadsafe_function
+  let (params, sender): (T, Sender<R>) = *Box::<(T, Sender<R>)>::from_raw(data.cast());
 
-  (*ctx)(ThreadSafeCallContext {
+  let res = (*ctx)(ThreadSafeCallContext {
     env: Env::from_raw(raw_env),
-    value: (params, sender),
+    value: params,
   });
+
+  sender
+    .send(res)
+    .expect("Send threadsafe function return data failed");
 }
 
 unsafe impl<Params: 'static, ReturnValue> Send for ThreadSafeFunction<Params, ReturnValue> {}
@@ -62,7 +70,7 @@ pub struct ThreadSafeFunction<Params: 'static, ReturnValue: 'static> {
 impl<Params: 'static, ReturnValue: 'static> ThreadSafeFunction<Params, ReturnValue> {
   pub fn new<F: Unpin>(env: Env, callback: F) -> Self
   where
-    F: Fn(ThreadSafeCallContext<(Params, Sender<ReturnValue>)>),
+    F: Fn(ThreadSafeCallContext<Params>) -> ReturnValue,
   {
     let cb = Pin::into_inner(Box::pin(callback));
     let cb = Box::into_raw(cb) as *mut c_void;
@@ -80,19 +88,21 @@ impl<Params: 'static, ReturnValue: 'static> ThreadSafeFunction<Params, ReturnVal
 
     unsafe {
       sys::napi_create_threadsafe_function(
-        env,                                             // env
-        ptr::null_mut(),                                 // func
-        ptr::null_mut(),                                 // async_resource
-        async_resource_name,                             // napi_value async_resource_name
-        0,                                               // size_t max_queue_size
-        1usize,                                          // size_t initial_thread_count
-        cb,                                              // void* thread_finalize_data
-        Some(thread_finalize_cb::<Params, ReturnValue>), // napi_finalize thread_finalize_cb
-        cb,                                              // void* context
-        Some(call_js_cb::<Params, ReturnValue, ErrorStrategy::CalleeHandled, F>),
-        &mut tsfn, // napi_threadsafe_function* result
+        env,
+        ptr::null_mut(),
+        ptr::null_mut(),
+        async_resource_name,
+        0,
+        1usize,
+        cb,
+        Some(thread_finalize_cb::<Params, ReturnValue>),
+        cb,
+        Some(call_js_cb::<Params, ReturnValue, F>),
+        &mut tsfn,
       );
+      sys::napi_unref_threadsafe_function(env, tsfn);
     };
+
 
     Self {
       tsfn,
@@ -112,6 +122,7 @@ impl<Params: 'static, ReturnValue: 'static> ThreadSafeFunction<Params, ReturnVal
       );
     }
 
+    // wait for tsfn to finish
     receiver.recv().unwrap()
   }
 }

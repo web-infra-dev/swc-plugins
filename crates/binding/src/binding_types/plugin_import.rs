@@ -66,10 +66,10 @@ impl FromNapi<PluginImportConfig> for PluginImportConfigNapi {
 
             let tsfn = ThreadSafeFunction::<String, Option<String>>::new(env, move |ctx| {
               let env = ctx.env;
-              let (s, send_return) = ctx.value;
-              let js_string = env.create_string(&s).unwrap();
+              let member = ctx.value;
+              let js_string = env.create_string(&member).unwrap();
               let s = call_js(env, &js_function, &[js_string]);
-              send_return.send(s).unwrap();
+              s
             });
 
             Box::new(move |s| tsfn.call(s)) as Box<dyn Sync + Send + Fn(String) -> Option<String>>
@@ -97,10 +97,10 @@ impl FromNapi<PluginImportConfig> for PluginImportConfigNapi {
 
             let tsfn = ThreadSafeFunction::<String, Option<String>>::new(env, move |ctx| {
               let env = ctx.env;
-              let (s, send_return) = ctx.value;
-              let js_string = env.create_string(&s).unwrap();
+              let member = ctx.value;
+              let js_string = env.create_string(&member).unwrap();
               let s = call_js(env, &js_function, &[js_string]);
-              send_return.send(s).unwrap();
+              s
             });
 
             Box::new(move |s| tsfn.call(s)) as Box<dyn Sync + Send + Fn(String) -> Option<String>>
