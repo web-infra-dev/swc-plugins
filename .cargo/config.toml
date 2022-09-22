@@ -1,3 +1,9 @@
+[alias]
+lint = "clippy --workspace --all-targets --verbose -- --deny warnings"
+# AKA `test-update`, handy cargo rst update without install `cargo-rst` binary
+tu = "run -p cargo-rst -- update"
+
+
 [target.x86_64-apple-darwin]
 rustflags = [
   "-C", "link-arg=-undefined",

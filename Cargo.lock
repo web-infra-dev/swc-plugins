@@ -828,27 +828,7 @@ checksum = "1c90329e44f9208b55f45711f9558cec15d7ef8295cc65ecd6d4188ae8edc58c"
 dependencies = [
  "atty",
  "backtrace",
- "miette-derive 4.7.1",
- "once_cell",
- "owo-colors",
- "supports-color",
- "supports-hyperlinks",
- "supports-unicode",
- "terminal_size",
- "textwrap",
- "thiserror",
- "unicode-width",
-]
-
-[[package]]
-name = "miette"
-version = "5.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a28d6092d7e94a90bb9ea8e6c26c99d5d112d49dda2afdb4f7ea8cf09e1a5a6d"
-dependencies = [
- "atty",
- "backtrace",
- "miette-derive 5.3.0",
+ "miette-derive",
  "once_cell",
  "owo-colors",
  "supports-color",
@@ -865,17 +845,6 @@ name = "miette-derive"
 version = "4.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6b5bc45b761bcf1b5e6e6c4128cd93b84c218721a8d9b894aa0aff4ed180174c"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
-name = "miette-derive"
-version = "5.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4f2485ed7d1fe80704928e3eb86387439609bd0c6bb96db8208daa364cfd1e09"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -902,8 +871,7 @@ name = "modern_swc_binding"
 version = "0.1.0"
 dependencies = [
  "core",
- "lazy_static",
- "miette 5.3.0",
+ "crossbeam-channel",
  "napi",
  "napi-derive",
  "shared",
@@ -2395,7 +2363,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b36a2a954635fc2eab4936f684e8a9d120eb0fbfdb7ea28cb5c35a3bca439e8d"
 dependencies = [
  "anyhow",
- "miette 4.7.1",
+ "miette",
  "once_cell",
  "parking_lot",
  "swc_common",

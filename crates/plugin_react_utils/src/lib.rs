@@ -24,7 +24,6 @@ pub fn react_utils(config: &ReactUtilsConfig) -> impl Fold {
     } else {
       Either::Right(noop())
     },
-
     if config.rm_effect.unwrap_or(false) {
       Either::Left(remove_effect())
     } else {

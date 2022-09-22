@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
-use plugin_modularize_imports::PackageConfig;
 use plugin_import::PluginImportConfig;
+use plugin_modularize_imports::PackageConfig;
 use plugin_react_utils::ReactUtilsConfig;
 use shared::swc::config::Options;
 

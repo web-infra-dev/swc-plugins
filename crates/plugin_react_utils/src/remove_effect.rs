@@ -1,8 +1,8 @@
 use std::collections::HashSet;
 
-use shared::swc_common::{util::take::Take};
+use shared::swc_common::util::take::Take;
 use shared::swc_ecma_ast::{self, BlockStmt, Expr, Id, ModuleDecl, ModuleExportName, ModuleItem};
-use shared::swc_ecma_visit::{VisitMut, VisitMutWith, as_folder, Fold};
+use shared::swc_ecma_visit::{as_folder, Fold, VisitMut, VisitMutWith};
 
 use shared::utils::ClearMark;
 

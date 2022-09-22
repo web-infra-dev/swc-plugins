@@ -278,7 +278,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
               .take()
               .into_iter()
               .enumerate()
-              .filter_map(|(idx, spec)| (!rm_specifier.contains(&idx)).then(|| spec))
+              .filter_map(|(idx, spec)| (!rm_specifier.contains(&idx)).then_some(spec))
               .collect();
           }
         }
@@ -290,7 +290,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
       .take()
       .into_iter()
       .enumerate()
-      .filter_map(|(idx, stmt)| (!specifiers_rm_es.contains(&idx)).then(|| stmt))
+      .filter_map(|(idx, stmt)| (!specifiers_rm_es.contains(&idx)).then_some(stmt))
       .collect();
 
     let body = &mut module.body;

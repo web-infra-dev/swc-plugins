@@ -2,8 +2,8 @@ use core::types::Extensions;
 use std::collections::HashMap;
 
 use super::plugin_modularize_imports::PackageConfigNapi;
-use super::{plugin_react_utils};
-use super::{plugin_import, FromNapi};
+use super::plugin_react_utils;
+use super::{plugin_import, IntoRawConfig};
 
 use napi_derive::napi;
 /**
@@ -17,8 +17,8 @@ pub struct ExtensionsNapi {
   pub react_utils: Option<plugin_react_utils::ReactUtilsConfigNapi>,
 }
 
-impl FromNapi<Extensions> for ExtensionsNapi {
-  fn from_napi(self, env: napi::Env) -> napi::Result<Extensions> {
+impl IntoRawConfig<Extensions> for ExtensionsNapi {
+  fn into_raw_config(self, env: napi::Env) -> napi::Result<Extensions> {
     let Self {
       modularize_imports,
       plugin_import,
@@ -26,9 +26,9 @@ impl FromNapi<Extensions> for ExtensionsNapi {
     } = self;
 
     Ok(Extensions {
-      modularize_imports: modularize_imports.from_napi(env)?,
-      plugin_import: plugin_import.from_napi(env)?,
-      react_utils: react_utils.from_napi(env)?,
+      modularize_imports: modularize_imports.into_raw_config(env)?,
+      plugin_import: plugin_import.into_raw_config(env)?,
+      react_utils: react_utils.into_raw_config(env)?,
     })
   }
 }

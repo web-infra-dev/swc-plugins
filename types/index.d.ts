@@ -16,36 +16,36 @@ export interface TransformConfig {
 
 export interface TransformConfigNapi {
   /** Raw swc options */
-  swc?: Buffer;
+  swc?: string;
   /** Internal rust-swc Plugins */
   extensions?: Extensions;
 }
 
 export interface Output {
-  code: Buffer;
-  map?: Buffer;
+  code: string;
+  map?: string;
 }
 
 export class Compiler {
   constructor(config: TransformConfigNapi);
 
-  transformSync(filename: string, code: Buffer, map?: Buffer): Output;
+  transformSync(filename: string, code: string, map?: string): Output;
 
-  transform(filename: string, code: Buffer, map?: Buffer): Promise<Output>;
+  transform(filename: string, code: string, map?: string): Promise<Output>;
 
   release(): void
 }
 
 function minify(
-  config: Buffer,
+  config: string,
   filename: string,
-  code: Buffer,
-  map?: Buffer
+  code: string,
+  map?: string
 ): Promise<Output>;
 
 function minifySync(
-  config: Buffer,
+  config: string,
   filename: string,
-  code: Buffer,
-  map?: Buffer
+  code: string,
+  map?: string
 ): Output;

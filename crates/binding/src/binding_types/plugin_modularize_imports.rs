@@ -4,7 +4,7 @@ use shared::serde::Deserialize;
 
 use napi_derive::napi;
 
-use super::FromNapi;
+use super::IntoRawConfig;
 
 #[napi(object)]
 #[derive(Clone, Debug, Deserialize)]
@@ -15,8 +15,8 @@ pub struct PackageConfigNapi {
   pub skip_default_conversion: bool,
 }
 
-impl FromNapi<PackageConfig> for PackageConfigNapi {
-  fn from_napi(self, _: napi::Env) -> napi::Result<PackageConfig> {
+impl IntoRawConfig<PackageConfig> for PackageConfigNapi {
+  fn into_raw_config(self, _: napi::Env) -> napi::Result<PackageConfig> {
     Ok(PackageConfig {
       transform: self.transform,
       prevent_full_import: self.prevent_full_import,

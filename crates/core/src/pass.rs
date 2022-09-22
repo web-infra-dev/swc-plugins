@@ -5,11 +5,11 @@ use shared::{
   swc_ecma_visit::Fold,
 };
 
-use plugin_react_utils::react_utils;
-use plugin_modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use plugin_import::plugin_import;
+use plugin_modularize_imports::{modularize_imports, Config as ModularizedConfig};
+use plugin_react_utils::react_utils;
 
-pub fn internal_transform_pass<'a>(config: &'a TransformConfig) -> impl Fold + 'a {
+pub fn internal_transform_pass(config: &TransformConfig) -> impl Fold + '_ {
   let extensions = &config.extensions;
 
   let modularize_imports = extensions
@@ -20,16 +20,16 @@ pub fn internal_transform_pass<'a>(config: &'a TransformConfig) -> impl Fold + '
         packages: config.clone(),
       }))
     })
-    .unwrap_or(Either::Right(noop()));
+    .unwrap_or_else(|| Either::Right(noop()));
 
   let plugin_import = extensions
     .plugin_import
     .as_ref()
     .map(|config| Either::Left(plugin_import(config)))
-    .unwrap_or(Either::Right(noop()));
+    .unwrap_or_else(|| Either::Right(noop()));
 
   let react_utils = if let Some(c) = &extensions.react_utils {
-    Either::Left(react_utils(&c))
+    Either::Left(react_utils(c))
   } else {
     Either::Right(noop())
   };

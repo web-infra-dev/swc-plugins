@@ -1,15 +1,15 @@
 mod binding_types;
-mod tsfn;
-use binding_types::{FromNapi, TransformConfigNapi};
-use napi::{
-  bindgen_prelude::{AsyncTask, Buffer},
-  Env, JsObject, Result, Status, Task,
-};
+mod thread_safe_function;
+use binding_types::{IntoRawConfig, TransformConfigNapi};
+use napi::{bindgen_prelude::AsyncTask, Env, JsObject, Result, Status, Task};
 
 use napi_derive::napi;
 use shared::{
   serde_json,
-  swc::{config::JsMinifyOptions, Compiler as SwcCompiler, TransformOutput},
+  swc::{
+    config::{JsMinifyOptions, TerserSourceMapOption},
+    Compiler as SwcCompiler, TransformOutput,
+  },
   swc_common::{
     sync::{Lazy, RwLock},
     SourceMap,
@@ -21,7 +21,6 @@ use std::{
   collections::HashMap,
   sync::{
     atomic::{AtomicU32, Ordering},
-
     Arc,
   },
 };
@@ -56,8 +55,7 @@ impl JsCompiler {
     compilers.insert(
       id,
       Compiler {
-        config: FromNapi::from_napi(config, env)
-        .unwrap(),
+        config: IntoRawConfig::into_raw_config(config, env).unwrap(),
         swc_compiler: Arc::new(SwcCompiler::new(Arc::new(SourceMap::default()))),
       },
     );
@@ -69,8 +67,8 @@ impl JsCompiler {
   pub fn transform(
     &self,
     filename: String,
-    code: Buffer,
-    map: Option<Buffer>,
+    code: String,
+    map: Option<String>,
   ) -> AsyncTask<TransformTask> {
     AsyncTask::new(TransformTask {
       code,
@@ -84,24 +82,31 @@ impl JsCompiler {
   pub fn transform_sync(
     &self,
     filename: String,
-    code: Buffer,
-    map: Option<Buffer>,
+    code: String,
+    map: Option<String>,
   ) -> Result<Output> {
+    // This hack is for distinguish
+    std::env::set_var("MODERN_JS_SWC_SYNC_CALL", "1");
+
     let compilers = COMPILERS.read();
 
     let compiler = compilers
       .get(&self.id)
       .expect("Compiler is released, maybe you are using compiler after call release()");
 
-    core::transform(
+    let res = core::transform(
       compiler.swc_compiler.clone(),
       &compiler.config,
-      filename.clone(),
-      std::str::from_utf8(code.to_vec().as_slice()).unwrap(),
-      map.map(|m| String::from_utf8(m.to_vec()).unwrap()),
+      filename,
+      &code,
+      map,
     )
     .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
-    .map(|transform_output| transform_output.into())
+    .map(|transform_output| transform_output.into());
+
+    std::env::remove_var("MODERN_JS_SWC_SYNC_CALL");
+
+    res
   }
 
   #[napi]
@@ -112,48 +117,68 @@ impl JsCompiler {
 }
 
 #[napi]
-pub fn minify(config: Buffer, filename: String, code: Buffer) -> AsyncTask<Minifier> {
+pub fn minify(
+  config: String,
+  filename: String,
+  code: String,
+  map: Option<String>,
+) -> AsyncTask<Minifier> {
+  let mut js_minify_options: JsMinifyOptions =
+    serde_json::from_slice(&<String as Into<Vec<_>>>::into(config)).unwrap();
+
+  if let Some(m) = map {
+    let m: TerserSourceMapOption = serde_json::from_str(&m).expect("Invalid SourceMap string");
+    js_minify_options.source_map = m.into();
+  }
+
   AsyncTask::new(Minifier {
     code,
     filename,
-    config: serde_json::from_slice(&<Buffer as Into<Vec<_>>>::into(config)).unwrap(),
+    config: js_minify_options,
   })
 }
 
 #[napi]
-pub fn minify_sync(config: Buffer, filename: String, code: Buffer) -> Result<Output> {
-  let js_minify_options = serde_json::from_slice(&<Buffer as Into<Vec<_>>>::into(config)).unwrap();
+pub fn minify_sync(
+  config: String,
+  filename: String,
+  code: String,
+  map: Option<String>,
+) -> Result<Output> {
+  let mut js_minify_options: JsMinifyOptions =
+    serde_json::from_slice(&<String as Into<Vec<_>>>::into(config)).unwrap();
 
-  core::minify(
-    &js_minify_options,
-    filename.clone(),
-    std::str::from_utf8(code.to_vec().as_slice()).unwrap(),
-  )
-  .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
-  .map(|transform_output| transform_output.into())
+  if let Some(m) = map {
+    let m: TerserSourceMapOption = serde_json::from_str(&m).expect("Invalid SourceMap string");
+    js_minify_options.source_map = m.into();
+  }
+
+  core::minify(&js_minify_options, filename, &code)
+    .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
+    .map(|transform_output| transform_output.into())
 }
 
 // ======= Napi boiler plate code =======
 #[napi(object)]
 pub struct Output {
-  pub code: Buffer,
-  pub map: Option<Buffer>,
+  pub code: String,
+  pub map: Option<String>,
 }
 
 impl From<TransformOutput> for Output {
   fn from(o: TransformOutput) -> Self {
     Self {
-      code: o.code.into_bytes().into(),
-      map: o.map.map(|m| m.into_bytes().into()),
+      code: o.code,
+      map: o.map,
     }
   }
 }
 
 pub struct TransformTask {
   pub compiler_id: u32,
-  pub code: Buffer,
+  pub code: String,
   pub filename: String,
-  pub map: Option<Buffer>,
+  pub map: Option<String>,
 }
 
 impl Task for TransformTask {
@@ -170,14 +195,10 @@ impl Task for TransformTask {
       compiler.swc_compiler.clone(),
       &compiler.config,
       self.filename.clone(),
-      std::str::from_utf8(self.code.to_vec().as_slice()).unwrap(),
-      self
-        .map
-        .as_ref()
-        .map(|map_buf| String::from_utf8(map_buf.to_vec()).unwrap()),
+      &self.code,
+      self.map.clone(),
     )
     .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
-    .map(|transform_output| transform_output.into())
   }
 
   fn resolve(&mut self, env: Env, output: Self::Output) -> napi::Result<Self::JsValue> {
@@ -191,7 +212,7 @@ impl Task for TransformTask {
 }
 
 pub struct Minifier {
-  code: Buffer,
+  code: String,
   filename: String,
   config: JsMinifyOptions,
 }
@@ -201,12 +222,8 @@ impl Task for Minifier {
   type JsValue = JsObject;
 
   fn compute(&mut self) -> napi::Result<Self::Output> {
-    core::minify(
-      &self.config,
-      self.filename.clone(),
-      std::str::from_utf8(self.code.to_vec().as_slice()).unwrap(),
-    )
-    .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
+    core::minify(&self.config, self.filename.clone(), &self.code)
+      .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
   }
 
   fn resolve(&mut self, env: napi::Env, output: Self::Output) -> napi::Result<Self::JsValue> {

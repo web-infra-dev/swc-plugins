@@ -5,7 +5,7 @@ use shared::serde::Deserialize;
 use napi::Env;
 use napi_derive::napi;
 
-use super::FromNapi;
+use super::IntoRawConfig;
 
 #[napi(object)]
 #[derive(Deserialize, Debug)]
@@ -15,8 +15,8 @@ pub struct ReactUtilsConfigNapi {
   pub rm_effect: Option<bool>,
 }
 
-impl FromNapi<ReactUtilsConfig> for ReactUtilsConfigNapi {
-  fn from_napi(self, _: Env) -> napi::Result<ReactUtilsConfig> {
+impl IntoRawConfig<ReactUtilsConfig> for ReactUtilsConfigNapi {
+  fn into_raw_config(self, _: Env) -> napi::Result<ReactUtilsConfig> {
     Ok(ReactUtilsConfig {
       auto_import_react: self.auto_import_react,
       rm_effect: self.rm_effect,
