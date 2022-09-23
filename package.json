@@ -1,6 +1,6 @@
 {
   "name": "@modern-js/swc-plugins",
-  "description": "SWC support for modern-js",
+  "description": "SWC support for modern-js and rspack",
   "homepage": "https://modernjs.dev",
   "bugs": "https://github.com/modern-js-dev/modern.js/issues",
   "repository": "modern-js-dev/modern.js",

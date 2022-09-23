@@ -1,5 +1,8 @@
 use swc_common::SyntaxContext;
-use {swc_ecma_ast::Ident, swc_ecma_visit::{VisitMut, Fold}};
+use {
+  swc_ecma_ast::Ident,
+  swc_ecma_visit::{Fold, VisitMut},
+};
 
 #[derive(Clone, Copy)]
 pub struct ClearMark;

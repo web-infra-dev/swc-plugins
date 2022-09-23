@@ -1,7 +1,7 @@
 use shared::swc_atoms::JsWord;
 use shared::swc_common::DUMMY_SP;
 use shared::swc_ecma_ast::{
-  ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleItem, Str, Ident,
+  Ident, ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleItem, Str,
 };
 use shared::swc_ecma_visit::{as_folder, Fold, VisitMut};
 
@@ -34,16 +34,14 @@ impl VisitMut for ImportReact {
       let body = &mut module.body;
       let dec = ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {
         span: DUMMY_SP,
-        specifiers: vec![ImportSpecifier::Default(
-          ImportDefaultSpecifier {
+        specifiers: vec![ImportSpecifier::Default(ImportDefaultSpecifier {
+          span: DUMMY_SP,
+          local: Ident {
             span: DUMMY_SP,
-            local: Ident {
-              span: DUMMY_SP,
-              sym: JsWord::from("React"),
-              optional: false,
-            },
+            sym: JsWord::from("React"),
+            optional: false,
           },
-        )],
+        })],
         src: Str {
           span: DUMMY_SP,
           value: JsWord::from("react"),

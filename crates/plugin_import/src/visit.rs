@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use shared::swc_ecma_ast::{Ident, TsTypeRef, Id, ImportDecl};
+use shared::swc_ecma_ast::{Id, Ident, ImportDecl, TsTypeRef};
 use shared::swc_ecma_visit::Visit;
 use shared::swc_ecma_visit::VisitWith;
 

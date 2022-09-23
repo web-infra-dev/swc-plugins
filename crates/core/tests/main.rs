@@ -10,7 +10,7 @@ fn test() {
   let code = "const a = {};
   const b = { ...a }";
 
-  let config = pass::types::TransformConfig {
+  let config = core::types::TransformConfig {
     swc: Options {
       config: shared::serde_json::from_str(
         r#"{
@@ -26,7 +26,6 @@ fn test() {
   };
 
   let res = transform(
-    None,
     Arc::new(Compiler::new(Arc::new(SourceMap::default()))),
     &config,
     "".into(),
