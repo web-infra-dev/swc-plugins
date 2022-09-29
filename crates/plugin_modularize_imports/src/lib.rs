@@ -31,6 +31,7 @@ use heck::ToKebabCase;
 use once_cell::sync::Lazy;
 use regex::{Captures, Regex};
 use serde::{Deserialize, Serialize};
+use shared::swc_cached::regex::CachedRegex;
 use shared::{
   swc_ecma_ast::{
     ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleExportName,
@@ -38,7 +39,6 @@ use shared::{
   },
   swc_ecma_visit::{noop_fold_type, Fold},
 };
-use swc_cached::regex::CachedRegex;
 
 static DUP_SLASH_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"//").unwrap());
 

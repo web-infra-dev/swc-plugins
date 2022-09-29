@@ -5,6 +5,7 @@ pub use anyhow;
 pub use serde_json;
 pub use swc;
 pub use swc_atoms;
+pub use swc_cached;
 pub use swc_common;
 pub use swc_ecma_ast;
 pub use swc_ecma_codegen;
