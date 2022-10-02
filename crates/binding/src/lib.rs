@@ -22,7 +22,7 @@ use std::{
   sync::{
     atomic::{AtomicU32, Ordering},
     Arc,
-  },
+  }, cell::RefCell,
 };
 
 // ===== Internal Rust struct under the hood =====
@@ -36,6 +36,10 @@ pub static COMPILERS: Lazy<Arc<RwLock<HashMap<u32, Compiler>>>> =
   Lazy::new(|| Arc::new(RwLock::new(HashMap::new())));
 
 static ID: AtomicU32 = AtomicU32::new(0);
+
+thread_local!{ 
+  pub static IS_SYNC: RefCell<bool> = RefCell::new(false)
+}
 
 // ========== API exposed to js ==========
 // this id maps to a real struct in COMPILERS
@@ -51,11 +55,13 @@ impl JsCompiler {
   pub fn new(env: Env, config: TransformConfigNapi) -> Self {
     let id = ID.fetch_add(1, Ordering::Relaxed);
 
+    let config = IntoRawConfig::into_raw_config(config, env).unwrap();
+
     let mut compilers = COMPILERS.write();
     compilers.insert(
       id,
       Compiler {
-        config: IntoRawConfig::into_raw_config(config, env).unwrap(),
+        config,
         swc_compiler: Arc::new(SwcCompiler::new(Arc::new(SourceMap::default()))),
       },
     );
@@ -86,27 +92,28 @@ impl JsCompiler {
     map: Option<String>,
   ) -> Result<Output> {
     // This hack is for distinguish
-    std::env::set_var("MODERN_JS_SWC_SYNC_CALL", "1");
-
-    let compilers = COMPILERS.read();
-
-    let compiler = compilers
-      .get(&self.id)
-      .expect("Compiler is released, maybe you are using compiler after call release()");
-
-    let res = core::transform(
-      compiler.swc_compiler.clone(),
-      &compiler.config,
-      filename,
-      &code,
-      map,
-    )
-    .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
-    .map(|transform_output| transform_output.into());
-
-    std::env::remove_var("MODERN_JS_SWC_SYNC_CALL");
-
-    res
+    IS_SYNC.with(|is_sync| {
+      is_sync.replace(true);
+      let compilers = COMPILERS.read();
+  
+      let compiler = compilers
+        .get(&self.id)
+        .expect("Compiler is released, maybe you are using compiler after call release()");
+  
+      let res = core::transform(
+        compiler.swc_compiler.clone(),
+        &compiler.config,
+        filename,
+        &code,
+        map,
+      )
+      .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
+      .map(|transform_output| transform_output.into());
+  
+      is_sync.replace(true);
+  
+      res
+    })
   }
 
   #[napi]

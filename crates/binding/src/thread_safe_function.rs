@@ -95,7 +95,6 @@ impl<Params: 'static, ReturnValue: 'static> ThreadSafeFunction<Params, ReturnVal
 
 impl<Params: 'static, ReturnValue: 'static> Drop for ThreadSafeFunction<Params, ReturnValue> {
   fn drop(&mut self) {
-    dbg!("drop ThreadSafeFunction");
     unsafe {
       check_status!(sys::napi_release_threadsafe_function(
         self.tsfn,
@@ -103,7 +102,6 @@ impl<Params: 'static, ReturnValue: 'static> Drop for ThreadSafeFunction<Params, 
       ))
       .unwrap();
     }
-    dbg!("drop ThreadSafeFunction done");
   }
 }
 
@@ -116,11 +114,8 @@ unsafe extern "C" fn thread_finalize_cb<T: 'static, R: 'static, F>(
 ) where
   F: Fn(CallContext<T>) -> napi::Result<R>,
 {
-  dbg!("cleanup");
   // cleanup
   drop(Box::from_raw(finalize_data.cast::<F>()));
-
-  dbg!("cleanup done");
 }
 
 unsafe extern "C" fn call_js_cb<T: 'static, R: 'static, F>(
