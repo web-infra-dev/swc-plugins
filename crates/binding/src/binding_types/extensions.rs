@@ -1,4 +1,4 @@
-use core::types::Extensions;
+use modern_swc_core::types::Extensions;
 use std::collections::HashMap;
 
 use super::plugin_modularize_imports::PackageConfigNapi;

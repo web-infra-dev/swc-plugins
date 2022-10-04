@@ -1,4 +1,4 @@
-use core::plugin_react_utils::ReactUtilsConfig;
+use modern_swc_core::plugin_react_utils::ReactUtilsConfig;
 
 use shared::serde::Deserialize;
 

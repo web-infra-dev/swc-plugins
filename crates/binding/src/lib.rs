@@ -16,7 +16,7 @@ use shared::{
   },
 };
 
-use core::types::TransformConfig;
+use modern_swc_core::types::TransformConfig;
 use std::{
   collections::HashMap,
   sync::{
@@ -100,7 +100,7 @@ impl JsCompiler {
         .get(&self.id)
         .expect("Compiler is released, maybe you are using compiler after call release()");
   
-      let res = core::transform(
+      let res = modern_swc_core::transform(
         compiler.swc_compiler.clone(),
         &compiler.config,
         filename,
@@ -160,7 +160,7 @@ pub fn minify_sync(
     js_minify_options.source_map = m.into();
   }
 
-  core::minify(&js_minify_options, filename, &code)
+  modern_swc_core::minify(&js_minify_options, filename, &code)
     .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
     .map(|transform_output| transform_output.into())
 }
@@ -198,7 +198,7 @@ impl Task for TransformTask {
       .get(&self.compiler_id)
       .expect("Compiler is released, maybe you are using compiler after call release()");
 
-    core::transform(
+    modern_swc_core::transform(
       compiler.swc_compiler.clone(),
       &compiler.config,
       self.filename.clone(),
@@ -229,7 +229,7 @@ impl Task for Minifier {
   type JsValue = JsObject;
 
   fn compute(&mut self) -> napi::Result<Self::Output> {
-    core::minify(&self.config, self.filename.clone(), &self.code)
+    modern_swc_core::minify(&self.config, self.filename.clone(), &self.code)
       .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
   }
 

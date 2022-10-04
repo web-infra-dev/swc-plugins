@@ -1,4 +1,4 @@
-use core::plugin_import::{PluginImportConfig, ReplaceCssConfig, ReplaceJsConfig};
+use modern_swc_core::plugin_import::{PluginImportConfig, ReplaceCssConfig, ReplaceJsConfig};
 
 use napi::{Env, JsFunction, JsString, Ref, Status};
 use napi_derive::napi;
