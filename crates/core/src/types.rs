@@ -5,13 +5,14 @@ use plugin_modularize_imports::PackageConfig;
 use plugin_react_utils::ReactUtilsConfig;
 use shared::swc::config::Options;
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct Extensions {
   pub modularize_imports: Option<HashMap<String, PackageConfig>>,
   pub plugin_import: Option<Vec<PluginImportConfig>>,
   pub react_utils: Option<ReactUtilsConfig>,
 }
 
+#[derive(Debug, Default)]
 pub struct TransformConfig {
   pub swc: Options,
 

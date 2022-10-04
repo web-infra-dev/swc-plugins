@@ -5,6 +5,7 @@ use heck::ToKebabCase;
 use shared::swc_common::util::take::Take;
 
 use std::collections::HashSet;
+use std::fmt::Debug;
 
 use crate::visit::IdentComponent;
 use shared::swc_common::{BytePos, Span, SyntaxContext};
@@ -16,13 +17,14 @@ use shared::swc_ecma_visit::{as_folder, Fold, VisitMut, VisitWith};
 use shared::{swc_atoms::JsWord, swc_common::DUMMY_SP};
 
 /* ======= Real struct ======= */
-
+#[derive(Debug, Default)]
 pub struct PluginImportConfig {
   pub from_source: String,
   pub replace_css: Option<ReplaceCssConfig>,
   pub replace_js: Option<ReplaceJsConfig>,
 }
 
+#[derive(Default)]
 pub struct ReplaceJsConfig {
   pub replace_expr: Option<Box<dyn Send + Sync + Fn(String) -> Option<String>>>,
   pub replace_tpl: Option<String>,
@@ -32,12 +34,41 @@ pub struct ReplaceJsConfig {
   pub transform_to_default_import: Option<bool>,
 }
 
+impl Debug for ReplaceJsConfig {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    f.write_str(&format!(
+      "ReplaceJsConfig: {{\nreplace_expr: {:?},\nreplace_tpl: {:?},\nignore_es_component: {:?},\nlower: {:?},\ncamel2_dash_component_name: {:?},\ntransform_to_default_import: {:?},\n}}\n",
+      self.replace_expr.as_ref().map(|_| Some("Func")).unwrap_or(None),
+      self.replace_tpl,
+      self.ignore_es_component,
+      self.lower,
+      self.camel2_dash_component_name,
+      self.transform_to_default_import
+    ))
+  }
+}
+
+#[derive(Default)]
 pub struct ReplaceCssConfig {
   pub replace_expr: Option<Box<dyn Send + Sync + Fn(String) -> Option<String>>>,
   pub replace_tpl: Option<String>,
   pub ignore_style_component: Option<Vec<String>>,
   pub lower: Option<bool>,
   pub camel2_dash_component_name: Option<bool>,
+}
+
+
+impl Debug for ReplaceCssConfig {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    f.write_str(&format!(
+      "ReplaceCssConfig: {{\nreplace_expr: {:?},\nreplace_tpl: {:?},\nignore_style_component: {:?},\nlower: {:?},\ncamel2_dash_component_name: {:?},\n}}\n",
+      self.replace_expr.as_ref().map(|_| Some("Func")).unwrap_or(None),
+      self.replace_tpl,
+      self.ignore_style_component,
+      self.lower,
+      self.camel2_dash_component_name,
+    ))
+  }
 }
 
 pub fn plugin_import<'a>(config: &'a Vec<PluginImportConfig>) -> impl Fold + 'a {
@@ -123,6 +154,7 @@ pub fn plugin_import<'a>(config: &'a Vec<PluginImportConfig>) -> impl Fold + 'a 
   as_folder(ImportPlugin { config, renderer })
 }
 
+#[derive(Debug)]
 struct EsSpec {
   source: String,
   default_spec: String,
@@ -159,6 +191,9 @@ impl<'a> VisitMut for ImportPlugin<'a> {
     for (item_index, item) in module.body.iter_mut().enumerate() {
       if let ModuleItem::ModuleDecl(ModuleDecl::Import(var)) = item {
         let source = &*var.src.value;
+
+        dbg!(&source);
+        dbg!(&config.iter().map(|c| c.from_source.clone()));
         if let Some(child_config) = config.iter().find(|&c| c.from_source == source) {
           let mut rm_specifier = HashSet::new();
           for (specifier_idx, specifier) in var.specifiers.iter().enumerate() {

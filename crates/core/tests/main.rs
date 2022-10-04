@@ -1,4 +1,4 @@
-use core::transform;
+use modern_swc_core::transform;
 use shared::{
   swc::{config::Options, Compiler},
   swc_common::SourceMap,
@@ -10,7 +10,7 @@ fn test() {
   let code = "const a = {};
   const b = { ...a }";
 
-  let config = core::types::TransformConfig {
+  let config = modern_swc_core::types::TransformConfig {
     swc: Options {
       config: shared::serde_json::from_str(
         r#"{

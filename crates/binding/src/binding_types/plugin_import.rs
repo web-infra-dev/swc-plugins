@@ -1,10 +1,10 @@
-use core::plugin_import::{PluginImportConfig, ReplaceCssConfig, ReplaceJsConfig};
+use modern_swc_core::plugin_import::{PluginImportConfig, ReplaceCssConfig, ReplaceJsConfig};
 
 use napi::{Env, JsFunction, JsString, Ref, Status};
 use napi_derive::napi;
 use shared::serde::Serialize;
 
-use crate::thread_safe_function::ThreadSafeFunction;
+use crate::{thread_safe_function::ThreadSafeFunction, IS_SYNC};
 
 use super::IntoRawConfig;
 
@@ -102,15 +102,17 @@ impl IntoRawConfig<PluginImportConfig> for PluginImportConfigNapi {
             );
 
             Box::new(move |s: String| {
-              if std::env::var("MODERN_JS_SWC_SYNC_CALL").is_ok() {
-                let js_function: JsFunction = wrap_env.get_reference_value(&js_ref).unwrap();
-                // sync call
-                call_js(&js_function, &[wrap_env.create_string(&s).unwrap()]).unwrap()
-              } else {
-                tsfn.call(s).expect(
-                  "Error occur while calling pluginImport replace_css.replace_expr() function",
-                )
-              }
+              IS_SYNC.with(|is_sync| {
+                if *is_sync.borrow() {
+                  let js_function: JsFunction = wrap_env.get_reference_value(&js_ref).unwrap();
+                  // sync call
+                  call_js(&js_function, &[wrap_env.create_string(&s).unwrap()]).unwrap()
+                } else {
+                  tsfn.call(s).expect(
+                    "Error occur while calling pluginImport replace_css.replace_expr() function",
+                  )
+                }
+              })
             }) as Box<dyn Sync + Send + Fn(String) -> Option<String>>
           }),
           replace_tpl,
@@ -148,14 +150,17 @@ impl IntoRawConfig<PluginImportConfig> for PluginImportConfigNapi {
             );
 
             Box::new(move |s: String| {
-              if std::env::var("MODERN_JS_SWC_SYNC_CALL").is_ok() {
-                let js_function: JsFunction = wrap_env.get_reference_value(&js_ref).unwrap();
-                call_js(&js_function, &[wrap_env.create_string(&s).unwrap()]).unwrap()
-              } else {
-                tsfn.call(s).expect(
-                  "Error occur while calling pluginImport replace_css.replace_expr() function",
-                )
-              }
+              IS_SYNC.with(|is_sync| {
+                if *is_sync.borrow() {
+                  let js_function: JsFunction = wrap_env.get_reference_value(&js_ref).unwrap();
+                  // sync call
+                  call_js(&js_function, &[wrap_env.create_string(&s).unwrap()]).unwrap()
+                } else {
+                  tsfn.call(s).expect(
+                    "Error occur while calling pluginImport replace_css.replace_expr() function",
+                  )
+                }
+              })
             }) as Box<dyn Sync + Send + Fn(String) -> Option<String>>
           }),
           replace_tpl,
