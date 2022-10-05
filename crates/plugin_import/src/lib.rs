@@ -192,8 +192,6 @@ impl<'a> VisitMut for ImportPlugin<'a> {
       if let ModuleItem::ModuleDecl(ModuleDecl::Import(var)) = item {
         let source = &*var.src.value;
 
-        dbg!(&source);
-        dbg!(&config.iter().map(|c| c.from_source.clone()));
         if let Some(child_config) = config.iter().find(|&c| c.from_source == source) {
           let mut rm_specifier = HashSet::new();
           for (specifier_idx, specifier) in var.specifiers.iter().enumerate() {

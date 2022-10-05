@@ -1,5 +1,5 @@
 {
-  "name": "@modern-js/modern-swc-win32-arm64-msvc",
+  "name": "@modern-js/swc-plugins-win32-arm64-msvc",
   "version": "0.0.1",
   "os": [
     "win32"
@@ -7,9 +7,9 @@
   "cpu": [
     "arm64"
   ],
-  "main": "modern-swc.win32-arm64-msvc.node",
+  "main": "swc-plugins.win32-arm64-msvc.node",
   "files": [
-    "modern-swc.win32-arm64-msvc.node"
+    "swc-plugins.win32-arm64-msvc.node"
   ],
   "description": "",
   "keywords": [],

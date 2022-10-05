@@ -31,11 +31,11 @@
     "test": "vitest run",
     "test:dev": "vitest",
     "version": "napi version",
-    "napi:prod": "napi build --cargo-cwd crates/binding --js index.js --dts unused.d.ts --js-package-name modern-swc --platform --release",
+    "napi:prod": "napi build --cargo-cwd crates/binding --js index.js --dts unused.d.ts --js-package-name swc-plugins --platform --release",
     "napi": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts"
   },
   "napi": {
-    "name": "modern-swc",
+    "name": "swc-plugins",
     "triples": {
       "additional": [
         "x86_64-unknown-linux-musl",

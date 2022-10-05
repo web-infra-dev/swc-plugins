@@ -1,3 +1,3 @@
-# `@modern-js/modern-swc-freebsd-x64`
+# `@modern-js/swc-plugins-freebsd-x64`
 
-This is the **x86_64-unknown-freebsd** binary for `@modern-js/modern-swc`
+This is the **x86_64-unknown-freebsd** binary for `@modern-js/swc-plugins`

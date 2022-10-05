@@ -1,5 +1,5 @@
 {
-  "name": "@modern-js/modern-swc-darwin-x64",
+  "name": "@modern-js/swc-plugins-darwin-x64",
   "version": "0.0.1",
   "os": [
     "darwin"
@@ -7,9 +7,9 @@
   "cpu": [
     "x64"
   ],
-  "main": "modern-swc.darwin-x64.node",
+  "main": "swc-plugins.darwin-x64.node",
   "files": [
-    "modern-swc.darwin-x64.node"
+    "swc-plugins.darwin-x64.node"
   ],
   "description": "",
   "keywords": [],

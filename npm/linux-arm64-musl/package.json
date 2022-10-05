@@ -1,5 +1,5 @@
 {
-  "name": "@modern-js/modern-swc-linux-arm64-musl",
+  "name": "@modern-js/swc-plugins-linux-arm64-musl",
   "version": "0.0.1",
   "os": [
     "linux"
@@ -7,9 +7,9 @@
   "cpu": [
     "arm64"
   ],
-  "main": "modern-swc.linux-arm64-musl.node",
+  "main": "swc-plugins.linux-arm64-musl.node",
   "files": [
-    "modern-swc.linux-arm64-musl.node"
+    "swc-plugins.linux-arm64-musl.node"
   ],
   "description": "",
   "keywords": [],

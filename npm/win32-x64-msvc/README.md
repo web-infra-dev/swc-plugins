@@ -1,3 +1,3 @@
-# `@modern-js/modern-swc-win32-x64-msvc`
+# `@modern-js/swc-plugins-win32-x64-msvc`
 
-This is the **x86_64-pc-windows-msvc** binary for `@modern-js/modern-swc`
+This is the **x86_64-pc-windows-msvc** binary for `@modern-js/swc-plugins`

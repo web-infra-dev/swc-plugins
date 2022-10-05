@@ -1,5 +1,5 @@
 {
-  "name": "@modern-js/modern-swc-linux-x64-gnu",
+  "name": "@modern-js/swc-plugins-linux-x64-gnu",
   "version": "0.0.1",
   "os": [
     "linux"
@@ -7,9 +7,9 @@
   "cpu": [
     "x64"
   ],
-  "main": "modern-swc.linux-x64-gnu.node",
+  "main": "swc-plugins.linux-x64-gnu.node",
   "files": [
-    "modern-swc.linux-x64-gnu.node"
+    "swc-plugins.linux-x64-gnu.node"
   ],
   "description": "",
   "keywords": [],

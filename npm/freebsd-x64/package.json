@@ -1,5 +1,5 @@
 {
-  "name": "@modern-js/modern-swc-freebsd-x64",
+  "name": "@modern-js/swc-plugins-freebsd-x64",
   "version": "0.0.1",
   "os": [
     "freebsd"
@@ -7,9 +7,9 @@
   "cpu": [
     "x64"
   ],
-  "main": "modern-swc.freebsd-x64.node",
+  "main": "swc-plugins.freebsd-x64.node",
   "files": [
-    "modern-swc.freebsd-x64.node"
+    "swc-plugins.freebsd-x64.node"
   ],
   "description": "",
   "keywords": [],
