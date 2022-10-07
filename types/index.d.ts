@@ -5,6 +5,9 @@ export interface Extensions {
   modularizeImports?: import("../crates/plugin_modularize_imports").config;
   pluginImport?: import("../crates/plugin_import").config;
   reactUtils?: import("../crates/plugin_react_utils").config;
+  lockCorejsVersion?: {
+    corejsPath: string
+  }
 }
 
 export interface TransformConfig {

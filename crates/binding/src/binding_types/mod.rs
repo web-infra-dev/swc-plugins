@@ -3,6 +3,7 @@ pub mod extensions;
 pub mod plugin_import;
 pub mod plugin_modularize_imports;
 pub mod plugin_react_utils;
+pub mod plugin_lock_corejs_version;
 
 use std::collections::HashMap;
 

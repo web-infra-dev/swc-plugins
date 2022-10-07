@@ -10,6 +10,7 @@ shared = { path = "../shared" }
 plugin_modularize_imports = {path = "../plugin_modularize_imports"}
 plugin_import = {path = "../plugin_import"}
 plugin_react_utils = {path = "../plugin_react_utils"}
+plugin_lock_corejs_version = {path = "../plugin_lock_corejs_version"}
 
 [dev-dependencies]
 insta = "1.18.2"

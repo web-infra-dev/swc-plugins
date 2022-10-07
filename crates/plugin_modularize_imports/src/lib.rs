@@ -23,6 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
  */
+
+ /* fork this just for adding kebab case transform, to use in some sceneries of plugin-import */
 use std::borrow::Cow;
 use std::collections::HashMap;
 

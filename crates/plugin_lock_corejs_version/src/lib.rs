@@ -5,8 +5,9 @@ use shared::{
   swc_ecma_visit::{as_folder, Fold, VisitMut},
 };
 
+#[derive(Debug)]
 pub struct LockCoreJsVersion {
-  corejs_path: String,
+  pub corejs_path: String,
 }
 
 static COREJS: &str = "core-js";

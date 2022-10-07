@@ -34,5 +34,11 @@ pub fn internal_transform_pass(config: &TransformConfig) -> impl Fold + '_ {
     Either::Right(noop())
   };
 
-  chain!(modularize_imports, plugin_import, react_utils)
+  let lock_core_js = if let Some(lock_core_js_config) = &extensions.lock_corejs_version {
+    Either::Left(plugin_lock_corejs_version::lock_corejs_version(lock_core_js_config.corejs_path.to_string()))
+  } else {
+    Either::Right(noop())
+  };
+
+  chain!(modularize_imports, plugin_import, react_utils, lock_core_js)
 }

@@ -878,6 +878,7 @@ version = "0.1.0"
 dependencies = [
  "insta",
  "plugin_import",
+ "plugin_lock_corejs_version",
  "plugin_modularize_imports",
  "plugin_react_utils",
  "shared",
