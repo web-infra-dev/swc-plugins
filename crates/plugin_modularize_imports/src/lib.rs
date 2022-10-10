@@ -122,7 +122,7 @@ impl<'a> Rewriter<'a> {
           };
           out.push(ImportDecl {
             specifiers: vec![specifier],
-            src: Box::new(Str::from(new_path.as_ref())),
+            src: Str::from(new_path.as_ref()),
             span: old_decl.span,
             type_only: false,
             asserts: None,

@@ -44,11 +44,11 @@ impl VisitMut for ImportReact {
             optional: false,
           },
         })],
-        src: Box::new(Str {
+        src: Str {
           span: DUMMY_SP,
           value: JsWord::from("react"),
           raw: None,
-        }),
+        },
         type_only: false,
         asserts: None,
       }));
