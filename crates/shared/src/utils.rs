@@ -1,7 +1,11 @@
-use swc_common::SyntaxContext;
 use {
-  swc_ecma_ast::Ident,
-  swc_ecma_visit::{Fold, VisitMut},
+  swc_core::{
+    common::SyntaxContext,
+    ecma::{
+      ast::Ident,
+      visit::{Fold, VisitMut}
+    }
+  }
 };
 
 #[derive(Clone, Copy)]

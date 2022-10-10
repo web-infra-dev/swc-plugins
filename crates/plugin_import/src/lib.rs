@@ -2,19 +2,23 @@ mod visit;
 
 use handlebars::{Context, Helper, HelperResult, Output, RenderContext, Template};
 use heck::ToKebabCase;
-use shared::swc_common::util::take::Take;
+use shared::swc_core::{
+  common::{util::take::Take, BytePos, Span, SyntaxContext, DUMMY_SP},
+  ecma::{
+    ast::{
+      Ident, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier, ImportSpecifier,
+      Module, ModuleDecl, ModuleExportName, ModuleItem, Str,
+    },
+    visit::{as_folder, Fold, VisitMut, VisitWith},
+    atoms::{JsWord}
+  },
+};
 
 use std::collections::HashSet;
 use std::fmt::Debug;
 
 use crate::visit::IdentComponent;
-use shared::swc_common::{BytePos, Span, SyntaxContext};
-use shared::swc_ecma_ast::{
-  self, Ident, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier, ImportSpecifier, Module,
-  ModuleDecl, ModuleExportName, ModuleItem, Str,
-};
-use shared::swc_ecma_visit::{as_folder, Fold, VisitMut, VisitWith};
-use shared::{swc_atoms::JsWord, swc_common::DUMMY_SP};
+
 
 /* ======= Real struct ======= */
 #[derive(Debug, Default)]
@@ -56,7 +60,6 @@ pub struct ReplaceCssConfig {
   pub lower: Option<bool>,
   pub camel2_dash_component_name: Option<bool>,
 }
-
 
 impl Debug for ReplaceCssConfig {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -333,10 +336,10 @@ impl<'a> VisitMut for ImportPlugin<'a> {
       let dec = ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {
         span: DUMMY_SP,
         specifiers: if js_source.use_default_import {
-          vec![swc_ecma_ast::ImportSpecifier::Default(
+          vec![ImportSpecifier::Default(
             ImportDefaultSpecifier {
               span: DUMMY_SP,
-              local: swc_ecma_ast::Ident {
+              local: Ident {
                 span: Span::new(
                   BytePos::DUMMY,
                   BytePos::DUMMY,
@@ -348,10 +351,10 @@ impl<'a> VisitMut for ImportPlugin<'a> {
             },
           )]
         } else {
-          vec![swc_ecma_ast::ImportSpecifier::Named(ImportNamedSpecifier {
+          vec![ImportSpecifier::Named(ImportNamedSpecifier {
             span: DUMMY_SP,
             imported: if js_source.as_name.is_some() {
-              Some(swc_ecma_ast::ModuleExportName::Ident(swc_ecma_ast::Ident {
+              Some(ModuleExportName::Ident(Ident {
                 span: DUMMY_SP,
                 sym: JsWord::from(js_source.default_spec.as_str()),
                 optional: false,
@@ -359,7 +362,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
             } else {
               None
             },
-            local: swc_ecma_ast::Ident {
+            local: Ident {
               span: Span::new(
                 BytePos::DUMMY,
                 BytePos::DUMMY,
@@ -371,11 +374,11 @@ impl<'a> VisitMut for ImportPlugin<'a> {
             is_type_only: false,
           })]
         },
-        src: Str {
+        src: Box::new(Str {
           span: DUMMY_SP,
           value: JsWord::from(js_source_ref),
           raw: None,
-        },
+        }),
         type_only: false,
         asserts: None,
       }));
@@ -386,11 +389,11 @@ impl<'a> VisitMut for ImportPlugin<'a> {
       let dec = ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {
         span: DUMMY_SP,
         specifiers: vec![],
-        src: Str {
+        src: Box::new(Str {
           span: DUMMY_SP,
           value: JsWord::from(css_source),
           raw: None,
-        },
+        }),
         type_only: false,
         asserts: None,
       }));

@@ -6,23 +6,26 @@ use napi::{bindgen_prelude::AsyncTask, Env, JsObject, Result, Status, Task};
 use napi_derive::napi;
 use shared::{
   serde_json,
-  swc::{
-    config::{JsMinifyOptions, TerserSourceMapOption},
-    Compiler as SwcCompiler, TransformOutput,
-  },
-  swc_common::{
-    sync::{Lazy, RwLock},
-    SourceMap,
+  swc_core::{
+    base::{
+      config::{JsMinifyOptions, TerserSourceMapOption},
+      Compiler as SwcCompiler, TransformOutput,
+    },
+    common::{
+      sync::{Lazy, RwLock},
+      SourceMap,
+    },
   },
 };
 
 use modern_swc_core::types::TransformConfig;
 use std::{
+  cell::RefCell,
   collections::HashMap,
   sync::{
     atomic::{AtomicU32, Ordering},
     Arc,
-  }, cell::RefCell,
+  },
 };
 
 // ===== Internal Rust struct under the hood =====
@@ -37,7 +40,7 @@ pub static COMPILERS: Lazy<Arc<RwLock<HashMap<u32, Compiler>>>> =
 
 static ID: AtomicU32 = AtomicU32::new(0);
 
-thread_local!{ 
+thread_local! {
   pub static IS_SYNC: RefCell<bool> = RefCell::new(false)
 }
 
@@ -91,15 +94,15 @@ impl JsCompiler {
     code: String,
     map: Option<String>,
   ) -> Result<Output> {
-    // This hack is for distinguish
+    // This hack is for distinguish if transform is async or not, if yes, using threadsafe function, else using sync JS call
     IS_SYNC.with(|is_sync| {
       is_sync.replace(true);
       let compilers = COMPILERS.read();
-  
+
       let compiler = compilers
         .get(&self.id)
         .expect("Compiler is released, maybe you are using compiler after call release()");
-  
+
       let res = modern_swc_core::transform(
         compiler.swc_compiler.clone(),
         &compiler.config,
@@ -109,9 +112,9 @@ impl JsCompiler {
       )
       .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
       .map(|transform_output| transform_output.into());
-  
+
       is_sync.replace(true);
-  
+
       res
     })
   }

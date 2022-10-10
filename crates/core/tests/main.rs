@@ -1,7 +1,7 @@
 use modern_swc_core::transform;
-use shared::{
-  swc::{config::Options, Compiler},
-  swc_common::SourceMap,
+use shared::swc_core::{
+  base::{config::Options, Compiler},
+  common::SourceMap
 };
 use std::sync::Arc;
 

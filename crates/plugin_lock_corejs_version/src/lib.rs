@@ -1,8 +1,10 @@
-use shared::{
-  swc_atoms::JsWord,
-  swc_common::DUMMY_SP,
-  swc_ecma_ast::{CallExpr, Callee, ImportDecl, Lit, Str},
-  swc_ecma_visit::{as_folder, Fold, VisitMut},
+use shared::swc_core::{
+  common::DUMMY_SP,
+  ecma::{
+    visit::{as_folder, Fold, VisitMut},
+    ast::{CallExpr, Callee, ImportDecl, Lit, Str},
+    atoms::JsWord,
+  },
 };
 
 #[derive(Debug)]
@@ -16,11 +18,11 @@ impl VisitMut for LockCoreJsVersion {
   fn visit_mut_import_decl(&mut self, decl: &mut ImportDecl) {
     if decl.src.value.contains(COREJS) {
       let locked_src = change_specifier(&decl.src.value, &self.corejs_path);
-      decl.src = Str {
+      decl.src = Box::new(Str {
         span: DUMMY_SP,
         value: JsWord::from(locked_src.as_str()),
         raw: None,
-      }
+      })
     }
   }
 

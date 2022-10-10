@@ -1,10 +1,38 @@
 /**
  * Internal plugins
  */
+ export interface ImportItem {
+  fromSource: string;
+  replaceJs?: {
+    ignoreEsComponent?: string[];
+    replaceExpr?: (member: string) => (string | false);
+    replaceTpl?: string;
+    lower?: boolean;
+    camel2DashComponentName?: boolean;
+    transformToDefaultImport?: boolean;
+  };
+  replaceCss?: {
+    ignoreStyleComponent?: string[];
+    replaceExpr?: (member: string) => (string | false);
+    replaceTpl?: string;
+    lower?: boolean;
+    camel2DashComponentName?: boolean;
+  };
+}
+
+export interface PackageConfig {
+  transform: string;
+  preventFullImport: boolean;
+  skipDefaultConversion: boolean;
+}
+
 export interface Extensions {
-  modularizeImports?: import("../crates/plugin_modularize_imports").config;
-  pluginImport?: import("../crates/plugin_import").config;
-  reactUtils?: import("../crates/plugin_react_utils").config;
+  modularizeImports?: Record<string, PackageConfig>;
+  pluginImport?: ImportItem[];
+  reactUtils?: {
+    autoImportReact?: boolean,
+    rmEffect?: boolean,
+  };
   lockCorejsVersion?: {
     corejsPath: string
   }

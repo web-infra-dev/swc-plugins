@@ -1,15 +1,18 @@
+use std::{path::Path, sync::Arc};
+
 use crate::types::TransformConfig;
-use shared::{
-  swc_common::{chain, pass::Either},
-  swc_ecma_transforms_base::pass::noop,
-  swc_ecma_visit::Fold,
+use shared::swc_core::{
+  common::{chain, comments::SingleThreadedComments, pass::Either, SourceMap, FileName},
+  ecma::transforms::base::pass::noop,
+  ecma::visit::Fold,
 };
 
 use plugin_import::plugin_import;
 use plugin_modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use plugin_react_utils::react_utils;
+use styled_jsx::styled_jsx;
 
-pub fn internal_transform_pass(config: &TransformConfig) -> impl Fold + '_ {
+pub fn internal_transform_pass(config: &TransformConfig, cm: Arc<SourceMap>) -> impl Fold + '_ {
   let extensions = &config.extensions;
 
   let modularize_imports = extensions
@@ -35,10 +38,29 @@ pub fn internal_transform_pass(config: &TransformConfig) -> impl Fold + '_ {
   };
 
   let lock_core_js = if let Some(lock_core_js_config) = &extensions.lock_corejs_version {
-    Either::Left(plugin_lock_corejs_version::lock_corejs_version(lock_core_js_config.corejs_path.to_string()))
+    Either::Left(plugin_lock_corejs_version::lock_corejs_version(
+      lock_core_js_config.corejs_path.to_string(),
+    ))
   } else {
     Either::Right(noop())
   };
 
-  chain!(modularize_imports, plugin_import, react_utils, lock_core_js)
+  let emotion = if let Some(emotion_options) = &extensions.emotion {
+    Either::Left(swc_emotion::emotion(
+      emotion_options.clone(),
+      Path::new(config.swc.filename.as_str()),
+      cm.clone(),
+      SingleThreadedComments::default(),
+    ))
+  } else {
+    Either::Right(noop())
+  };
+
+  let styled_jsx = if *extensions.styled_jsx.as_ref().unwrap_or(&false) {
+    Either::Left(styled_jsx(cm, FileName::Real(config.swc.filename.clone().into())))
+  } else {
+    Either::Right(noop())
+  };
+
+  chain!(modularize_imports, plugin_import, react_utils, lock_core_js, emotion, styled_jsx)
 }

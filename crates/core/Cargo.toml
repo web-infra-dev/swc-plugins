@@ -11,6 +11,9 @@ plugin_modularize_imports = {path = "../plugin_modularize_imports"}
 plugin_import = {path = "../plugin_import"}
 plugin_react_utils = {path = "../plugin_react_utils"}
 plugin_lock_corejs_version = {path = "../plugin_lock_corejs_version"}
+swc_emotion = "0.24.0"
+styled_components = "0.47.0"
+styled_jsx = "0.22.0"
 
 [dev-dependencies]
 insta = "1.18.2"

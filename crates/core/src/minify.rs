@@ -2,8 +2,10 @@ use std::{path::PathBuf, sync::Arc};
 
 use shared::{
   anyhow::Result,
-  swc::{config::JsMinifyOptions, try_with_handler, Compiler, HandlerOpts, TransformOutput},
-  swc_common::{errors::ColorConfig, sync::Lazy, FileName},
+  swc_core:: {
+    base::{config::JsMinifyOptions, try_with_handler, Compiler, HandlerOpts, TransformOutput},
+    common::{errors::ColorConfig, sync::Lazy, FileName},
+  }
 };
 
 static COMPILER: Lazy<Arc<Compiler>> = Lazy::new(|| Arc::new(Compiler::new(Default::default())));

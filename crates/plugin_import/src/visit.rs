@@ -1,8 +1,10 @@
 use std::collections::HashSet;
-
-use shared::swc_ecma_ast::{Id, Ident, ImportDecl, TsTypeRef};
-use shared::swc_ecma_visit::Visit;
-use shared::swc_ecma_visit::VisitWith;
+use shared::swc_core::{
+  ecma::{
+    ast::{Id, Ident, ImportDecl, TsTypeRef},
+    visit::{Visit, VisitWith}
+  }
+};
 
 #[derive(Default)]
 pub struct IdentComponent {

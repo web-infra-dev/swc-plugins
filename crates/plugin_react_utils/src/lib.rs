@@ -1,8 +1,11 @@
 use shared::serde::{self, Deserialize};
-use shared::swc_common::chain;
-use shared::swc_common::pass::Either;
-use shared::swc_ecma_transforms_base::pass::noop;
-use shared::swc_ecma_visit::Fold;
+use shared::swc_core::{
+  common::{chain, pass::Either,},
+  ecma::{
+    transforms::base::pass::noop,
+    visit::Fold,
+  }
+};
 
 mod import_react;
 mod remove_effect;
