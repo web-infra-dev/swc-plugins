@@ -25,14 +25,12 @@
   },
   "scripts": {
     "artifacts": "napi artifacts",
-    "build": "npm run napi:prod && npm run artifacts",
-    "build:dev": "npm run napi",
+    "build": "napi build --cargo-cwd crates/binding --js index.js --dts unused.d.ts --js-package-name swc-plugins --platform --release",
+    "build:dev": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts",
     "prepublishOnly": "napi prepublish -t npm",
-    "test": "vitest run",
+    "test": "vitest run --segfault-retry=3",
     "test:dev": "vitest",
-    "version": "napi version",
-    "napi:prod": "napi build --cargo-cwd crates/binding --js index.js --dts unused.d.ts --js-package-name swc-plugins --platform --release",
-    "napi": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts"
+    "version": "napi version"
   },
   "napi": {
     "name": "swc-plugins",

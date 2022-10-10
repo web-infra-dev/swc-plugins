@@ -1,22 +1,22 @@
 name: CI
 
 env:
-  DEBUG: 'napi:*'
-  APP_NAME: 'swc-plugins'
-  MACOSX_DEPLOYMENT_TARGET: '10.13'
+  DEBUG: "napi:*"
+  APP_NAME: "swc-plugins"
+  MACOSX_DEPLOYMENT_TARGET: "10.13"
   # https://github.com/SchrodingerZhu/snmalloc-rs
   CACHE_FRIENDLY_OFFSET: 64
 
-'on':
+"on":
   push:
     branches:
       - main
     tags-ignore:
-      - '**'
+      - "**"
     paths-ignore:
-      - '**/*.md'
+      - "**/*.md"
       - LICENSE
-      - '**/*.gitignore'
+      - "**/*.gitignore"
       - .editorconfig
       - docs/**
   pull_request: null
@@ -30,38 +30,38 @@ jobs:
       matrix:
         settings:
           - host: macos-latest
-            target: 'x86_64-apple-darwin'
+            target: "x86_64-apple-darwin"
             build: |
               pnpm build
               strip -x *.node
           - host: windows-latest
             build: pnpm build
-            target: 'x86_64-pc-windows-msvc'
+            target: "x86_64-pc-windows-msvc"
           - host: windows-latest
             build: |
               export CARGO_PROFILE_RELEASE_CODEGEN_UNITS=32;
               export CARGO_PROFILE_RELEASE_LTO=false
               pnpm build -- --target i686-pc-windows-msvc
               pnpm test
-            target: 'i686-pc-windows-msvc'
+            target: "i686-pc-windows-msvc"
             setup: |
               choco install nodejs-lts --x86 -y --force
               echo "C:\\Program Files (x86)\\nodejs" >> $GITHUB_PATH
           - host: ubuntu-latest
-            target: 'x86_64-unknown-linux-gnu'
+            target: "x86_64-unknown-linux-gnu"
             docker: |
               docker pull $DOCKER_REGISTRY_URL/napi-rs/napi-rs/nodejs-rust:lts-debian
               docker tag $DOCKER_REGISTRY_URL/napi-rs/napi-rs/nodejs-rust:lts-debian builder
             build: |
               docker run --rm -v ~/.cargo/git:/root/.cargo/git -v ~/.cargo/registry:/root/.cargo/registry -v $(pwd):/build -w /build builder sh -c "npm install -g pnpm@6 && pnpm install && pnpm build && strip swc-plugins.linux-x64-gnu.node"
           - host: ubuntu-latest
-            target: 'x86_64-unknown-linux-musl'
+            target: "x86_64-unknown-linux-musl"
             docker: |
               docker pull $DOCKER_REGISTRY_URL/napi-rs/napi-rs/nodejs-rust:lts-alpine
               docker tag $DOCKER_REGISTRY_URL/napi-rs/napi-rs/nodejs-rust:lts-alpine builder
             build: docker run --rm -v ~/.cargo/git:/root/.cargo/git -v ~/.cargo/registry:/root/.cargo/registry -v $(pwd):/build -w /build builder sh -c "apk add --update cmake && npx pnpm@6 install && npx pnpm@6 build && strip swc-plugins.linux-x64-musl.node"
           - host: macos-latest
-            target: 'aarch64-apple-darwin'
+            target: "aarch64-apple-darwin"
             build: |
               sudo rm -Rf /Library/Developer/CommandLineTools/SDKs/*;
               export CC=$(xcrun -f clang);
@@ -71,7 +71,7 @@ jobs:
               pnpm build -- --target=aarch64-apple-darwin
               strip -x *.node
           - host: ubuntu-latest
-            target: 'aarch64-unknown-linux-gnu'
+            target: "aarch64-unknown-linux-gnu"
             setup: |
               sudo apt-get update
               sudo apt-get install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu -y
@@ -79,37 +79,21 @@ jobs:
               pnpm build -- --target=aarch64-unknown-linux-gnu
               aarch64-linux-gnu-strip swc-plugins.linux-arm64-gnu.node
           - host: ubuntu-latest
-            target: 'armv7-unknown-linux-gnueabihf'
+            target: "armv7-unknown-linux-gnueabihf"
             setup: |
               sudo apt-get update
               sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf -y
             build: |
               pnpm build -- --target=armv7-unknown-linux-gnueabihf
               arm-linux-gnueabihf-strip swc-plugins.linux-arm-gnueabihf.node
-#          - host: ubuntu-latest
-#            target: 'aarch64-linux-android'
-#            build: |
-#              export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER="${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang"
-#              export PATH="${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin:${PATH}"
-#              pnpm build -- --target aarch64-linux-android
-#              ${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-strip *.node
-#          - host: ubuntu-latest
-#            target: 'armv7-linux-androideabi'
-#            build: |
-#              export CARGO_TARGET_ARMV7_LINUX_ANDROIDEABI_LINKER="${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi24-clang"
-#              export CC="${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi24-clang"
-#              export CXX="${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi24-clang++"
-#              export PATH="${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin:${PATH}"
-#              pnpm build -- --target armv7-linux-androideabi
-#              ${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-strip *.node
           - host: ubuntu-latest
-            target: 'aarch64-unknown-linux-musl'
+            target: "aarch64-unknown-linux-musl"
             docker: |
               docker pull ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
               docker tag ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine builder
             build: docker run --rm -v ~/.cargo/git:/root/.cargo/git -v ~/.cargo/registry:/root/.cargo/registry -v $(pwd):/swc-plugins -w /swc-plugins builder sh -c "rustup target add aarch64-unknown-linux-musl && npx pnpm@6 install && npx pnpm@6 build -- --target=aarch64-unknown-linux-musl && /aarch64-linux-musl-cross/bin/aarch64-linux-musl-strip *.node"
           - host: windows-latest
-            target: 'aarch64-pc-windows-msvc'
+            target: "aarch64-pc-windows-msvc"
             build: pnpm build -- --target aarch64-pc-windows-msvc
 
     name: stable - ${{ matrix.settings.target }} - node@14
@@ -158,10 +142,10 @@ jobs:
         if: ${{ matrix.settings.setup }}
         shell: bash
 
-      - name: 'Install dependencies'
+      - name: "Install dependencies"
         run: pnpm install --no-frozen-lockfile
 
-      - name: 'Build'
+      - name: "Build"
         run: ${{ matrix.settings.build }}
         shell: bash
 
@@ -170,7 +154,6 @@ jobs:
         with:
           name: bindings-${{ matrix.settings.target }}
           path: ${{ env.APP_NAME }}.*.node
-          retention-days: 1
 
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -181,10 +164,10 @@ jobs:
       matrix:
         settings:
           - host: macos-latest
-            target: 'x86_64-apple-darwin'
+            target: "x86_64-apple-darwin"
           - host: windows-latest
-            target: 'x86_64-pc-windows-msvc'
-        node: ['12', '14', '16']
+            target: "x86_64-pc-windows-msvc"
+        node: ["14", "16"]
     runs-on: ${{ matrix.settings.host }}
 
     steps:
@@ -205,7 +188,7 @@ jobs:
           path: ~/.pnpm-store
           key: npm-cache-test-${{ matrix.settings.target }}-${{ matrix.node }}-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - name: 'Install dependencies'
+      - name: "Install dependencies"
         run: pnpm install --no-frozen-lockfile
 
       - name: Download artifacts
@@ -228,7 +211,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['12', '14', '16']
+        node: ["14", "16"]
     runs-on: ubuntu-latest
 
     steps:
@@ -260,7 +243,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['12', '14', '16']
+        node: ["14", "16"]
     runs-on: ubuntu-latest
 
     steps:
@@ -292,7 +275,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['12', '14', '16']
+        node: ["14", "16"]
     runs-on: ubuntu-latest
 
     steps:
@@ -323,10 +306,13 @@ jobs:
             ls -la
 
   test-linux-aarch64-musl-binding:
-    name: Test bindings on aarch64-unknown-linux-musl - node@lts
+    name: Test bindings on aarch64-unknown-linux-musl - node@${{ matrix.node }}
     needs:
       - build
-
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["14", "16"]
     runs-on: ubuntu-latest
 
     steps:
@@ -352,7 +338,7 @@ jobs:
               apk add nodejs npm && \
               npm install -g pnpm@6 && \
               pnpm install --no-frozen-lockfile && \
-              npm test
+              pnpm test
             "
   test-linux-arm-gnueabihf-binding:
     name: Test bindings on armv7-unknown-linux-gnueabihf - node@${{ matrix.node }}
@@ -361,7 +347,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['12', '14', '16']
+        node: ["14", "16"]
     runs-on: ubuntu-latest
 
     steps:
@@ -420,7 +406,7 @@ jobs:
           path: ~/.pnpm-store
           key: npm-cache-ubuntu-latest-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - name: 'Install dependencies'
+      - name: "Install dependencies"
         run: pnpm install --no-frozen-lockfile
 
       - name: Download all artifacts

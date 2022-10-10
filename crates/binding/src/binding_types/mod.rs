@@ -4,6 +4,9 @@ pub mod plugin_import;
 pub mod plugin_modularize_imports;
 pub mod plugin_react_utils;
 pub mod plugin_lock_corejs_version;
+pub mod plugin_styled_components;
+pub mod plugin_emotion;
+pub mod plugin_styled_jsx;
 
 use std::collections::HashMap;
 

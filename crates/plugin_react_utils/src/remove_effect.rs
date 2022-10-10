@@ -1,8 +1,12 @@
 use std::collections::HashSet;
 
-use shared::swc_common::util::take::Take;
-use shared::swc_ecma_ast::{self, BlockStmt, Expr, Id, ModuleDecl, ModuleExportName, ModuleItem};
-use shared::swc_ecma_visit::{as_folder, Fold, VisitMut, VisitMutWith};
+use shared::swc_core::{
+  common::util::take::Take,
+  ecma::{
+    ast::{ BlockStmt, Expr, Id, ModuleDecl, ModuleExportName, ModuleItem, Module, ImportSpecifier},
+    visit::{as_folder, Fold, VisitMut, VisitMutWith},
+  }
+};
 
 use shared::utils::ClearMark;
 
@@ -73,7 +77,7 @@ pub fn remove_effect() -> impl Fold + VisitMut {
 struct RmCall {}
 
 impl VisitMut for RmCall {
-  fn visit_mut_module(&mut self, module: &mut shared::swc_ecma_ast::Module) {
+  fn visit_mut_module(&mut self, module: &mut Module) {
     let mut visitor = RmUseEffect {
       react_mark: HashSet::new(),
       use_effect_mark: HashSet::new(),
@@ -84,7 +88,7 @@ impl VisitMut for RmCall {
         if source == "react" {
           for specifier in &var.specifiers {
             match specifier {
-              swc_ecma_ast::ImportSpecifier::Named(named) => {
+              ImportSpecifier::Named(named) => {
                 match &named.imported {
                   Some(imported) => {
                     let imported_name = match imported {
@@ -104,11 +108,11 @@ impl VisitMut for RmCall {
                   }
                 }
               }
-              swc_ecma_ast::ImportSpecifier::Default(default) => {
+              ImportSpecifier::Default(default) => {
                 // import ??? from 'react'
                 visitor.react_mark.insert(default.local.to_id());
               }
-              swc_ecma_ast::ImportSpecifier::Namespace(default) => {
+              ImportSpecifier::Namespace(default) => {
                 // import * as ??? from 'react'
                 visitor.react_mark.insert(default.local.to_id());
               }

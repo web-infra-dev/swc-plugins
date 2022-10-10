@@ -1,9 +1,14 @@
 use std::path::PathBuf;
 
 use plugin_modularize_imports::{modularize_imports, PackageConfig};
-use shared::swc_ecma_parser::{EsConfig, Syntax};
+
 use shared::swc_ecma_transforms_testing::test_fixture;
 use shared::testing::fixture;
+use shared::swc_core::{
+  ecma::{
+    parser::{EsConfig, Syntax},
+  }
+};
 
 fn syntax() -> Syntax {
   Syntax::Es(EsConfig {

@@ -1,9 +1,11 @@
-use shared::swc_atoms::JsWord;
-use shared::swc_common::DUMMY_SP;
-use shared::swc_ecma_ast::{
-  Ident, ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleItem, Str,
+use shared::swc_core::{
+  common::DUMMY_SP,
+  ecma::{
+    visit::{as_folder, Fold, VisitMut},
+    ast::{Ident, ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleItem, Str},
+    atoms::JsWord
+  }
 };
-use shared::swc_ecma_visit::{as_folder, Fold, VisitMut};
 
 struct ImportReact;
 
@@ -42,11 +44,11 @@ impl VisitMut for ImportReact {
             optional: false,
           },
         })],
-        src: Str {
+        src: Box::new(Str {
           span: DUMMY_SP,
           value: JsWord::from("react"),
           raw: None,
-        },
+        }),
         type_only: false,
         asserts: None,
       }));
