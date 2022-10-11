@@ -18,11 +18,11 @@ impl VisitMut for LockCoreJsVersion {
   fn visit_mut_import_decl(&mut self, decl: &mut ImportDecl) {
     if decl.src.value.contains(COREJS) {
       let locked_src = change_specifier(&decl.src.value, &self.corejs_path);
-      decl.src = Str {
+      decl.src = Box::new(Str {
         span: DUMMY_SP,
         value: JsWord::from(locked_src.as_str()),
         raw: None,
-      }
+      })
     }
   }
 
