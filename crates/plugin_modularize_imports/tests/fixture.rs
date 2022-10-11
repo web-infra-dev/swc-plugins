@@ -64,5 +64,6 @@ fn modularize_imports_fixture(input: PathBuf) {
     },
     &input,
     &output,
+    Default::default()
   );
 }

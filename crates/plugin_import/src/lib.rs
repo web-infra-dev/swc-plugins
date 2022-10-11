@@ -374,11 +374,11 @@ impl<'a> VisitMut for ImportPlugin<'a> {
             is_type_only: false,
           })]
         },
-        src: Str {
+        src: Box::new(Str {
           span: DUMMY_SP,
           value: JsWord::from(js_source_ref),
           raw: None,
-        },
+        }),
         type_only: false,
         asserts: None,
       }));
@@ -389,11 +389,11 @@ impl<'a> VisitMut for ImportPlugin<'a> {
       let dec = ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {
         span: DUMMY_SP,
         specifiers: vec![],
-        src: Str {
+        src: Box::new(Str {
           span: DUMMY_SP,
           value: JsWord::from(css_source),
           raw: None,
-        },
+        }),
         type_only: false,
         asserts: None,
       }));
