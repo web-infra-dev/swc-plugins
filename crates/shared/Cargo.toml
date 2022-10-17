@@ -24,11 +24,12 @@ swc_core = { features = [
   "ecma_transforms_react",
   "ecma_transforms_typescript",
   "ecma_transforms_optimization",
+  "ecma_quote",
   "ecma_parser",
   "ecma_parser_typescript",
   "cached",
-  "base"
-], version = "0.34.0" }
+  "base",
+], version = "0.38.5" }
 
 [dev-dependencies]
 testing_macros = "0.2.7"

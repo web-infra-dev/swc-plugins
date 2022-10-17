@@ -3,9 +3,9 @@ use std::{path::PathBuf, sync::Arc};
 use shared::{
   anyhow::Result,
   swc_core::{
-    base::{try_with_handler, Compiler, HandlerOpts, TransformOutput, config},
+    base::{config, try_with_handler, Compiler, HandlerOpts, TransformOutput},
     common::{errors::ColorConfig, FileName, GLOBALS},
-    ecma::transforms::base::pass::noop,
+    ecma::{transforms::base::pass::noop},
   },
 };
 
@@ -21,6 +21,7 @@ pub fn transform(
 ) -> Result<TransformOutput> {
   GLOBALS.set(&Default::default(), || {
     let cm = compiler.cm.clone();
+
     try_with_handler(
       cm.clone(),
       HandlerOpts {
@@ -30,19 +31,20 @@ pub fn transform(
       |handler| {
         compiler.run_transform(handler, true, || {
           let fm = cm.new_source_file(FileName::Real(PathBuf::from(&filename)), code.to_string());
-  
+
           let mut swc_config = config::Options {
             ..config.swc.clone()
           };
           swc_config.config.input_source_map = input_source_map.map(config::InputSourceMap::Str);
           swc_config.filename = filename;
-  
+
           compiler.process_js_with_custom_pass(
             fm,
             None,
             handler,
             &swc_config,
-            |_, _| internal_transform_pass(config, cm),
+            // TODO pass comments to internal pass
+            |_, _comments| internal_transform_pass(config, cm),
             |_, _| noop(),
           )
         })
