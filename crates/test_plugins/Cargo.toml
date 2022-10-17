@@ -1,0 +1,10 @@
+[package]
+edition = "2021"
+name = "test_plugins"
+version = "0.1.0"
+
+[dependencies]
+modern_swc_core = {path = "../core"}
+shared = {path = "../shared"}
+similar = "2.1.0"
+colored = "2.0.0"

@@ -7,7 +7,7 @@ use shared::swc_core::{
   },
 };
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LockCoreJsVersion {
   pub corejs_path: String,
 }

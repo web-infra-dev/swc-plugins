@@ -13,7 +13,7 @@ mod remove_effect;
 pub use import_react::auto_import_react;
 pub use remove_effect::remove_effect;
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 #[serde(crate = "self::serde")]
 pub struct ReactUtilsConfig {
   pub auto_import_react: Option<bool>,

@@ -1,6 +1,7 @@
 use modern_swc_core::types::Extensions;
 use std::collections::HashMap;
 
+use super::plugin_dynamic_import_node::DynImportNodeConfigNapi;
 use super::plugin_emotion::EmotionOptionsNapi;
 use super::plugin_lock_corejs_version::LockCoreJsVersionNapi;
 use super::plugin_modularize_imports::PackageConfigNapi;
@@ -23,6 +24,8 @@ pub struct ExtensionsNapi {
   pub emotion: Option<EmotionOptionsNapi>,
   pub styled_components: Option<StyledComponentsConfigNapi>,
   pub styled_jsx: Option<bool>,
+
+  pub dyn_import_node: Option<DynImportNodeConfigNapi>
 }
 
 impl IntoRawConfig<Extensions> for ExtensionsNapi {
@@ -34,7 +37,8 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       lock_corejs_version,
       emotion,
       styled_components,
-      styled_jsx
+      styled_jsx,
+      dyn_import_node
     } = self;
 
     Ok(Extensions {
@@ -45,6 +49,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       emotion: emotion.into_raw_config(env)?,
       styled_components: styled_components.into_raw_config(env)?,
       styled_jsx,
+      dyn_import_node: dyn_import_node.into_raw_config(env)?
     })
   }
 }
