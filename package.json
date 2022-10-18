@@ -7,12 +7,6 @@
   "license": "MIT",
   "main": "./index.js",
   "types": "./types/index.d.ts",
-  "exports": {
-    ".": "./index.js",
-    "./binding": "./binding.js",
-    "./loader": "./dist/loader.js",
-    "./plugin": "./dist/plugin.js"
-  },
   "version": "0.0.2",
   "devDependencies": {
     "@types/node": "^18.7.1",
