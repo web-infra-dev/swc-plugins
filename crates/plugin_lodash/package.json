@@ -1,0 +1,12 @@
+{
+  "name": "swc-plugins-plugin-lodash-test",
+  "devDependencies": {
+    "lodash": "^4.17.21",
+    "lodash-compat": "^3.10.2",
+    "lodash-es": "^4.17.21",
+    "react-bootstrap": "^2.5.0"
+  },
+  "dependencies": {
+    "@storybook/addon-links": "^6.5.12"
+  }
+}
