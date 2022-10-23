@@ -4,8 +4,8 @@ use shared::{
   anyhow::Result,
   swc_core::{
     base::{config, try_with_handler, Compiler, HandlerOpts, TransformOutput},
-    common::{errors::ColorConfig, FileName, GLOBALS},
-    ecma::{transforms::base::pass::noop},
+    common::{errors::ColorConfig, FileName, Mark, GLOBALS},
+    ecma::transforms::base::pass::noop,
   },
 };
 
@@ -38,13 +38,18 @@ pub fn transform(
           swc_config.config.input_source_map = input_source_map.map(config::InputSourceMap::Str);
           swc_config.filename = filename;
 
+          let top_level_mark = swc_config.top_level_mark.unwrap_or_else(Mark::new);
+          let unresolved_mark = Mark::new();
+
+          swc_config.top_level_mark = Some(top_level_mark);
+
           compiler.process_js_with_custom_pass(
             fm,
             None,
             handler,
             &swc_config,
             // TODO pass comments to internal pass
-            |_, _comments| internal_transform_pass(config, cm),
+            |_, _comments| internal_transform_pass(config, cm, top_level_mark, unresolved_mark),
             |_, _| noop(),
           )
         })

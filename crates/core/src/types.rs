@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use plugin_dynamic_import_node::DynImportNodeConfig;
+use plugin_lodash::PluginLodashConfig;
 use shared::swc_core::base::config::Options;
 use plugin_import::PluginImportConfig;
 use plugin_lock_corejs_version::LockCoreJsVersion;
@@ -17,7 +17,7 @@ pub struct Extensions {
   pub styled_components: Option<styled_components::Config>,
   pub styled_jsx: Option<bool>,
 
-  pub dyn_import_node: Option<DynImportNodeConfig>
+  pub lodash: Option<PluginLodashConfig>,
 }
 
 #[derive(Debug, Default)]

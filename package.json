@@ -14,12 +14,15 @@
     "vitest": "^0.22.0",
     "@napi-rs/cli": "^2.11.4"
   },
+  "files": [
+    "types/**"
+  ],
   "engines": {
     "node": ">=14.18.0"
   },
   "scripts": {
     "artifacts": "napi artifacts",
-    "build": "napi build --cargo-cwd crates/binding --js index.js --dts unused.d.ts --js-package-name swc-plugins --platform --release",
+    "build": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts --release",
     "build:dev": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "vitest run --segfault-retry=3",

@@ -11,7 +11,7 @@ plugin_modularize_imports = {path = "../plugin_modularize_imports"}
 plugin_import = {path = "../plugin_import"}
 plugin_react_utils = {path = "../plugin_react_utils"}
 plugin_lock_corejs_version = {path = "../plugin_lock_corejs_version"}
-plugin_dynamic_import_node = {path = "../plugin_dynamic-import-node"}
+plugin_lodash = {path = "../plugin_lodash"}
 
 swc_emotion = "0.24.0"
 styled_components = "0.47.0"

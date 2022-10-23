@@ -7,7 +7,7 @@ pub mod plugin_lock_corejs_version;
 pub mod plugin_styled_components;
 pub mod plugin_emotion;
 pub mod plugin_styled_jsx;
-pub mod plugin_dynamic_import_node;
+pub mod plugin_lodash;
 
 use std::collections::HashMap;
 

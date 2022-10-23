@@ -1,9 +1,9 @@
 use std::sync::Arc;
 
 use crate::types::TransformConfig;
-use plugin_dynamic_import_node::dyn_import_node;
+use plugin_lodash::plugin_lodash;
 use shared::swc_core::{
-  common::{chain, pass::Either, SourceMap, comments::SingleThreadedComments},
+  common::{chain, pass::Either, SourceMap, comments::SingleThreadedComments, Mark},
   ecma::transforms::base::pass::noop,
   ecma::visit::Fold,
 };
@@ -15,6 +15,8 @@ use plugin_react_utils::react_utils;
 pub fn internal_transform_pass(
   config: &TransformConfig,
   _cm: Arc<SourceMap>,
+  top_level_mark: Mark,
+  _unresolved_mark: Mark
 ) -> impl Fold + '_
 {
   let extensions = &config.extensions;
@@ -49,10 +51,8 @@ pub fn internal_transform_pass(
     Either::Right(noop())
   };
 
-  let dyn_import_node = if let Some(dyn_import_node_config) = &extensions.dyn_import_node {
-    // Now this just for fn signature, this comment has no op
-    let comments = SingleThreadedComments::default();
-    Either::Left(dyn_import_node(dyn_import_node_config.clone(), Some(comments)))
+  let lodash = if let Some(ref config) = extensions.lodash {
+    Either::Left(plugin_lodash(config, top_level_mark))
   } else {
     Either::Right(noop())
   };
@@ -79,6 +79,6 @@ pub fn internal_transform_pass(
     plugin_import,
     react_utils,
     lock_core_js,
-    dyn_import_node
+    lodash
   )
 }
