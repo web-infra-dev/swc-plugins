@@ -9,10 +9,11 @@ pub mod plugin_emotion;
 pub mod plugin_styled_jsx;
 pub mod plugin_lodash;
 
-use std::collections::HashMap;
-
 pub use config::TransformConfigNapi;
 use napi::{Env, Result};
+use shared::hashbrown::HashMap;
+use std::collections::HashMap as StdHashMap;
+
 pub trait IntoRawConfig<T> {
   fn into_raw_config(self, env: Env) -> Result<T>;
 }
@@ -51,6 +52,22 @@ where
 {
   fn into_raw_config(self, env: Env) -> Result<HashMap<K, V>> {
     let mut res = HashMap::with_capacity(self.len());
+
+    for (k, v) in self {
+      res.insert(k, v.into_raw_config(env)?);
+    }
+
+    Ok(res)
+  }
+}
+
+impl<T, K, V> IntoRawConfig<StdHashMap<K, V>> for StdHashMap<K, T>
+where
+  K: Eq + std::hash::Hash,
+  T: IntoRawConfig<V>,
+{
+  fn into_raw_config(self, env: Env) -> Result<StdHashMap<K, V>> {
+    let mut res = StdHashMap::with_capacity(self.len());
 
     for (k, v) in self {
       res.insert(k, v.into_raw_config(env)?);

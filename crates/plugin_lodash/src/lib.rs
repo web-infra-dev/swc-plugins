@@ -1,5 +1,5 @@
 use mappings::{build_mappings, Mappings, Package};
-use shared::swc_core::{
+use shared::{swc_core::{
   self,
   common::{Mark, Span, DUMMY_SP},
   ecma::{
@@ -13,9 +13,8 @@ use shared::swc_core::{
     visit::{as_folder, Fold, VisitMut, VisitMutWith},
   },
   quote,
-};
+}, hashbrown::{HashMap, HashSet}};
 use std::{
-  collections::{HashMap, HashSet},
   ops::Deref,
   path::PathBuf,
 };

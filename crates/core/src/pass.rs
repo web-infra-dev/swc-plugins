@@ -1,9 +1,9 @@
 use std::sync::Arc;
 
-use crate::types::TransformConfig;
+use crate::{plugin::PluginContext, types::TransformConfig};
 use plugin_lodash::plugin_lodash;
 use shared::swc_core::{
-  common::{chain, pass::Either, SourceMap, comments::SingleThreadedComments, Mark},
+  common::{chain, comments::Comments, pass::Either, Mark, SourceMap},
   ecma::transforms::base::pass::noop,
   ecma::visit::Fold,
 };
@@ -14,11 +14,18 @@ use plugin_react_utils::react_utils;
 
 pub fn internal_transform_pass(
   config: &TransformConfig,
-  _cm: Arc<SourceMap>,
+  cm: Arc<SourceMap>,
   top_level_mark: Mark,
-  _unresolved_mark: Mark
-) -> impl Fold + '_
-{
+  unresolved_mark: Mark,
+  comments: impl Comments,
+) -> impl Fold + '_ {
+  let _ctx = PluginContext {
+    cm,
+    top_level_mark,
+    unresolved_mark,
+    comments,
+  };
+
   let extensions = &config.extensions;
 
   let modularize_imports = extensions

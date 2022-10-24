@@ -1,5 +1,5 @@
 use modern_swc_core::types::Extensions;
-use std::collections::HashMap;
+use std::collections::HashMap as StdHashMap;
 
 use super::plugin_emotion::EmotionOptionsNapi;
 use super::plugin_lock_corejs_version::LockCoreJsVersionNapi;
@@ -16,7 +16,7 @@ use napi_derive::napi;
 #[derive(Default)]
 #[napi(object)]
 pub struct ExtensionsNapi {
-  pub modularize_imports: Option<HashMap<String, PackageConfigNapi>>,
+  pub modularize_imports: Option<StdHashMap<String, PackageConfigNapi>>,
   pub plugin_import: Option<Vec<plugin_import::PluginImportConfigNapi>>,
   pub react_utils: Option<plugin_react_utils::ReactUtilsConfigNapi>,
   pub lock_corejs_version: Option<LockCoreJsVersionNapi>,

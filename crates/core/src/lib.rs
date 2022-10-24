@@ -2,6 +2,8 @@ mod minify;
 mod pass;
 mod transform;
 
+pub mod plugin;
+
 pub mod types;
 pub use transform::transform;
 pub use minify::minify;

@@ -15,13 +15,12 @@ use shared::{
       sync::{Lazy, RwLock},
       SourceMap,
     },
-  },
+  }, hashbrown::HashMap,
 };
 
 use modern_swc_core::types::TransformConfig;
 use std::{
   cell::RefCell,
-  collections::HashMap,
   sync::{
     atomic::{AtomicU32, Ordering},
     Arc,
