@@ -1,5 +1,4 @@
 use std::{
-  collections::HashMap,
   fs,
   path::{Path, PathBuf},
 };
@@ -7,7 +6,7 @@ use std::{
 use nodejs_resolver::{Options, ResolveResult, Resolver};
 use shared::{
   anyhow,
-  serde::{Deserialize, Serialize},
+  serde::{Deserialize, Serialize}, hashbrown::HashMap,
 };
 
 use crate::error::{ResolveError, ResolveErrorKind};

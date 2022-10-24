@@ -49,7 +49,15 @@ pub fn transform(
             handler,
             &swc_config,
             // TODO pass comments to internal pass
-            |_, _comments| internal_transform_pass(config, cm, top_level_mark, unresolved_mark),
+            |_, comments| {
+              internal_transform_pass(
+                config,
+                cm,
+                top_level_mark,
+                unresolved_mark,
+                comments.clone(),
+              )
+            },
             |_, _| noop(),
           )
         })

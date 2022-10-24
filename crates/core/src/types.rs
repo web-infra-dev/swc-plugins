@@ -1,14 +1,14 @@
-use std::collections::HashMap;
-use plugin_lodash::PluginLodashConfig;
-use shared::swc_core::base::config::Options;
 use plugin_import::PluginImportConfig;
 use plugin_lock_corejs_version::LockCoreJsVersion;
+use plugin_lodash::PluginLodashConfig;
 use plugin_modularize_imports::PackageConfig;
 use plugin_react_utils::ReactUtilsConfig;
+use shared::swc_core::base::config::Options;
+use std::collections::HashMap as StdHashMap;
 
 #[derive(Default, Debug)]
 pub struct Extensions {
-  pub modularize_imports: Option<HashMap<String, PackageConfig>>,
+  pub modularize_imports: Option<StdHashMap<String, PackageConfig>>,
   pub plugin_import: Option<Vec<PluginImportConfig>>,
   pub react_utils: Option<ReactUtilsConfig>,
   pub lock_corejs_version: Option<LockCoreJsVersion>,

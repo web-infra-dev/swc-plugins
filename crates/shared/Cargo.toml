@@ -30,6 +30,7 @@ swc_core = { features = [
   "cached",
   "base",
 ], version = "0.38.5" }
+hashbrown = "0.12.3"
 
 [dev-dependencies]
 testing_macros = "0.2.7"

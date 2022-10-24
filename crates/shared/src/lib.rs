@@ -7,3 +7,4 @@ pub use swc_ecma_transforms_testing;
 pub use testing;
 pub use swc_core;
 pub extern crate serde;
+pub use hashbrown;

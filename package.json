@@ -9,10 +9,15 @@
   "types": "./types/index.d.ts",
   "version": "0.0.2",
   "devDependencies": {
+    "@napi-rs/cli": "^2.11.4",
+    "@storybook/addon-links": "^6.5.12",
     "@types/node": "^18.7.1",
+    "lodash": "^4.17.21",
+    "lodash-compat": "^3.10.2",
+    "lodash-es": "^4.17.21",
+    "react-bootstrap": "^2.5.0",
     "tsno": "^2.0.0",
-    "vitest": "^0.22.0",
-    "@napi-rs/cli": "^2.11.4"
+    "vitest": "^0.22.0"
   },
   "files": [
     "types/**"

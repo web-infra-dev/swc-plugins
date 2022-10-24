@@ -1695,6 +1695,7 @@ name = "shared"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "hashbrown",
  "serde",
  "serde_json",
  "swc_core 0.38.6",
