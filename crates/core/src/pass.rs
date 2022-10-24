@@ -3,7 +3,7 @@ use std::sync::Arc;
 use crate::types::TransformConfig;
 use plugin_lodash::plugin_lodash;
 use shared::swc_core::{
-  common::{chain, pass::Either, SourceMap, comments::SingleThreadedComments, Mark},
+  common::{chain, pass::Either, Mark, SourceMap},
   ecma::transforms::base::pass::noop,
   ecma::visit::Fold,
 };
@@ -16,9 +16,8 @@ pub fn internal_transform_pass(
   config: &TransformConfig,
   _cm: Arc<SourceMap>,
   top_level_mark: Mark,
-  _unresolved_mark: Mark
-) -> impl Fold + '_
-{
+  _unresolved_mark: Mark,
+) -> impl Fold + '_ {
   let extensions = &config.extensions;
 
   let modularize_imports = extensions
