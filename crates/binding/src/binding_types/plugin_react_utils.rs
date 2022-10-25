@@ -18,8 +18,8 @@ pub struct ReactUtilsConfigNapi {
 impl IntoRawConfig<ReactUtilsConfig> for ReactUtilsConfigNapi {
   fn into_raw_config(self, _: Env) -> napi::Result<ReactUtilsConfig> {
     Ok(ReactUtilsConfig {
-      auto_import_react: self.auto_import_react,
-      rm_effect: self.rm_effect,
+      auto_import_react: self.auto_import_react.unwrap_or(false),
+      rm_effect: self.rm_effect.unwrap_or(false),
     })
   }
 }

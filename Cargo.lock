@@ -1337,6 +1337,7 @@ name = "plugin_react_utils"
 version = "0.1.0"
 dependencies = [
  "shared",
+ "test_plugins",
 ]
 
 [[package]]
