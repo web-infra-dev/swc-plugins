@@ -38,7 +38,7 @@ pub fn transform(
           swc_config.config.input_source_map = input_source_map.map(config::InputSourceMap::Str);
           swc_config.filename = filename;
 
-          let top_level_mark = swc_config.top_level_mark.unwrap_or_else(Mark::new);
+          let top_level_mark = Mark::new();
           let unresolved_mark = Mark::new();
 
           swc_config.top_level_mark = Some(top_level_mark);

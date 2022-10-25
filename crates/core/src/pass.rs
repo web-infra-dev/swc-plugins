@@ -37,7 +37,7 @@ pub fn internal_transform_pass(
     .unwrap_or_else(|| Either::Right(noop()));
 
   let react_utils = if let Some(c) = &extensions.react_utils {
-    Either::Left(react_utils(c))
+    Either::Left(react_utils(c, top_level_mark))
   } else {
     Either::Right(noop())
   };

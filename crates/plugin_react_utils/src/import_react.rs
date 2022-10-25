@@ -1,45 +1,56 @@
-use shared::swc_core::{
-  common::DUMMY_SP,
-  ecma::{
-    visit::{as_folder, Fold, VisitMut},
-    ast::{Ident, ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleItem, Str},
-    atoms::JsWord
-  }
+use shared::{
+  swc_core::{
+    common::{Mark, Span, DUMMY_SP},
+    ecma::{
+      ast::{
+        Ident, ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleItem,
+        Str,
+      },
+      atoms::JsWord,
+      visit::{as_folder, Fold, VisitMut, VisitMutWith},
+    },
+  },
+  utils::change_ident_syntax_context,
 };
 
-struct ImportReact;
+struct ImportReact {
+  top_level_mark: Mark,
+}
 
 impl VisitMut for ImportReact {
   fn visit_mut_module(&mut self, module: &mut Module) {
-    let mut need_add = true;
+    let mut need_import = true;
 
     for item in &module.body {
       if let ModuleItem::ModuleDecl(ModuleDecl::Import(var)) = item {
         let source = &var.src.value;
         if source == "react" {
           for specifier in &var.specifiers {
-            match specifier {
-              ImportSpecifier::Named(ref _s) => {}
-              ImportSpecifier::Default(ref s) => {
-                if &s.local.sym == "React" {
-                  need_add = false;
-                }
-              }
-              ImportSpecifier::Namespace(ref _s) => {}
+            if let ImportSpecifier::Default(_) = specifier {
+              // default import already exist
+              need_import = false;
+              break;
             }
           }
         }
       }
     }
 
-    if need_add {
+    if need_import {
+      let local_span = Span::dummy_with_cmt().apply_mark(self.top_level_mark);
+
+      module.visit_mut_children_with(&mut change_ident_syntax_context(
+        local_span.ctxt,
+        "React".into(),
+      ));
+
       let body = &mut module.body;
       let dec = ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {
         span: DUMMY_SP,
         specifiers: vec![ImportSpecifier::Default(ImportDefaultSpecifier {
           span: DUMMY_SP,
           local: Ident {
-            span: DUMMY_SP,
+            span: local_span,
             sym: JsWord::from("React"),
             optional: false,
           },
@@ -57,6 +68,6 @@ impl VisitMut for ImportReact {
   }
 }
 
-pub fn auto_import_react() -> impl Fold + VisitMut {
-  as_folder(ImportReact)
+pub fn auto_import_react(top_level_mark: Mark) -> impl Fold + VisitMut {
+  as_folder(ImportReact { top_level_mark })
 }
