@@ -9,8 +9,7 @@ edition = "2021"
 anyhow = "1.0.62"
 serde_json = "1.0.71"
 serde = {version= "1.0.71", features=["derive"]}
-swc_ecma_transforms_testing = "0.114.2"
-testing = "0.31.5"
+testing = "0.31.3"
 swc_core = { features = [
   "common_concurrent",
   "ecma_ast",
@@ -29,7 +28,8 @@ swc_core = { features = [
   "ecma_parser_typescript",
   "cached",
   "base",
-], version = "0.38.5" }
+  "testing_transform"
+], version = "0.28.10" }
 hashbrown = "0.12.3"
 
 [dev-dependencies]

@@ -25,7 +25,6 @@ pub fn internal_transform_pass(
     unresolved_mark,
     comments,
   };
-
   let extensions = &config.extensions;
 
   let modularize_imports = extensions
