@@ -945,26 +945,10 @@ name = "modern_swc_binding"
 version = "0.1.0"
 dependencies = [
  "crossbeam-channel",
- "modern_swc_core",
  "napi",
  "napi-derive",
  "shared",
-]
-
-[[package]]
-name = "modern_swc_core"
-version = "0.1.0"
-dependencies = [
- "insta",
- "plugin_import",
- "plugin_lock_corejs_version",
- "plugin_lodash",
- "plugin_modularize_imports",
- "plugin_react_utils",
- "shared",
- "styled_components",
- "styled_jsx",
- "swc_emotion",
+ "swc_plugins_core",
 ]
 
 [[package]]
@@ -1336,6 +1320,7 @@ dependencies = [
 name = "plugin_react_utils"
 version = "0.1.0"
 dependencies = [
+ "glob",
  "shared",
  "test_plugins",
 ]
@@ -2720,6 +2705,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "swc_plugins_core"
+version = "0.1.0"
+dependencies = [
+ "insta",
+ "plugin_import",
+ "plugin_lock_corejs_version",
+ "plugin_lodash",
+ "plugin_modularize_imports",
+ "plugin_react_utils",
+ "shared",
+ "styled_components",
+ "styled_jsx",
+ "swc_emotion",
+]
+
+[[package]]
 name = "swc_timer"
 version = "0.17.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2812,9 +2813,9 @@ name = "test_plugins"
 version = "0.1.0"
 dependencies = [
  "colored",
- "modern_swc_core",
  "shared",
  "similar",
+ "swc_plugins_core",
 ]
 
 [[package]]

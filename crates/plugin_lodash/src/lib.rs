@@ -1,23 +1,27 @@
 use mappings::{build_mappings, Mappings, Package};
-use shared::swc_core::{
-  self,
-  common::{Mark, Span, DUMMY_SP},
-  ecma::{
-    ast::{
-      CallExpr, ExportNamedSpecifier, ExportSpecifier, Expr, Id, Ident, ImportDecl,
-      ImportDefaultSpecifier, ImportSpecifier, MemberProp, Module, ModuleDecl, ModuleExportName,
-      ModuleItem, NamedExport, Str,
+use shared::{
+  swc_core::{
+    self,
+    common::{Mark, Span, DUMMY_SP},
+    ecma::{
+      ast::{
+        CallExpr, ExportNamedSpecifier, ExportSpecifier, Expr, Id, Ident, ImportDecl,
+        ImportDefaultSpecifier, ImportSpecifier, MemberProp, Module, ModuleDecl, ModuleExportName,
+        ModuleItem, NamedExport, Str,
+      },
+      atoms::JsWord,
+      utils::undefined,
+      visit::{as_folder, Fold, VisitMut, VisitMutWith},
     },
-    atoms::JsWord,
-    utils::undefined,
-    visit::{as_folder, Fold, VisitMut, VisitMutWith},
+    quote,
   },
-  quote,
+  PluginContext,
 };
 use std::{
   collections::{HashMap, HashSet},
   ops::Deref,
   path::PathBuf,
+  sync::Arc,
 };
 
 mod error;
@@ -31,7 +35,10 @@ pub struct PluginLodashConfig {
   pub ids: Vec<String>,
 }
 
-pub fn plugin_lodash(config: &PluginLodashConfig, top_level_mark: Mark) -> impl Fold {
+pub fn plugin_lodash(
+  config: &PluginLodashConfig,
+  plugin_context: Arc<PluginContext>,
+) -> impl Fold + '_ {
   let mut ids = vec!["lodash".into(), "lodash-es".into(), "lodash-compat".into()];
   config.ids.iter().for_each(|id| {
     if !ids.contains(id) {
@@ -61,7 +68,7 @@ pub fn plugin_lodash(config: &PluginLodashConfig, top_level_mark: Mark) -> impl 
 
   as_folder(PluginLodash {
     cwd: config.cwd.clone(),
-    top_level_mark,
+    top_level_mark: plugin_context.top_level_mark,
     mappings,
     pkg_map,
     imported_names: Default::default(),
@@ -410,11 +417,7 @@ fn detect_curried_fn(expr: &Expr) -> Option<Id> {
 
     if let Some(inner) = inner {
       Some(inner)
-    } else if let Some(Expr::Call(call_expr)) = call_expr
-    .callee
-    .as_expr()
-    .map(Deref::deref)
-    {
+    } else if let Some(Expr::Call(call_expr)) = call_expr.callee.as_expr().map(Deref::deref) {
       if let Some(Expr::Ident(ident)) = call_expr.callee.as_expr().map(Deref::deref) {
         Some(ident.to_id())
       } else {
@@ -430,23 +433,17 @@ fn detect_curried_fn(expr: &Expr) -> Option<Id> {
 
 #[test]
 fn test_detect_curry() {
-  let expr = quote!(
-    "curryFn(func)([_])" as Expr
-  );
+  let expr = quote!("curryFn(func)([_])" as Expr);
 
   assert!(detect_curried_fn(&expr).is_some());
   assert_eq!("curryFn", detect_curried_fn(&expr).unwrap().0.to_string());
 
-  let expr = quote!(
-    "curryFn()()()(func)([_])" as Expr
-  );
+  let expr = quote!("curryFn()()()(func)([_])" as Expr);
 
   assert!(detect_curried_fn(&expr).is_some());
   assert_eq!("curryFn", detect_curried_fn(&expr).unwrap().0.to_string());
 
-  let expr = quote!(
-    "curryFn([_])" as Expr
-  );
+  let expr = quote!("curryFn([_])" as Expr);
 
   assert!(detect_curried_fn(&expr).is_none());
 }

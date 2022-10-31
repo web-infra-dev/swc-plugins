@@ -5,7 +5,7 @@ use std::{
 
 use plugin_lodash::PluginLodashConfig;
 use shared::swc_core::cached::regex::CachedRegex;
-use test_plugins::{run_test, Extensions, TransformConfig};
+use test_plugins::{run_test, swc_plugins_core::types::{TransformConfig, Extensions} };
 
 #[test]
 fn test_fixtures() {

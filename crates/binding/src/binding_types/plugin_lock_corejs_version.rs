@@ -1,4 +1,4 @@
-use modern_swc_core::plugin_lock_corejs_version::LockCoreJsVersion;
+use swc_plugins_core::plugin_lock_corejs_version::LockCoreJsVersion;
 use napi_derive::napi;
 
 use super::IntoRawConfig;
