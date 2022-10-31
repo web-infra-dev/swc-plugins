@@ -1,6 +1,5 @@
 use std::{
-  borrow::{Borrow, BorrowMut},
-  collections::{HashMap, HashSet},
+  borrow::BorrowMut,
   ops::DerefMut,
   sync::Arc,
 };
@@ -27,7 +26,7 @@ use shared::{
     collect_bindings, contain_ident, count_ident, is_react_component, is_react_component_class,
     is_return_jsx, remove_invalid_expr, BindingInfo, ReactComponentType,
   },
-  PluginContext,
+  PluginContext, ahash::{AHashSet, AHashMap},
 };
 
 pub fn react_remove_prop_types(
@@ -123,10 +122,10 @@ where
   pub config: &'a ReactRemovePropTypeConfig,
   comments: C,
 
-  components: HashSet<Id>,
-  namespaces: HashSet<Id>,
+  components: AHashSet<Id>,
+  namespaces: AHashSet<Id>,
   inserts: Vec<(usize, ModuleItem)>,
-  bindings: HashMap<Id, BindingInfo>,
+  bindings: AHashMap<Id, BindingInfo>,
 }
 
 impl<'a, C> ReactRemovePropTypes<'a, C>
@@ -459,9 +458,9 @@ where
 
 struct CollectReactComponent<'a> {
   config: &'a ReactRemovePropTypeConfig,
-  ids: HashSet<Id>,
-  namespaces: HashSet<Id>,
-  bindings: &'a HashMap<Id, BindingInfo>,
+  ids: AHashSet<Id>,
+  namespaces: AHashSet<Id>,
+  bindings: &'a AHashMap<Id, BindingInfo>,
 }
 
 impl<'a> CollectReactComponent<'a> {
@@ -532,7 +531,7 @@ impl<'a> Visit for CollectReactComponent<'a> {
   fn visit_export_decl(&mut self, export_decl: &ExportDecl) {
     match &export_decl.decl {
       Decl::Class(class_decl) => {
-        if is_react_component_class(&class_decl.class, Some(&self.bindings)) {
+        if is_react_component_class(&class_decl.class, Some(self.bindings)) {
           self.ids.insert(class_decl.ident.to_id());
         } else {
           self.check_custom_class(&class_decl.ident, &class_decl.class);
@@ -633,7 +632,7 @@ impl<'a> Visit for CollectReactComponent<'a> {
 
 struct RemoveImports<'a> {
   config: &'a ReactRemovePropTypeConfig,
-  ids: HashMap<Id, usize>,
+  ids: AHashMap<Id, usize>,
 }
 
 impl<'a> VisitMut for RemoveImports<'a> {

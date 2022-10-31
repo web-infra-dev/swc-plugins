@@ -2,7 +2,7 @@ use mappings::{build_mappings, Mappings, Package};
 use shared::{
   swc_core::{
     self,
-    common::{Mark, Span, DUMMY_SP},
+    common::{Mark, Span, DUMMY_SP, collections::{AHashMap, AHashSet}},
     ecma::{
       ast::{
         CallExpr, ExportNamedSpecifier, ExportSpecifier, Expr, Id, Ident, ImportDecl,
@@ -18,7 +18,6 @@ use shared::{
   PluginContext,
 };
 use std::{
-  collections::{HashMap, HashSet},
   ops::Deref,
   path::PathBuf,
   sync::Arc,
@@ -47,7 +46,7 @@ pub fn plugin_lodash(
   });
 
   let mappings = build_mappings(ids.iter().map(|s| s.as_str()), &config.cwd).unwrap();
-  let mut pkg_map = HashMap::default();
+  let mut pkg_map = AHashMap::default();
 
   for (id, module_map) in &mappings {
     for base in module_map.keys() {
@@ -82,20 +81,20 @@ pub fn plugin_lodash(
 #[derive(Debug, Default)]
 pub struct PluginLodash {
   pub cwd: PathBuf,
-  pkg_map: HashMap<JsWord, Package>,
+  pkg_map: AHashMap<JsWord, Package>,
   mappings: Mappings,
 
   top_level_mark: Mark,
 
-  // HashMap<(module_id, local_id, imported), imported_ident>
-  imported_names: HashMap<(JsWord, JsWord, JsWord), Id>,
+  // AHashMap<(module_id, local_id, imported), imported_ident>
+  imported_names: AHashMap<(JsWord, JsWord, JsWord), Id>,
 
   // Eg: "_" -> "lodash"
-  namespace_map: HashMap<Id, JsWord>,
+  namespace_map: AHashMap<Id, JsWord>,
   imports: Vec<ImportDecl>,
   exports: Vec<Id>,
 
-  lodash_vars: HashSet<Id>,
+  lodash_vars: AHashSet<Id>,
 }
 
 impl PluginLodash {
@@ -323,9 +322,9 @@ fn imported_to_id(imported: Option<ModuleExportName>) -> Option<Id> {
 // Remove useless import decl and export decl
 // Replace every lodash global variable with (void 0)
 struct PostProcess<'a> {
-  pkg_map: &'a HashMap<JsWord, Package>,
-  namespaces: &'a HashMap<Id, JsWord>,
-  lodash_vars: &'a HashSet<Id>,
+  pkg_map: &'a AHashMap<JsWord, Package>,
+  namespaces: &'a AHashMap<Id, JsWord>,
+  lodash_vars: &'a AHashSet<Id>,
   in_lodash_call: Option<Id>,
 }
 

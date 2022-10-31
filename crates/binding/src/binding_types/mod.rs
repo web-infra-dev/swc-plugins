@@ -13,7 +13,7 @@ use std::collections::HashMap;
 
 pub use config::TransformConfigNapi;
 use napi::{Env, Error, Result, Status};
-use shared::swc_core::cached::regex::CachedRegex;
+use shared::{ahash::AHashMap, swc_core::cached::regex::CachedRegex};
 pub trait IntoRawConfig<T> {
   fn into_raw_config(self, env: Env) -> Result<T>;
 }
@@ -44,6 +44,23 @@ where
     Ok(res)
   }
 }
+
+impl<T, K, V> IntoRawConfig<AHashMap<K, V>> for HashMap<K, T>
+where
+  K: Eq + std::hash::Hash,
+  T: IntoRawConfig<V>,
+{
+  fn into_raw_config(self, env: Env) -> Result<AHashMap<K, V>> {
+    let mut res = AHashMap::with_capacity(self.len());
+
+    for (k, v) in self {
+      res.insert(k, v.into_raw_config(env)?);
+    }
+
+    Ok(res)
+  }
+}
+
 
 impl<T, K, V> IntoRawConfig<HashMap<K, V>> for HashMap<K, T>
 where

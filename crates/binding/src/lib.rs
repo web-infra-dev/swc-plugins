@@ -13,7 +13,7 @@ use shared::{
     },
     common::{
       sync::{Lazy, RwLock},
-      SourceMap,
+      SourceMap, collections::AHashMap,
     },
   },
 };
@@ -21,7 +21,6 @@ use shared::{
 use swc_plugins_core::types::TransformConfig;
 use std::{
   cell::RefCell,
-  collections::HashMap,
   sync::{
     atomic::{AtomicU32, Ordering},
     Arc,
@@ -35,8 +34,8 @@ pub struct Compiler {
 }
 
 // js id -> Rust Compiler
-pub static COMPILERS: Lazy<Arc<RwLock<HashMap<u32, Compiler>>>> =
-  Lazy::new(|| Arc::new(RwLock::new(HashMap::new())));
+pub static COMPILERS: Lazy<Arc<RwLock<AHashMap<u32, Compiler>>>> =
+  Lazy::new(|| Arc::new(RwLock::new(AHashMap::default())));
 
 static ID: AtomicU32 = AtomicU32::new(0);
 
