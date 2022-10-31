@@ -1,11 +1,11 @@
 use std::{
-  collections::HashMap,
   fs,
   path::{Path, PathBuf},
 };
 
 use nodejs_resolver::{Options, ResolveResult, Resolver};
 use shared::{
+  ahash::AHashMap,
   anyhow,
   serde::{Deserialize, Serialize},
 };
@@ -13,7 +13,7 @@ use shared::{
 use crate::error::{ResolveError, ResolveErrorKind};
 
 pub type ModuleId = String; // lodash, lodash-es, lodash-compat
-pub type Mappings = HashMap<ModuleId, ModuleMap>; // lodash -> [...], lodash-es -> [...]
+pub type Mappings = AHashMap<ModuleId, ModuleMap>; // lodash -> [...], lodash-es -> [...]
 
 #[derive(Debug)]
 pub struct Package {
@@ -88,8 +88,8 @@ impl Package {
   }
 }
 
-pub type ModuleMap = HashMap<String, Pairs>; // lib -> [...], es -> [...], dist -> [...]
-pub type Pairs = HashMap<String, PathBuf>; // camelcase -> camelCase, kebabcase -> kebabCase
+pub type ModuleMap = AHashMap<String, Pairs>; // lib -> [...], es -> [...], dist -> [...]
+pub type Pairs = AHashMap<String, PathBuf>; // camelcase -> camelCase, kebabcase -> kebabCase
 
 pub fn build_mappings<'a>(
   ids: impl Iterator<Item = &'a str>,

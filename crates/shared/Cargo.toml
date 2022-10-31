@@ -30,6 +30,7 @@ swc_core = { features = [
   "base",
   "testing_transform"
 ], version = "0.28.10" }
+ahash = "0.8.0"
 
 [dev-dependencies]
 testing_macros = "0.2.7"

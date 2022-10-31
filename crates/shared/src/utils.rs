@@ -1,12 +1,13 @@
-use std::{borrow::Borrow, collections::HashMap};
+use std::borrow::Borrow;
 
+use ahash::AHashMap;
 use swc_core::{
   common::{SyntaxContext, DUMMY_SP},
   ecma::{
     ast::{
-      AssignExpr, BlockStmt, BlockStmtOrExpr, Callee, Class, ClassDecl, ClassExpr, Decl,
-      DefaultDecl, Expr, ExprStmt, FnDecl, Function, Id, Ident, Lit, MemberProp, Module,
-      ModuleDecl, ModuleItem, Pat, PatOrExpr, Program, ReturnStmt, Stmt, VarDecl, VarDeclKind,
+      AssignExpr, BlockStmt, BlockStmtOrExpr, Callee, Class, ClassDecl, Decl, DefaultDecl, Expr,
+      ExprStmt, FnDecl, Function, Id, Ident, Lit, MemberProp, Module, ModuleDecl, ModuleItem, Pat,
+      PatOrExpr, Program, ReturnStmt, Stmt, VarDecl, VarDeclKind,
     },
     atoms::JsWord,
     visit::{Fold, Visit, VisitMut, VisitMutWith, VisitWith},
@@ -123,7 +124,7 @@ pub fn contain_ident(id: &Id, expr: &Expr) -> bool {
 }
 
 pub struct IdentCount {
-  inner: HashMap<Id, usize>,
+  inner: AHashMap<Id, usize>,
 }
 impl Visit for IdentCount {
   fn visit_ident(&mut self, ident: &Ident) {
@@ -134,7 +135,7 @@ impl Visit for IdentCount {
       .or_insert(1);
   }
 }
-pub fn count_ident(module: &impl VisitWith<IdentCount>) -> HashMap<Id, usize> {
+pub fn count_ident(module: &impl VisitWith<IdentCount>) -> AHashMap<Id, usize> {
   let mut ident_count = IdentCount {
     inner: Default::default(),
   };
@@ -199,7 +200,7 @@ static PURE_COMPONENT_NAME: &str = "PureComponent";
 
 pub fn is_react_component(
   expr: &Expr,
-  bindings: Option<&HashMap<Id, BindingInfo>>,
+  bindings: Option<&AHashMap<Id, BindingInfo>>,
 ) -> ReactComponentType {
   match expr {
     Expr::Fn(function) => {
@@ -257,7 +258,7 @@ pub fn is_react_component(
 
 pub fn is_react_component_class(
   class: &Class,
-  bindings: Option<&HashMap<Id, BindingInfo>>,
+  bindings: Option<&AHashMap<Id, BindingInfo>>,
 ) -> bool {
   if let Some(super_class) = class.super_class.as_deref() {
     let is = match super_class {
@@ -274,8 +275,8 @@ pub fn is_react_component_class(
           let maybe_class = bindings.get(&super_class.to_id()).unwrap();
           if !maybe_class.re_assigned && maybe_class.init.is_some() {
             let is_react_class = match maybe_class.init.as_ref().unwrap() {
-                BindingInitKind::Expr(expr) => is_react_component(&expr, Some(bindings)) == ReactComponentType::Class,
-                BindingInitKind::Class(class) => is_react_component_class(&class, Some(bindings)),
+                BindingInitKind::Expr(expr) => is_react_component(expr, Some(bindings)) == ReactComponentType::Class,
+                BindingInitKind::Class(class) => is_react_component_class(class, Some(bindings)),
                 BindingInitKind::Fn(_) => { false },
             };
 
@@ -300,7 +301,7 @@ pub fn is_react_component_class(
 
 pub fn is_return_jsx<'a>(
   stmts: impl Iterator<Item = &'a Stmt>,
-  bindings: Option<&HashMap<Id, BindingInfo>>,
+  bindings: Option<&AHashMap<Id, BindingInfo>>,
 ) -> bool {
   for stmt in stmts {
     if let Stmt::Return(return_stmt) = stmt {
@@ -337,7 +338,7 @@ pub fn is_creating_component(expr: &Expr) -> bool {
   }
 }
 
-pub fn is_jsx(expr: &Expr, bindings: Option<&HashMap<Id, BindingInfo>>) -> bool {
+pub fn is_jsx(expr: &Expr, bindings: Option<&AHashMap<Id, BindingInfo>>) -> bool {
   if is_creating_component(expr) {
     return true;
   }
@@ -468,7 +469,7 @@ pub struct BindingInfo {
 }
 
 pub struct CollectBindings {
-  pub bindings: HashMap<Id, BindingInfo>,
+  pub bindings: AHashMap<Id, BindingInfo>,
 }
 
 impl CollectBindings {
@@ -583,7 +584,7 @@ impl Visit for CollectBindings {
 }
 
 pub struct DetectReAssigned<'a> {
-  pub bindings: &'a mut HashMap<Id, BindingInfo>,
+  pub bindings: &'a mut AHashMap<Id, BindingInfo>,
 }
 
 impl<'a> DetectReAssigned<'a> {
@@ -620,9 +621,9 @@ impl<'a> Visit for DetectReAssigned<'a> {
   }
 }
 
-pub fn collect_bindings(module: &Module) -> HashMap<Id, BindingInfo> {
+pub fn collect_bindings(module: &Module) -> AHashMap<Id, BindingInfo> {
   let mut collect_bindings = CollectBindings {
-    bindings: HashMap::default(),
+    bindings: AHashMap::default(),
   };
 
   module.visit_with(&mut collect_bindings);
@@ -638,7 +639,7 @@ mod test {
     quote,
   };
 
-  use crate::utils::{collect_bindings, match_member, ReactComponentType};
+  use crate::utils::{match_member, ReactComponentType};
 
   use super::{is_esm, is_react_component};
 

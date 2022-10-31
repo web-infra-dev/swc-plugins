@@ -9,6 +9,7 @@ pub use swc_core::ecma::transforms::testing as swc_ecma_transforms_testing;
 use swc_core::common::{comments::SingleThreadedComments, Mark, SourceMap};
 pub use testing;
 pub extern crate serde;
+pub use ahash;
 
 pub struct PluginContext {
   pub cm: Arc<SourceMap>,
