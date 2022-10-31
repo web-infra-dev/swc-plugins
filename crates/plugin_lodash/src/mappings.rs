@@ -3,11 +3,12 @@ use std::{
   path::{Path, PathBuf},
 };
 
-use nodejs_resolver::{Options, ResolveResult, Resolver};
+use nodejs_resolver::{ResolveResult, Resolver};
 use shared::{
   ahash::AHashMap,
   anyhow,
   serde::{Deserialize, Serialize},
+  swc_core::common::sync::Lazy,
 };
 
 use crate::error::{ResolveError, ResolveErrorKind};
@@ -91,6 +92,8 @@ impl Package {
 pub type ModuleMap = AHashMap<String, Pairs>; // lib -> [...], es -> [...], dist -> [...]
 pub type Pairs = AHashMap<String, PathBuf>; // camelcase -> camelCase, kebabcase -> kebabCase
 
+static RESOLVER: Lazy<Resolver> = Lazy::new(|| Resolver::new(Default::default()));
+
 pub fn build_mappings<'a>(
   ids: impl Iterator<Item = &'a str>,
   root: &Path,
@@ -116,8 +119,7 @@ pub fn build_mappings<'a>(
 }
 
 fn resolve(id: &str, pwd: &Path) -> Result<PathBuf, ResolveError> {
-  let resolver = Resolver::new(Options::default());
-  match resolver.resolve(pwd, id) {
+  match RESOLVER.resolve(pwd, id) {
     Ok(info) => match info {
       ResolveResult::Info(info) => Ok(info.path),
       ResolveResult::Ignored => Err(ResolveError::new(id.into(), ResolveErrorKind::ShouldIgnore)),
@@ -160,6 +162,7 @@ fn init_module_map(pkg_root: PathBuf) -> anyhow::Result<ModuleMap> {
       .as_path()
       .strip_prefix(&pkg_root)?
       .to_string_lossy()
+      .replace(r"\\", "/")
       .to_string();
 
     module_dir_map.insert(base, build_pairs(&pkg_root, &dir)?);

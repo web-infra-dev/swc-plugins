@@ -118,7 +118,7 @@ impl PluginLodash {
           imported_name, source
         )
       });
-    let new_source = format!("{}/{}", pkg.id, import_path.display());
+    let new_source = format!("{}/{}", pkg.id, import_path.to_string_lossy().replace(r#"\\"#, "/"));
 
     self
       .imported_names
