@@ -5,7 +5,10 @@ use std::{
 
 use plugin_lodash::PluginLodashConfig;
 use shared::swc_core::cached::regex::CachedRegex;
-use test_plugins::{run_test, swc_plugins_core::types::{TransformConfig, Extensions} };
+use test_plugins::{
+  run_test,
+  swc_plugins_core::types::{Extensions, TransformConfig},
+};
 
 #[test]
 fn test_fixtures() {
@@ -22,16 +25,17 @@ fn run_fixture(path: &Path, cwd: PathBuf) {
   let tests = fs::read_dir(path).unwrap();
   for test_dir in tests {
     let test_dir = test_dir.unwrap().path();
-    
+
     let actual_file = test_dir.join("actual.js");
     let actual_content = String::from_utf8(fs::read(actual_file).unwrap()).unwrap();
-    
+
     let expected_file = test_dir.join("expected.js");
     println!("run fixture test: {}", expected_file.display());
     run_test(
       test_dir.display().to_string().as_str(),
       &TransformConfig {
-        swc: shared::serde_json::from_str(r#"
+        swc: shared::serde_json::from_str(
+          r#"
           {
             "jsc": {
               "parser": {
@@ -49,7 +53,9 @@ fn run_fixture(path: &Path, cwd: PathBuf) {
               "type": "commonjs"
             }
           }
-        "#).unwrap(),
+        "#,
+        )
+        .unwrap(),
         extensions: Extensions {
           lodash: Some(PluginLodashConfig {
             cwd: cwd.clone(),

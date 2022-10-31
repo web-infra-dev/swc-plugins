@@ -9,15 +9,15 @@
   "types": "./types/index.d.ts",
   "version": "0.0.2",
   "devDependencies": {
-    "@types/node": "^18.7.1",
-    "tsno": "^2.0.0",
-    "vitest": "^0.22.0",
     "@napi-rs/cli": "^2.11.4",
+    "@storybook/addon-links": "^6.5.12",
+    "@types/node": "^18.7.1",
     "lodash": "^4.17.21",
     "lodash-compat": "^3.10.2",
     "lodash-es": "^4.17.21",
     "react-bootstrap": "^2.5.0",
-    "@storybook/addon-links": "^6.5.12"
+    "tsno": "^2.0.0",
+    "vitest": "^0.24.4"
   },
   "engines": {
     "node": ">=14.18.0"
@@ -27,7 +27,7 @@
     "build": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts --release",
     "build:dev": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts",
     "prepublishOnly": "napi prepublish -t npm",
-    "test": "cargo test",
+    "test": "vitest run",
     "version": "napi version"
   },
   "napi": {
@@ -46,5 +46,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "vite": "^3.2.2"
   }
 }

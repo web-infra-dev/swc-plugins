@@ -8,7 +8,7 @@ use shared::{
       config::{self, ModuleConfig},
       try_with_handler, Compiler, HandlerOpts, TransformOutput,
     },
-    common::{errors::ColorConfig, FileName, Mark, GLOBALS, comments::SingleThreadedComments},
+    common::{errors::ColorConfig, FileName, Mark, GLOBALS},
     ecma::{
       ast::EsVersion,
       parser::{Syntax, TsConfig},

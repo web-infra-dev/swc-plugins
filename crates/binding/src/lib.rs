@@ -12,13 +12,13 @@ use shared::{
       Compiler as SwcCompiler, TransformOutput,
     },
     common::{
+      collections::AHashMap,
       sync::{Lazy, RwLock},
-      SourceMap, collections::AHashMap,
+      SourceMap,
     },
   },
 };
 
-use swc_plugins_core::types::TransformConfig;
 use std::{
   cell::RefCell,
   sync::{
@@ -26,6 +26,7 @@ use std::{
     Arc,
   },
 };
+use swc_plugins_core::types::TransformConfig;
 
 // ===== Internal Rust struct under the hood =====
 pub struct Compiler {

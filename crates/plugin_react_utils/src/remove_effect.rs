@@ -3,9 +3,9 @@ use std::collections::HashSet;
 use shared::swc_core::{
   common::util::take::Take,
   ecma::{
-    ast::{ BlockStmt, Expr, Id, ModuleDecl, ModuleExportName, ModuleItem, Module, ImportSpecifier},
+    ast::{BlockStmt, Expr, Id, ImportSpecifier, Module, ModuleDecl, ModuleExportName, ModuleItem},
     visit::{as_folder, Fold, VisitMut, VisitMutWith},
-  }
+  },
 };
 
 use shared::utils::ClearMark;

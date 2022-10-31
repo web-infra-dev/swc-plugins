@@ -2,7 +2,6 @@ use std::sync::Arc;
 
 pub mod remove_prop_types;
 use shared::serde::{self, Deserialize};
-use shared::swc_core::common::Mark;
 use shared::swc_core::{
   common::{chain, pass::Either},
   ecma::{transforms::base::pass::noop, visit::Fold},

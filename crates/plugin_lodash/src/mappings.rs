@@ -1,6 +1,6 @@
 use std::{
   fs,
-  path::{Path, PathBuf},
+  path::{Path, PathBuf, MAIN_SEPARATOR},
 };
 
 use nodejs_resolver::{ResolveResult, Resolver};
@@ -54,7 +54,7 @@ impl Package {
     })
   }
 
-  pub fn find_module<'a>(&self, mappings: &'a Mappings, name: &str) -> Option<&'a PathBuf> {
+  pub fn find_module<'a>(&self, mappings: &'a Mappings, name: &str) -> Option<&'a String> {
     // For ```import { map } from 'lodash'```
     // We find through iterating `lodash/bar/map.js`, `lodash/foo/map.js`, `lodash/map.js`, ...
 
@@ -90,7 +90,7 @@ impl Package {
 }
 
 pub type ModuleMap = AHashMap<String, Pairs>; // lib -> [...], es -> [...], dist -> [...]
-pub type Pairs = AHashMap<String, PathBuf>; // camelcase -> camelCase, kebabcase -> kebabCase
+pub type Pairs = AHashMap<String, String>; // camelcase -> camelCase, kebabcase -> kebabCase
 
 static RESOLVER: Lazy<Resolver> = Lazy::new(|| Resolver::new(Default::default()));
 
@@ -151,18 +151,18 @@ struct PkgJson {
 fn init_module_map(pkg_root: PathBuf) -> anyhow::Result<ModuleMap> {
   let mut module_dir_map = ModuleMap::default();
 
-  let mut dir_paths: Vec<_> = glob::glob(&format!("{}/**", pkg_root.display()))?.collect();
-  dir_paths.push(Ok(pkg_root.clone()));
+  let mut dir_paths: Vec<_> = fs::read_dir(&pkg_root)?
+    .map(|item| item.unwrap().path())
+    .filter(|p| p.is_dir())
+    .collect();
+  dir_paths.push(pkg_root.clone());
 
   for dir in dir_paths {
-    let dir = dir?;
-
     // make it relative
     let base = dir
       .as_path()
       .strip_prefix(&pkg_root)?
       .to_string_lossy()
-      .replace(r"\\", "/")
       .to_string();
 
     module_dir_map.insert(base, build_pairs(&pkg_root, &dir)?);
@@ -182,10 +182,12 @@ fn get_pkg_json(module_root: &Path) -> anyhow::Result<PkgJson> {
 fn build_pairs(pkg_root: &Path, dir_path: &Path) -> anyhow::Result<Pairs> {
   let mut pairs = Pairs::default();
 
-  let files = glob::glob(&format!("{}/*.js", dir_path.display()))?;
+  let files = fs::read_dir(&dir_path)?
+    .map(|it| it.unwrap().path())
+    .filter(|it| it.extension().map(|ext| ext == "js").unwrap_or(false));
 
   for file_path in files {
-    let file_path = file_path?;
+    // in windows, file_name: a\\b\\c.js
     let file_name = file_path.strip_prefix(dir_path).unwrap();
     let name = file_name.to_string_lossy().to_string().replace(".js", "");
     let file_relative_path = file_path
@@ -194,9 +196,10 @@ fn build_pairs(pkg_root: &Path, dir_path: &Path) -> anyhow::Result<Pairs> {
       .to_str()
       .unwrap()
       .strip_suffix(".js")
-      .unwrap();
+      .unwrap()
+      .replace(MAIN_SEPARATOR, "/");
 
-    pairs.insert(name.to_lowercase(), PathBuf::from(file_relative_path));
+    pairs.insert(name.to_lowercase(), file_relative_path);
   }
 
   Ok(pairs)

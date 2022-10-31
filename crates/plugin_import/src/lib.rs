@@ -6,11 +6,11 @@ use shared::swc_core::{
   common::{util::take::Take, BytePos, Span, SyntaxContext, DUMMY_SP},
   ecma::{
     ast::{
-      Ident, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier, ImportSpecifier,
-      Module, ModuleDecl, ModuleExportName, ModuleItem, Str,
+      Ident, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier, ImportSpecifier, Module,
+      ModuleDecl, ModuleExportName, ModuleItem, Str,
     },
+    atoms::JsWord,
     visit::{as_folder, Fold, VisitMut, VisitWith},
-    atoms::{JsWord}
   },
 };
 
@@ -18,7 +18,6 @@ use std::collections::HashSet;
 use std::fmt::Debug;
 
 use crate::visit::IdentComponent;
-
 
 /* ======= Real struct ======= */
 #[derive(Debug, Default)]
@@ -336,20 +335,18 @@ impl<'a> VisitMut for ImportPlugin<'a> {
       let dec = ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {
         span: DUMMY_SP,
         specifiers: if js_source.use_default_import {
-          vec![ImportSpecifier::Default(
-            ImportDefaultSpecifier {
-              span: DUMMY_SP,
-              local: Ident {
-                span: Span::new(
-                  BytePos::DUMMY,
-                  BytePos::DUMMY,
-                  SyntaxContext::from_u32(js_source.mark),
-                ),
-                sym: JsWord::from(js_source.as_name.unwrap_or(js_source.default_spec).as_str()),
-                optional: false,
-              },
+          vec![ImportSpecifier::Default(ImportDefaultSpecifier {
+            span: DUMMY_SP,
+            local: Ident {
+              span: Span::new(
+                BytePos::DUMMY,
+                BytePos::DUMMY,
+                SyntaxContext::from_u32(js_source.mark),
+              ),
+              sym: JsWord::from(js_source.as_name.unwrap_or(js_source.default_spec).as_str()),
+              optional: false,
             },
-          )]
+          })]
         } else {
           vec![ImportSpecifier::Named(ImportNamedSpecifier {
             span: DUMMY_SP,

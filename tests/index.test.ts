@@ -1,5 +1,10 @@
-import { it, expect } from "vitest";
+import { describe, expect, it } from "vitest"
 
-it("init", () => {
-  expect(1).toBe(1);
-});
+describe('find binding', () => {
+  it('dd', () => {
+    const binding = require("../index.js")
+    expect(binding.Compiler).toBeDefined()
+    expect(binding.minify).toBeDefined()
+    expect(binding.minifySync).toBeDefined()
+  })
+})

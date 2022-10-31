@@ -61,7 +61,6 @@ where
   }
 }
 
-
 impl<T, K, V> IntoRawConfig<HashMap<K, V>> for HashMap<K, T>
 where
   K: Eq + std::hash::Hash,

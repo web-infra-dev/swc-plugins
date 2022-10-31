@@ -1,9 +1,9 @@
 use shared::swc_core::{
   common::DUMMY_SP,
   ecma::{
-    visit::{as_folder, Fold, VisitMut},
     ast::{CallExpr, Callee, ImportDecl, Lit, Str},
     atoms::JsWord,
+    visit::{as_folder, Fold, VisitMut},
   },
 };
 
