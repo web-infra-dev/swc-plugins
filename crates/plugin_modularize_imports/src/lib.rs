@@ -23,8 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
  */
-
- /* fork this just for adding kebab case transform, to use in some sceneries of plugin-import */
+/* fork this just for adding kebab case transform, to use in some sceneries of plugin-import */
 use std::borrow::Cow;
 use std::collections::HashMap;
 
@@ -37,10 +36,12 @@ use serde::{Deserialize, Serialize};
 use shared::swc_core::{
   cached::regex::CachedRegex,
   ecma::{
-    ast::{ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleExportName,
-      ModuleItem, Str,},
+    ast::{
+      ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleExportName,
+      ModuleItem, Str,
+    },
     visit::{noop_fold_type, Fold},
-  }
+  },
 };
 
 static DUP_SLASH_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"//").unwrap());

@@ -2,7 +2,10 @@ use mappings::{build_mappings, Mappings, Package};
 use shared::{
   swc_core::{
     self,
-    common::{Mark, Span, DUMMY_SP, collections::{AHashMap, AHashSet}},
+    common::{
+      collections::{AHashMap, AHashSet},
+      Mark, Span, DUMMY_SP,
+    },
     ecma::{
       ast::{
         CallExpr, ExportNamedSpecifier, ExportSpecifier, Expr, Id, Ident, ImportDecl,
@@ -17,16 +20,10 @@ use shared::{
   },
   PluginContext,
 };
-use std::{
-  ops::Deref,
-  path::PathBuf,
-  sync::Arc,
-};
+use std::{ops::Deref, path::PathBuf, sync::Arc};
 
 mod error;
 mod mappings;
-
-extern crate glob;
 
 #[derive(Debug, Default)]
 pub struct PluginLodashConfig {
@@ -118,7 +115,11 @@ impl PluginLodash {
           imported_name, source
         )
       });
-    let new_source = format!("{}/{}", pkg.id, import_path.to_string_lossy().replace(r#"\\"#, "/"));
+    let new_source = format!(
+      "{}/{}",
+      pkg.id,
+      import_path
+    );
 
     self
       .imported_names

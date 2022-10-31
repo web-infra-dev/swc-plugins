@@ -1,5 +1,5 @@
-use swc_plugins_core::plugin_lock_corejs_version::LockCoreJsVersion;
 use napi_derive::napi;
+use swc_plugins_core::plugin_lock_corejs_version::LockCoreJsVersion;
 
 use super::IntoRawConfig;
 
@@ -10,8 +10,8 @@ pub struct LockCoreJsVersionNapi {
 
 impl IntoRawConfig<LockCoreJsVersion> for LockCoreJsVersionNapi {
   fn into_raw_config(self, _env: napi::Env) -> napi::Result<LockCoreJsVersion> {
-      Ok(LockCoreJsVersion {
-        corejs_path: self.corejs_path
-      })
+    Ok(LockCoreJsVersion {
+      corejs_path: self.corejs_path,
+    })
   }
 }

@@ -1,4 +1,6 @@
-use swc_plugins_core::plugin_react_utils::{remove_prop_types::ReactRemovePropTypeConfig, ReactUtilsConfig};
+use swc_plugins_core::plugin_react_utils::{
+  remove_prop_types::ReactRemovePropTypeConfig, ReactUtilsConfig,
+};
 
 use shared::serde::Deserialize;
 

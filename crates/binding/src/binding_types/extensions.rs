@@ -1,5 +1,5 @@
-use swc_plugins_core::types::Extensions;
 use std::collections::HashMap;
+use swc_plugins_core::types::Extensions;
 
 use super::plugin_emotion::EmotionOptionsNapi;
 use super::plugin_lock_corejs_version::LockCoreJsVersionNapi;
@@ -25,7 +25,7 @@ pub struct ExtensionsNapi {
   pub styled_components: Option<StyledComponentsConfigNapi>,
   pub styled_jsx: Option<bool>,
 
-  pub lodash: Option<PluginLodashConfigNapi>
+  pub lodash: Option<PluginLodashConfigNapi>,
 }
 
 impl IntoRawConfig<Extensions> for ExtensionsNapi {
@@ -38,7 +38,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       emotion,
       styled_components,
       styled_jsx,
-      lodash
+      lodash,
     } = self;
 
     Ok(Extensions {
@@ -49,7 +49,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       emotion: emotion.into_raw_config(env)?,
       styled_components: styled_components.into_raw_config(env)?,
       styled_jsx,
-      lodash: lodash.into_raw_config(env)?
+      lodash: lodash.into_raw_config(env)?,
     })
   }
 }

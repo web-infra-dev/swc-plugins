@@ -1,9 +1,9 @@
-use swc_plugins_core::transform;
 use shared::swc_core::{
   base::{config::Options, Compiler},
-  common::SourceMap
+  common::SourceMap,
 };
 use std::sync::Arc;
+use swc_plugins_core::transform;
 
 #[test]
 fn test() {
