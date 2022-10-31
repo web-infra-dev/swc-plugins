@@ -12,11 +12,13 @@
     "@types/node": "^18.7.1",
     "tsno": "^2.0.0",
     "vitest": "^0.22.0",
-    "@napi-rs/cli": "^2.11.4"
+    "@napi-rs/cli": "^2.11.4",
+    "lodash": "^4.17.21",
+    "lodash-compat": "^3.10.2",
+    "lodash-es": "^4.17.21",
+    "react-bootstrap": "^2.5.0",
+    "@storybook/addon-links": "^6.5.12"
   },
-  "files": [
-    "types/**"
-  ],
   "engines": {
     "node": ">=14.18.0"
   },
@@ -25,8 +27,7 @@
     "build": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts --release",
     "build:dev": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts",
     "prepublishOnly": "napi prepublish -t npm",
-    "test": "vitest run --segfault-retry=3",
-    "test:dev": "vitest",
+    "test": "cargo test",
     "version": "napi version"
   },
   "napi": {
@@ -38,7 +39,6 @@
         "i686-pc-windows-msvc",
         "armv7-unknown-linux-gnueabihf",
         "aarch64-apple-darwin",
-        "x86_64-unknown-freebsd",
         "aarch64-unknown-linux-musl",
         "aarch64-pc-windows-msvc"
       ]

@@ -1,0 +1,21 @@
+[package]
+name = "swc_plugins_core"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+shared = { path = "../shared" }
+plugin_modularize_imports = {path = "../plugin_modularize_imports"}
+plugin_import = {path = "../plugin_import"}
+plugin_react_utils = {path = "../plugin_react_utils"}
+plugin_lock_corejs_version = {path = "../plugin_lock_corejs_version"}
+plugin_lodash = {path = "../plugin_lodash"}
+
+swc_emotion = "0.23.0"
+styled_components = "0.46.0"
+styled_jsx = "0.21.0"
+
+[dev-dependencies]
+insta = "1.18.2"

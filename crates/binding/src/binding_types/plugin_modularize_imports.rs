@@ -1,4 +1,4 @@
-use modern_swc_core::plugin_modularize_imports::PackageConfig;
+use swc_plugins_core::plugin_modularize_imports::PackageConfig;
 
 use shared::serde::Deserialize;
 

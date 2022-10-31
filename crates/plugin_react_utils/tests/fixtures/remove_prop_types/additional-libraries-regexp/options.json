@@ -1,0 +1,4 @@
+{
+  "additionalLibraries": ["/custom-prop-types$"],
+  "removeImport": true
+}

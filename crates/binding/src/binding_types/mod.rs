@@ -1,18 +1,19 @@
 pub mod config;
 pub mod extensions;
+pub mod plugin_emotion;
 pub mod plugin_import;
+pub mod plugin_lock_corejs_version;
+pub mod plugin_lodash;
 pub mod plugin_modularize_imports;
 pub mod plugin_react_utils;
-pub mod plugin_lock_corejs_version;
 pub mod plugin_styled_components;
-pub mod plugin_emotion;
 pub mod plugin_styled_jsx;
-pub mod plugin_lodash;
 
 use std::collections::HashMap;
 
 pub use config::TransformConfigNapi;
-use napi::{Env, Result};
+use napi::{Env, Error, Result, Status};
+use shared::swc_core::cached::regex::CachedRegex;
 pub trait IntoRawConfig<T> {
   fn into_raw_config(self, env: Env) -> Result<T>;
 }
@@ -57,5 +58,16 @@ where
     }
 
     Ok(res)
+  }
+}
+
+impl IntoRawConfig<CachedRegex> for String {
+  fn into_raw_config(self, _env: Env) -> Result<CachedRegex> {
+    CachedRegex::new(self.as_str()).map_err(|e| {
+      Error::new(
+        Status::InvalidArg,
+        format!("Cannot convert string to RegExpr:\n{}", e),
+      )
+    })
   }
 }

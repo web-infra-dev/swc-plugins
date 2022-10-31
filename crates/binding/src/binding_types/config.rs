@@ -1,4 +1,4 @@
-use modern_swc_core::types::TransformConfig;
+use swc_plugins_core::types::TransformConfig;
 
 use napi_derive::napi;
 use shared::serde_json;

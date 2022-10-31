@@ -1,4 +1,4 @@
-use modern_swc_core::types::Extensions;
+use swc_plugins_core::types::Extensions;
 use std::collections::HashMap;
 
 use super::plugin_emotion::EmotionOptionsNapi;

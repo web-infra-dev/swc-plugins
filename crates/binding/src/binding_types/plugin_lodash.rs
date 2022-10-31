@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use modern_swc_core::plugin_lodash::PluginLodashConfig;
+use swc_plugins_core::plugin_lodash::PluginLodashConfig;
 use napi_derive::napi;
 
 use super::IntoRawConfig;

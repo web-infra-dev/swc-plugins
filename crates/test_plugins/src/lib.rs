@@ -1,17 +1,16 @@
 use std::sync::Arc;
 
 use colored::Colorize;
-pub use modern_swc_core::{transform, types::Extensions, types::TransformConfig};
 
 use shared::swc_core::{base::Compiler, cached::regex::CachedRegex, common::SourceMap};
 
-pub use modern_swc_core;
 use similar::ChangeTag;
+pub use swc_plugins_core;
 
 // WIP
 pub fn run_test<'a>(
   test_name: &str,
-  config: &TransformConfig,
+  config: &swc_plugins_core::types::TransformConfig,
   code: &'a str,
   expected: Option<impl AsRef<str>>,
   ignore: Option<CachedRegex>,
@@ -22,7 +21,7 @@ pub fn run_test<'a>(
 
   let cm = Arc::new(SourceMap::default());
 
-  let res = transform(
+  let res = swc_plugins_core::transform(
     Arc::new(Compiler::new(cm)),
     config,
     "test".into(),
@@ -44,12 +43,14 @@ pub fn run_test<'a>(
     let expected: String = expected
       .split('\n')
       .map(|s| s.trim().to_string() + "\n")
+      .filter(|s| s != "\n" && s != ";\n")
       .collect();
     let res: String = res
       .code
       .as_str()
       .split('\n')
       .map(|s| s.trim().to_string() + "\n")
+      .filter(|s| s != "\n" && s != ";\n")
       .collect();
     if res.trim() != expected.trim() {
       println!("[{}] fail\n\n", test_name);
