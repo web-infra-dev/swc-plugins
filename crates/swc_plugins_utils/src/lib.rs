@@ -1,7 +1,7 @@
 use std::borrow::Borrow;
 
-use ahash::AHashMap;
-use swc_core::{
+use shared::ahash::AHashMap;
+use shared::swc_core::{
   common::{SyntaxContext, DUMMY_SP},
   ecma::{
     ast::{
@@ -633,13 +633,14 @@ pub fn collect_bindings(module: &Module) -> AHashMap<Id, BindingInfo> {
 
 #[cfg(test)]
 mod test {
-  use swc_core::{
+  use shared::swc_core::{
+    self,
     common::DUMMY_SP,
     ecma::ast::{Module, Program},
     quote,
   };
 
-  use crate::utils::{match_member, ReactComponentType};
+  use crate::{match_member, ReactComponentType};
 
   use super::{is_esm, is_react_component};
 

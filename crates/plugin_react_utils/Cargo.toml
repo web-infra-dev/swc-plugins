@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 shared = {path="../shared"}
+swc_plugins_utils = {path="../swc_plugins_utils"}
 
 [dev-dependencies]
 test_plugins = {path="../test_plugins"}
