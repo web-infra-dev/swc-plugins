@@ -1,4 +1,3 @@
-pub mod utils;
 use std::sync::Arc;
 
 // reexports some same version libs

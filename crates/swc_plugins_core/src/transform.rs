@@ -17,8 +17,8 @@ use shared::{
       // transforms::module::common_js::Config
     },
   },
-  utils::is_esm,
 };
+use swc_plugins_utils::is_esm;
 
 use crate::pass::internal_transform_pass;
 use crate::types::TransformConfig;

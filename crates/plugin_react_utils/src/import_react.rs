@@ -10,8 +10,8 @@ use shared::{
       visit::{as_folder, Fold, VisitMut, VisitMutWith},
     },
   },
-  utils::change_ident_syntax_context,
 };
+use swc_plugins_utils::change_ident_syntax_context;
 
 struct ImportReact {
   top_level_mark: Mark,

@@ -8,7 +8,7 @@ use shared::swc_core::{
   },
 };
 
-use shared::utils::ClearMark;
+use swc_plugins_utils::ClearMark;
 
 struct RmUseEffect {
   use_effect_mark: HashSet<Id>, // used for remove useEffect()

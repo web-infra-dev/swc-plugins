@@ -17,6 +17,7 @@
     "lodash-es": "^4.17.21",
     "react-bootstrap": "^2.5.0",
     "tsno": "^2.0.0",
+    "vite": "^3.2.2",
     "vitest": "^0.24.4"
   },
   "engines": {
@@ -27,7 +28,7 @@
     "build": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts --release",
     "build:dev": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts",
     "prepublishOnly": "napi prepublish -t npm",
-    "test": "vitest run",
+    "test": "vitest run --segfault-retry=3",
     "version": "napi version"
   },
   "napi": {
@@ -46,8 +47,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "vite": "^3.2.2"
   }
 }
