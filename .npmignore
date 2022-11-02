@@ -7,3 +7,8 @@ Cargo.toml
 rust-toolchain
 rustfmt.toml
 unused.d.ts
+.cargo/
+.github/
+.vscode/
+npm/
+*.node
