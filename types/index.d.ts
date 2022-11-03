@@ -32,9 +32,21 @@ export interface Extensions {
   reactUtils?: {
     autoImportReact?: boolean,
     rmEffect?: boolean,
+    rmPropTypes?: {
+      mode?: "remove" | "unwrap" | "unsafe-wrap",
+      removeImport?: bool,
+      ignoreFilenames?: String[],
+      additionalLibraries?: String[],
+      classNameMatchers?: String[],
+    }
   };
   lockCorejsVersion?: {
-    corejsPath: string
+    corejs?: string,
+    swcHelpers?: string
+  },
+  lodash?: {
+    cwd?: string,
+    ids?: string,
   }
 }
 
