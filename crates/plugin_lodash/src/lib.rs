@@ -5,6 +5,7 @@ use shared::{
     self,
     common::{
       collections::{AHashMap, AHashSet},
+      sync::{Lazy, RwLock},
       Mark, Span, DUMMY_SP,
     },
     ecma::{
@@ -26,6 +27,15 @@ use std::{ops::Deref, path::PathBuf, sync::Arc};
 mod error;
 mod mappings;
 
+/// Cache for reducing lots of IO operations(Caused by `nodejs::resolve()`)
+///
+/// This is BAD in some situations
+/// If you `transform` in multi-thread, and while thread1 is still transforming,
+/// thread2 may change this mappings.
+static CACHED: Lazy<RwLock<CacheItem>> =
+  Lazy::new(|| RwLock::new(Default::default()));
+type CacheItem = (Mappings, AHashMap<JsWord, Package>, String);
+
 #[derive(Debug, Default, Deserialize)]
 #[serde(crate = "shared::serde")]
 pub struct PluginLodashConfig {
@@ -44,31 +54,45 @@ pub fn plugin_lodash(
     }
   });
 
-  let mappings = build_mappings(ids.iter().map(|s| s.as_str()), &config.cwd).unwrap();
-  let mut pkg_map = AHashMap::default();
+  let hash = config
+    .ids
+    .iter()
+    .fold(String::new(), |hash, curr| hash + curr);
 
-  for (id, module_map) in &mappings {
-    for base in module_map.keys() {
-      // Key is lodash, lodash/fp
-      // `base` could be empty
-      pkg_map.insert(
-        {
-          if base.is_empty() {
-            JsWord::from(id.as_str())
-          } else {
-            JsWord::from(format!("{}/{}", &id, &base).as_str())
-          }
-        },
-        Package::new(&config.cwd, id, base).unwrap(),
-      );
+  {
+    let mappings_with_hash = CACHED.read();
+
+    if CACHED.read().2 != hash {
+      drop(mappings_with_hash);
+      let mappings = build_mappings(ids.iter().map(|s| s.as_str()), &config.cwd).unwrap();
+
+      let mut pkg_map = AHashMap::default();
+
+      for (id, module_map) in &mappings {
+        for base in module_map.keys() {
+          // Key is lodash, lodash/fp
+          // `base` could be empty
+          pkg_map.insert(
+            {
+              if base.is_empty() {
+                JsWord::from(id.as_str())
+              } else {
+                JsWord::from(format!("{}/{}", &id, &base).as_str())
+              }
+            },
+            Package::new(&config.cwd, id, base).unwrap(),
+          );
+        }
+      }
+
+      let mut mappings_and_hash = CACHED.write();
+      *mappings_and_hash = (mappings, pkg_map, hash);
     }
   }
 
   as_folder(PluginLodash {
     cwd: config.cwd.clone(),
     top_level_mark: plugin_context.top_level_mark,
-    mappings,
-    pkg_map,
     imported_names: Default::default(),
     namespace_map: Default::default(),
     imports: Default::default(),
@@ -80,9 +104,6 @@ pub fn plugin_lodash(
 #[derive(Debug, Default)]
 pub struct PluginLodash {
   pub cwd: PathBuf,
-  pkg_map: AHashMap<JsWord, Package>,
-  mappings: Mappings,
-
   top_level_mark: Mark,
 
   // AHashMap<(module_id, local_id, imported), imported_ident>
@@ -98,6 +119,7 @@ pub struct PluginLodash {
 
 impl PluginLodash {
   fn add_import(&mut self, source: JsWord, local: Id, imported: Option<Id>) -> Id {
+    let (mappings, pkg_map, _) = &*CACHED.read();
     let (imported_name, _) = imported.unwrap_or_else(|| local.clone());
 
     if let Some(id) =
@@ -108,9 +130,9 @@ impl PluginLodash {
       return id.clone();
     }
 
-    let pkg = self.pkg_map.get(&source).unwrap();
+    let pkg = pkg_map.get(&source).unwrap();
     let import_path = pkg
-      .find_module(&self.mappings, &imported_name)
+      .find_module(mappings, &imported_name)
       .unwrap_or_else(|| {
         panic!(
           "Cannot find appropriate import path to: {}, in package: {}",
@@ -200,7 +222,6 @@ impl VisitMut for PluginLodash {
     }
 
     module.visit_mut_with(&mut PostProcess {
-      pkg_map: &self.pkg_map,
       namespaces: &self.namespace_map,
       lodash_vars: &self.lodash_vars,
       in_lodash_call: None,
@@ -208,9 +229,10 @@ impl VisitMut for PluginLodash {
   }
 
   fn visit_mut_import_decl(&mut self, import_decl: &mut ImportDecl) {
+    let pkg_map = &CACHED.borrow().1;
     let source = &import_decl.src.value;
 
-    if self.pkg_map.get(source).is_none() {
+    if pkg_map.get(source).is_none() {
       return;
     }
 
@@ -254,7 +276,7 @@ impl VisitMut for PluginLodash {
           (self.namespace_map.get(&id.to_id()), &member_expr.prop)
         {
           // Check if this import should be replaced
-          if self.pkg_map.get(source).is_some() {
+          if CACHED.borrow().1.get(source).is_some() {
             // Convert _.map() -> map#0()
             let local_name = format!("{}#{}", &prop.sym, self.imported_names.len());
             let local = Ident::new(
@@ -284,7 +306,7 @@ impl VisitMut for PluginLodash {
   // export { map, add }
   fn visit_mut_named_export(&mut self, named_export: &mut NamedExport) {
     if let Some(source) = &named_export.src {
-      if self.pkg_map.get(&source.value).is_some() {
+      if CACHED.borrow().1.get(&source.value).is_some() {
         for spec in &named_export.specifiers {
           if let ExportSpecifier::Named(named_spec) = spec {
             let (local, imported) = if named_spec.exported.is_some() {
@@ -321,7 +343,6 @@ fn imported_to_id(imported: Option<ModuleExportName>) -> Option<Id> {
 // Remove useless import decl and export decl
 // Replace every lodash global variable with (void 0)
 struct PostProcess<'a> {
-  pkg_map: &'a AHashMap<JsWord, Package>,
   namespaces: &'a AHashMap<Id, JsWord>,
   lodash_vars: &'a AHashSet<Id>,
   in_lodash_call: Option<Id>,
@@ -339,12 +360,12 @@ impl<'a> VisitMut for PostProcess<'a> {
 
     for (idx, module_item) in module.body.iter().enumerate() {
       if let ModuleItem::ModuleDecl(ModuleDecl::Import(import_decl)) = module_item {
-        if self.pkg_map.get(&import_decl.src.value).is_some() {
+        if CACHED.borrow().1.get(&import_decl.src.value).is_some() {
           removed.push(idx);
         }
       } else if let ModuleItem::ModuleDecl(ModuleDecl::ExportNamed(named_export)) = module_item {
         if let Some(source) = &named_export.src {
-          if self.pkg_map.get(&source.value).is_some() {
+          if CACHED.borrow().1.get(&source.value).is_some() {
             removed.push(idx);
           }
         }

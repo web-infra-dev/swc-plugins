@@ -1311,6 +1311,7 @@ dependencies = [
 name = "plugin_lodash"
 version = "0.1.0"
 dependencies = [
+ "better_scoped_tls",
  "nodejs-resolver",
  "shared",
  "test_plugins",

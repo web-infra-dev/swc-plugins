@@ -6,8 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+better_scoped_tls = "0.1.0"
 nodejs-resolver = "0.0.42"
 shared = {path="../shared"}
 
-[dev_dependencies]
+[dev-dependencies]
 test_plugins = {path="../test_plugins"}
