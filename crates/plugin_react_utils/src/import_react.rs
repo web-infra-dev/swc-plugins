@@ -1,14 +1,12 @@
-use shared::{
-  swc_core::{
-    common::{Mark, Span, DUMMY_SP},
-    ecma::{
-      ast::{
-        Ident, ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleItem,
-        Str,
-      },
-      atoms::JsWord,
-      visit::{as_folder, Fold, VisitMut, VisitMutWith},
+use shared::swc_core::{
+  common::{Mark, Span, DUMMY_SP},
+  ecma::{
+    ast::{
+      Ident, ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleItem,
+      Str,
     },
+    atoms::JsWord,
+    visit::{as_folder, Fold, VisitMut, VisitMutWith},
   },
 };
 use swc_plugins_utils::change_ident_syntax_context;

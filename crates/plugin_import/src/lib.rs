@@ -2,6 +2,7 @@ mod visit;
 
 use handlebars::{Context, Helper, HelperResult, Output, RenderContext, Template};
 use heck::ToKebabCase;
+use serde::Deserialize;
 use shared::swc_core::{
   common::{util::take::Take, BytePos, Span, SyntaxContext, DUMMY_SP},
   ecma::{
@@ -20,15 +21,18 @@ use std::fmt::Debug;
 use crate::visit::IdentComponent;
 
 /* ======= Real struct ======= */
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Deserialize)]
+#[serde(crate = "shared::serde")]
 pub struct PluginImportConfig {
   pub from_source: String,
   pub replace_css: Option<ReplaceCssConfig>,
   pub replace_js: Option<ReplaceJsConfig>,
 }
 
-#[derive(Default)]
+#[derive(Default, Deserialize)]
+#[serde(crate = "shared::serde")]
 pub struct ReplaceJsConfig {
+  #[serde(skip)]
   pub replace_expr: Option<Box<dyn Send + Sync + Fn(String) -> Option<String>>>,
   pub replace_tpl: Option<String>,
   pub ignore_es_component: Option<Vec<String>>,
@@ -51,8 +55,10 @@ impl Debug for ReplaceJsConfig {
   }
 }
 
-#[derive(Default)]
+#[derive(Default, Deserialize)]
+#[serde(crate = "shared::serde")]
 pub struct ReplaceCssConfig {
+  #[serde(skip)]
   pub replace_expr: Option<Box<dyn Send + Sync + Fn(String) -> Option<String>>>,
   pub replace_tpl: Option<String>,
   pub ignore_style_component: Option<Vec<String>>,

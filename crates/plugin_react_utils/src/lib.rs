@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 pub mod remove_prop_types;
-use shared::serde::{self, Deserialize};
+use shared::serde::Deserialize;
 use shared::swc_core::{
   common::{chain, pass::Either},
   ecma::{transforms::base::pass::noop, visit::Fold},
@@ -17,10 +17,13 @@ pub use remove_effect::remove_effect;
 use crate::remove_prop_types::react_remove_prop_types;
 
 #[derive(Deserialize, Debug, Clone, Default)]
-#[serde(crate = "self::serde")]
+#[serde(crate = "shared::serde", rename_all = "camelCase")]
 pub struct ReactUtilsConfig {
+  #[serde(default)]
   pub auto_import_react: bool,
+  #[serde(default)]
   pub rm_effect: bool,
+  #[serde(default)]
   pub rm_prop_types: Option<remove_prop_types::ReactRemovePropTypeConfig>,
 }
 

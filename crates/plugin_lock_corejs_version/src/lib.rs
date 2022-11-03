@@ -1,28 +1,45 @@
-use shared::swc_core::{
-  common::DUMMY_SP,
-  ecma::{
-    ast::{CallExpr, Callee, ImportDecl, Lit, Str},
-    atoms::JsWord,
-    visit::{as_folder, Fold, VisitMut},
+use shared::{
+  serde::Deserialize,
+  swc_core::{
+    common::DUMMY_SP,
+    ecma::{
+      ast::{CallExpr, Callee, ImportDecl, Lit, Str},
+      atoms::JsWord,
+      visit::{as_folder, Fold, VisitMut},
+    },
   },
 };
 
-#[derive(Debug, Clone)]
+static COREJS: &str = "core-js";
+static SWC_HELPERS: &str = "@swc/helpers";
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(crate = "shared::serde", rename_all="camelCase")]
 pub struct LockCoreJsVersion {
-  pub corejs_path: String,
+  pub swc_helpers: String,
+  pub corejs: String,
 }
 
-static COREJS: &str = "core-js";
+impl LockCoreJsVersion {
+  fn need_replace(&self, value: impl AsRef<str>) -> Option<String> {
+    if value.as_ref().starts_with(COREJS) {
+      Some(value.as_ref().replace(COREJS, &self.corejs))
+    } else if value.as_ref().starts_with(SWC_HELPERS) {
+      Some(value.as_ref().replace(SWC_HELPERS, &self.swc_helpers))
+    } else {
+      None
+    }
+  }
+}
 
 impl VisitMut for LockCoreJsVersion {
   fn visit_mut_import_decl(&mut self, decl: &mut ImportDecl) {
-    if decl.src.value.contains(COREJS) {
-      let locked_src = change_specifier(&decl.src.value, &self.corejs_path);
+    if let Some(value) = self.need_replace(&decl.src.value) {
       decl.src = Box::new(Str {
         span: DUMMY_SP,
-        value: JsWord::from(locked_src.as_str()),
+        value: JsWord::from(value.as_str()),
         raw: None,
-      })
+      });
     }
   }
 
@@ -31,17 +48,16 @@ impl VisitMut for LockCoreJsVersion {
       Callee::Import(_) => {
         // import('core-js')
         if let Some(Lit::Str(specifier)) = call_expr.args[0].expr.as_mut_lit() {
-          if specifier.value.contains(COREJS) {
-            let locked_path = change_specifier(&specifier.value, &self.corejs_path);
-
+          if let Some(replaced) = self.need_replace(&specifier.value) {
             *specifier = Str {
               span: DUMMY_SP,
-              value: JsWord::from(locked_path.as_str()),
+              value: JsWord::from(replaced.as_str()),
               raw: None,
-            }
+            };
           }
         }
       }
+
       Callee::Expr(expr) => {
         if let Some(id) = expr.as_ident() {
           if &id.sym != "require" {
@@ -50,10 +66,9 @@ impl VisitMut for LockCoreJsVersion {
 
           // require('core-js')
           if let Some(Lit::Str(specifier)) = call_expr.args[0].expr.as_mut_lit() {
-            if specifier.value.contains(COREJS) {
-              let locked_path = change_specifier(&specifier.value, &self.corejs_path);
-              specifier.value = JsWord::from(locked_path.as_str());
+            if let Some(value) = self.need_replace(&specifier.value) {
               specifier.span = DUMMY_SP;
+              specifier.value = JsWord::from(value);
             }
           }
         }
@@ -63,28 +78,9 @@ impl VisitMut for LockCoreJsVersion {
   }
 }
 
-pub fn change_specifier(input: &str, corejs_path: &str) -> String {
-  input.replace(COREJS, corejs_path)
-}
-
-pub fn lock_corejs_version(corejs_path: String) -> impl Fold {
-  as_folder(LockCoreJsVersion { corejs_path })
-}
-
-#[cfg(test)]
-mod test {
-  use shared::swc_ecma_transforms_testing::test_transform;
-
-  use crate::lock_corejs_version;
-
-  #[test]
-  fn test() {
-    test_transform(
-      Default::default(),
-      |_| lock_corejs_version("node_modules/core-js".into()),
-      r#"import "core-js";"#,
-      r#"import "node_modules/core-js";"#,
-      true,
-    )
-  }
+pub fn lock_corejs_version(corejs: String, swc_helpers: String) -> impl Fold {
+  as_folder(LockCoreJsVersion {
+    corejs,
+    swc_helpers,
+  })
 }

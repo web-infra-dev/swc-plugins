@@ -5,13 +5,15 @@ use super::IntoRawConfig;
 
 #[napi(object)]
 pub struct LockCoreJsVersionNapi {
-  pub corejs_path: String,
+  pub corejs: String,
+  pub swc_helpers: String,
 }
 
 impl IntoRawConfig<LockCoreJsVersion> for LockCoreJsVersionNapi {
   fn into_raw_config(self, _env: napi::Env) -> napi::Result<LockCoreJsVersion> {
     Ok(LockCoreJsVersion {
-      corejs_path: self.corejs_path,
+      corejs: self.corejs,
+      swc_helpers: self.swc_helpers,
     })
   }
 }

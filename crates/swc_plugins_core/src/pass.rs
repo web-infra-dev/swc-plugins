@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use crate::types::TransformConfig;
+use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_lodash::plugin_lodash;
 use shared::{
   swc_core::{
@@ -15,7 +16,7 @@ use plugin_import::plugin_import;
 use plugin_modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use plugin_react_utils::react_utils;
 
-pub fn internal_transform_pass(
+pub fn internal_transform_before_pass(
   config: &TransformConfig,
   cm: Arc<SourceMap>,
   top_level_mark: Mark,
@@ -53,14 +54,6 @@ pub fn internal_transform_pass(
     Either::Right(noop())
   };
 
-  let lock_core_js = if let Some(lock_core_js_config) = &extensions.lock_corejs_version {
-    Either::Left(plugin_lock_corejs_version::lock_corejs_version(
-      lock_core_js_config.corejs_path.to_string(),
-    ))
-  } else {
-    Either::Right(noop())
-  };
-
   let lodash = if let Some(ref config) = extensions.lodash {
     Either::Left(plugin_lodash(config, plugin_context))
   } else {
@@ -84,11 +77,22 @@ pub fn internal_transform_pass(
   //   Either::Right(noop())
   // };
 
-  chain!(
-    modularize_imports,
-    plugin_import,
-    react_utils,
-    lock_core_js,
-    lodash
-  )
+  chain!(modularize_imports, plugin_import, react_utils, lodash)
+}
+
+pub fn internal_transform_after_pass(
+  config: &TransformConfig,
+  _cm: Arc<SourceMap>,
+  _top_level_mark: Mark,
+  _unresolved_mark: Mark,
+  _comments: SingleThreadedComments,
+) -> impl Fold + '_ {
+  if let Some(config) = &config.extensions.lock_corejs_version {
+    Either::Left(lock_corejs_version(
+      config.corejs.clone(),
+      config.swc_helpers.clone(),
+    ))
+  } else {
+    Either::Right(noop())
+  }
 }

@@ -1,5 +1,6 @@
 use mappings::{build_mappings, Mappings, Package};
 use shared::{
+  serde::Deserialize,
   swc_core::{
     self,
     common::{
@@ -25,7 +26,8 @@ use std::{ops::Deref, path::PathBuf, sync::Arc};
 mod error;
 mod mappings;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Deserialize)]
+#[serde(crate = "shared::serde")]
 pub struct PluginLodashConfig {
   pub cwd: PathBuf,
   pub ids: Vec<String>,
@@ -115,11 +117,7 @@ impl PluginLodash {
           imported_name, source
         )
       });
-    let new_source = format!(
-      "{}/{}",
-      pkg.id,
-      import_path
-    );
+    let new_source = format!("{}/{}", pkg.id, import_path);
 
     self
       .imported_names
