@@ -12,7 +12,6 @@ use shared::{
     ecma::{
       ast::EsVersion,
       parser::{Syntax, TsConfig},
-      transforms::base::pass::noop,
       // TODO current version too low
       // transforms::module::common_js::Config
     },
@@ -20,7 +19,7 @@ use shared::{
 };
 use swc_plugins_utils::is_esm;
 
-use crate::pass::internal_transform_pass;
+use crate::pass::{internal_transform_after_pass, internal_transform_before_pass};
 use crate::types::TransformConfig;
 
 pub fn transform(
@@ -92,15 +91,23 @@ pub fn transform(
             &swc_config,
             // TODO pass comments to internal pass
             |_, comments| {
-              internal_transform_pass(
+              internal_transform_before_pass(
                 config,
-                cm,
+                cm.clone(),
                 top_level_mark,
                 unresolved_mark,
                 comments.clone(),
               )
             },
-            |_, _| noop(),
+            |_, comments| {
+              internal_transform_after_pass(
+                config,
+                cm.clone(),
+                top_level_mark,
+                unresolved_mark,
+                comments.clone(),
+              )
+            },
           )
         })
       },

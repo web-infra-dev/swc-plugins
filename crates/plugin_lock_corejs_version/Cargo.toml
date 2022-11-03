@@ -7,3 +7,6 @@ version = "0.1.0"
 
 [dependencies]
 shared = {path = "../shared"}
+
+[dev-dependencies]
+test_plugins = {path="../test_plugins"}
