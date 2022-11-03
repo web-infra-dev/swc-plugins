@@ -2,16 +2,13 @@ use swc_plugins_core::plugin_react_utils::{
   remove_prop_types::ReactRemovePropTypeConfig, ReactUtilsConfig,
 };
 
-use shared::serde::Deserialize;
-
 use napi::Env;
 use napi_derive::napi;
 
 use super::IntoRawConfig;
 
 #[napi(object)]
-#[derive(Deserialize, Debug)]
-#[serde(crate = "shared::serde")]
+#[derive(Debug)]
 pub struct ReactUtilsConfigNapi {
   pub auto_import_react: Option<bool>,
   pub rm_effect: Option<bool>,
@@ -19,14 +16,13 @@ pub struct ReactUtilsConfigNapi {
 }
 
 #[napi(object)]
-#[derive(Deserialize, Debug)]
-#[serde(crate = "shared::serde")]
+#[derive(Debug)]
 pub struct ReactUtilsRmPropTypesConfig {
-  pub mode: String,
-  pub remove_import: bool,
-  pub ignore_filenames: Vec<String>,
-  pub additional_libraries: Vec<String>,
-  pub class_name_matchers: Vec<String>,
+  pub mode: Option<String>,
+  pub remove_import: Option<bool>,
+  pub ignore_filenames: Option<Vec<String>>,
+  pub additional_libraries: Option<Vec<String>>,
+  pub class_name_matchers: Option<Vec<String>>,
 }
 
 impl IntoRawConfig<ReactUtilsConfig> for ReactUtilsConfigNapi {
@@ -35,11 +31,23 @@ impl IntoRawConfig<ReactUtilsConfig> for ReactUtilsConfigNapi {
       auto_import_react: self.auto_import_react.unwrap_or(false),
       rm_effect: self.rm_effect.unwrap_or(false),
       rm_prop_types: self.rm_prop_types.map(|config| ReactRemovePropTypeConfig {
-        mode: config.mode.into(),
-        remove_import: config.remove_import,
-        ignore_filenames: config.ignore_filenames.into_raw_config(env).unwrap(),
-        additional_libraries: config.additional_libraries.into_raw_config(env).unwrap(),
-        class_name_matchers: config.class_name_matchers.into_raw_config(env).unwrap(),
+        mode: config.mode.unwrap_or_else(|| "remove".into()).into(),
+        remove_import: config.remove_import.unwrap_or(true),
+        ignore_filenames: config
+          .ignore_filenames
+          .unwrap_or_default()
+          .into_raw_config(env)
+          .unwrap(),
+        additional_libraries: config
+          .additional_libraries
+          .unwrap_or_default()
+          .into_raw_config(env)
+          .unwrap(),
+        class_name_matchers: config
+          .class_name_matchers
+          .unwrap_or_default()
+          .into_raw_config(env)
+          .unwrap(),
       }),
     })
   }
