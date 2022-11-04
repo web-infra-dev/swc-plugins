@@ -8,7 +8,7 @@ use shared::{
       config::{self, ModuleConfig},
       try_with_handler, Compiler, HandlerOpts, TransformOutput,
     },
-    common::{errors::ColorConfig, FileName, Mark, GLOBALS},
+    common::{errors::ColorConfig, FileName, Mark, GLOBALS, comments::SingleThreadedComments},
     ecma::{
       ast::EsVersion,
       parser::{Syntax, TsConfig},
@@ -16,18 +16,30 @@ use shared::{
       // transforms::module::common_js::Config
     },
   },
+  PluginContext,
 };
 use swc_plugins_utils::is_esm;
 
 use crate::pass::{internal_transform_after_pass, internal_transform_before_pass};
 use crate::types::TransformConfig;
 
+/// As we initialize plugins at each transform,
+/// Some plugins need very heavy work on the first
+/// time, and if we can cache it, we should get better
+/// performance.
+/// A `config_hash` is the unique key representing a
+/// specific `TransformConfig`.
+/// transform don't care how you create this hash.
+/// 
+/// If you call `transform` from `nodejs`, this config hash
+/// is unique for each `binding::Compiler`.
 pub fn transform(
   compiler: Arc<Compiler>,
   config: &TransformConfig,
   filename: String,
   code: &str,
   input_source_map: Option<String>,
+  config_hash: Option<String>
 ) -> Result<TransformOutput> {
   GLOBALS.set(&Default::default(), || {
     let cm = compiler.cm.clone();
@@ -84,28 +96,32 @@ pub fn transform(
             });
           }
 
+          // TODO comments can be pass to `process_js_with_custom_pass` in next swc version
+          let comments = SingleThreadedComments::default();
+          let plugin_context = Arc::new(PluginContext {
+            cm,
+            top_level_mark,
+            unresolved_mark,
+            comments,
+            config_hash,
+          });
+
           compiler.process_js_with_custom_pass(
             fm,
             None,
             handler,
             &swc_config,
-            // TODO pass comments to internal pass
-            |_, comments| {
+            // TODO pass comments to internal pass in next swc versions
+            |_, _comments| {
               internal_transform_before_pass(
                 config,
-                cm.clone(),
-                top_level_mark,
-                unresolved_mark,
-                comments.clone(),
+                plugin_context.clone()
               )
             },
-            |_, comments| {
+            |_, _comments| {
               internal_transform_after_pass(
                 config,
-                cm.clone(),
-                top_level_mark,
-                unresolved_mark,
-                comments.clone(),
+                plugin_context.clone()
               )
             },
           )

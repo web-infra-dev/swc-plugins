@@ -39,6 +39,7 @@ where
   pub config: swc_plugins_core::types::TransformConfig,
   pub hooks: H,
   pub ignore: Vec<CachedRegex>,
+  pub config_hash: Option<String>
 }
 
 pub trait FixtureTesterHook {
@@ -92,11 +93,13 @@ where
     config: swc_plugins_core::types::TransformConfig,
     hooks: H,
     ignore: Vec<CachedRegex>,
+    config_hash: Option<String>,
   ) -> Self {
     Self {
       config,
       hooks,
       ignore,
+      config_hash
     }
   }
 
@@ -167,6 +170,7 @@ where
       "test".into(),
       code,
       None,
+      self.config_hash.clone()
     );
 
     if let Err(e) = res {

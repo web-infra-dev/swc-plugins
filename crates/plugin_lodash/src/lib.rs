@@ -1,12 +1,11 @@
-use mappings::{build_mappings, Mappings, Package};
+use mappings::{build_mappings, build_pkg_map, Mappings, Package};
 use shared::{
+  ahash::{AHashMap, AHashSet},
+  dashmap::DashMap,
   serde::Deserialize,
   swc_core::{
     self,
-    common::{
-      collections::{AHashMap, AHashSet},
-      Mark, Span, DUMMY_SP,
-    },
+    common::{sync::Lazy, Mark, Span, DUMMY_SP},
     ecma::{
       ast::{
         CallExpr, ExportNamedSpecifier, ExportSpecifier, Expr, Id, Ident, ImportDecl,
@@ -26,6 +25,13 @@ use std::{ops::Deref, path::PathBuf, sync::Arc};
 mod error;
 mod mappings;
 
+struct CacheItem {
+  mappings: Arc<Mappings>,
+  pkg_map: Arc<AHashMap<JsWord, Package>>,
+}
+
+static CACHE: Lazy<DashMap<String, CacheItem>> = Lazy::new(Default::default);
+
 #[derive(Debug, Default, Deserialize)]
 #[serde(crate = "shared::serde")]
 pub struct PluginLodashConfig {
@@ -44,25 +50,23 @@ pub fn plugin_lodash(
     }
   });
 
-  let mappings = build_mappings(ids.iter().map(|s| s.as_str()), &config.cwd).unwrap();
-  let mut pkg_map = AHashMap::default();
+  let (mappings, pkg_map) = if let Some(cache_key) = &plugin_context.config_hash && CACHE.contains_key(cache_key) {
+    let cache_item = CACHE.get(cache_key).unwrap();
+    (cache_item.mappings.clone(), cache_item.pkg_map.clone())
+  } else {
+    let mappings = Arc::new(
+      build_mappings(ids.iter().map(|s| s.as_str()), &config.cwd).unwrap()
+    );
+    let pkg_map = Arc::new(build_pkg_map(&config.cwd, &mappings));
 
-  for (id, module_map) in &mappings {
-    for base in module_map.keys() {
-      // Key is lodash, lodash/fp
-      // `base` could be empty
-      pkg_map.insert(
-        {
-          if base.is_empty() {
-            JsWord::from(id.as_str())
-          } else {
-            JsWord::from(format!("{}/{}", &id, &base).as_str())
-          }
-        },
-        Package::new(&config.cwd, id, base).unwrap(),
-      );
+    if let Some(k) = &plugin_context.config_hash {
+      CACHE.insert(k.clone(), CacheItem {
+        mappings: mappings.clone(),
+        pkg_map: pkg_map.clone(),
+      });
     }
-  }
+    (mappings, pkg_map)
+  };
 
   as_folder(PluginLodash {
     cwd: config.cwd.clone(),
@@ -80,8 +84,8 @@ pub fn plugin_lodash(
 #[derive(Debug, Default)]
 pub struct PluginLodash {
   pub cwd: PathBuf,
-  pkg_map: AHashMap<JsWord, Package>,
-  mappings: Mappings,
+  pkg_map: Arc<AHashMap<JsWord, Package>>,
+  mappings: Arc<Mappings>,
 
   top_level_mark: Mark,
 

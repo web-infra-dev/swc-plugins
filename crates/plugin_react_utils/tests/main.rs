@@ -141,7 +141,8 @@ fn main() {
       }
     }"#).unwrap(),
     Hook{},
-    vec![]
+    vec![],
+    None
   );
 
   tester.fixtures(&fixture_dir);

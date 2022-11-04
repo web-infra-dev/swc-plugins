@@ -20,6 +20,7 @@ fn main() {
     config,
     BaseFixtureHook,
     vec![],
+    None
   );
 
   tester.fixtures(&current_dir().unwrap().join("tests/fixtures"));

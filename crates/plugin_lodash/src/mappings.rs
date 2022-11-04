@@ -8,7 +8,7 @@ use shared::{
   ahash::AHashMap,
   anyhow,
   serde::{Deserialize, Serialize},
-  swc_core::common::sync::Lazy,
+  swc_core::{common::sync::Lazy, ecma::atoms::JsWord},
 };
 
 use crate::error::{ResolveError, ResolveErrorKind};
@@ -203,4 +203,27 @@ fn build_pairs(pkg_root: &Path, dir_path: &Path) -> anyhow::Result<Pairs> {
   }
 
   Ok(pairs)
+}
+
+pub fn build_pkg_map(cwd: &Path, mappings: &Mappings) -> AHashMap<JsWord, Package> {
+  let mut pkg_map = AHashMap::default();
+
+  for (id, module_map) in mappings {
+    for base in module_map.keys() {
+      // Key is lodash, lodash/fp
+      // `base` could be empty
+      pkg_map.insert(
+        {
+          if base.is_empty() {
+            JsWord::from(id.as_str())
+          } else {
+            JsWord::from(format!("{}/{}", &id, &base).as_str())
+          }
+        },
+        Package::new(cwd, id, base).unwrap(),
+      );
+    }
+  }
+
+  pkg_map
 }
