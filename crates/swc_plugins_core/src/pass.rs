@@ -5,7 +5,7 @@ use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_lodash::plugin_lodash;
 use shared::{
   swc_core::{
-    common::{chain, comments::SingleThreadedComments, pass::Either, Mark, SourceMap},
+    common::{chain, pass::Either},
     ecma::transforms::base::pass::noop,
     ecma::visit::Fold,
   },
@@ -18,18 +18,8 @@ use plugin_react_utils::react_utils;
 
 pub fn internal_transform_before_pass(
   config: &TransformConfig,
-  cm: Arc<SourceMap>,
-  top_level_mark: Mark,
-  unresolved_mark: Mark,
-  comments: SingleThreadedComments,
+  plugin_context: Arc<PluginContext>,
 ) -> impl Fold + '_ {
-  let plugin_context = Arc::new(PluginContext {
-    cm,
-    top_level_mark,
-    unresolved_mark,
-    comments,
-  });
-
   let extensions = &config.extensions;
 
   let modularize_imports = extensions
@@ -82,10 +72,7 @@ pub fn internal_transform_before_pass(
 
 pub fn internal_transform_after_pass(
   config: &TransformConfig,
-  _cm: Arc<SourceMap>,
-  _top_level_mark: Mark,
-  _unresolved_mark: Mark,
-  _comments: SingleThreadedComments,
+  _plugin_context: Arc<PluginContext>,
 ) -> impl Fold + '_ {
   if let Some(config) = &config.extensions.lock_corejs_version {
     Either::Left(lock_corejs_version(

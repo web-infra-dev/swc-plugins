@@ -9,10 +9,12 @@ pub use swc_core::ecma::transforms::testing as swc_ecma_transforms_testing;
 pub use testing;
 pub extern crate serde;
 pub use ahash;
+pub use dashmap;
 
 pub struct PluginContext {
   pub cm: Arc<SourceMap>,
   pub top_level_mark: Mark,
   pub unresolved_mark: Mark,
   pub comments: SingleThreadedComments,
+  pub config_hash: Option<String> // This can be used by plugins to do caching
 }

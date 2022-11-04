@@ -1704,6 +1704,7 @@ version = "0.1.0"
 dependencies = [
  "ahash 0.8.0",
  "anyhow",
+ "dashmap",
  "serde",
  "serde_json",
  "swc_core",

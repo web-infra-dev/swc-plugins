@@ -30,6 +30,7 @@ use swc_plugins_core::types::TransformConfig;
 
 // ===== Internal Rust struct under the hood =====
 pub struct Compiler {
+  pub id: u32,
   pub config: TransformConfig,
   pub swc_compiler: Arc<SwcCompiler>,
 }
@@ -64,6 +65,7 @@ impl JsCompiler {
     compilers.insert(
       id,
       Compiler {
+        id,
         config,
         swc_compiler: Arc::new(SwcCompiler::new(Arc::new(SourceMap::default()))),
       },
@@ -109,6 +111,7 @@ impl JsCompiler {
         filename,
         &code,
         map,
+        Some(compiler.id.to_string())
       )
       .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
       .map(|transform_output| transform_output.into());
@@ -207,6 +210,7 @@ impl Task for TransformTask {
       self.filename.clone(),
       &self.code,
       self.map.clone(),
+      Some(compiler.id.to_string())
     )
     .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
   }
