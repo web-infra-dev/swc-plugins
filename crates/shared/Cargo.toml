@@ -12,6 +12,7 @@ serde = {version= "1.0.71", features=["derive"]}
 testing = "0.31.3"
 swc_core = { features = [
   "common_concurrent",
+  "base_concurrent",
   "ecma_ast",
   "ecma_visit",
   "ecma_loader_node",
@@ -29,9 +30,9 @@ swc_core = { features = [
   "cached",
   "base",
   "testing_transform"
-], version = "0.28.10" }
-ahash = "0.8.0"
+], version = "0.40.20" }
 dashmap = "5.4.0"
+ahash = "0.7.6"
 
 [dev-dependencies]
 testing_macros = "0.2.7"
