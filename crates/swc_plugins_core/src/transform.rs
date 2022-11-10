@@ -64,10 +64,11 @@ pub fn transform(
           let unresolved_mark = Mark::new();
 
           swc_config.top_level_mark = Some(top_level_mark);
+          let comments = SingleThreadedComments::default();
 
           // Need auto detect esm
-          if swc_config.config.module.is_none() {
-            let program = Some(compiler.parse_js(
+          let program = if swc_config.config.module.is_none() {
+            let program = compiler.parse_js(
               fm.clone(),
               handler,
               swc_config.config.jsc.target.unwrap_or(EsVersion::Es2022),
@@ -79,10 +80,10 @@ pub fn transform(
                 })
               }),
               config::IsModule::Bool(true),
-              None,
-            )?);
+              Some(&comments),
+            )?;
 
-            swc_config.config.module = Some(if is_esm(program.as_ref().unwrap()) {
+            swc_config.config.module = Some(if is_esm(&program) {
               ModuleConfig::Es6
             } else {
               ModuleConfig::CommonJs(
@@ -94,31 +95,34 @@ pub fn transform(
                 .unwrap(),
               )
             });
-          }
+            Some(program)
+          } else {
+            None
+          };
 
           // TODO comments can be pass to `process_js_with_custom_pass` in next swc version
-          let comments = SingleThreadedComments::default();
           let plugin_context = Arc::new(PluginContext {
             cm,
             top_level_mark,
             unresolved_mark,
-            comments,
+            comments: comments.clone(),
             config_hash,
           });
 
           compiler.process_js_with_custom_pass(
             fm,
-            None,
+            program,
             handler,
             &swc_config,
+            comments,
             // TODO pass comments to internal pass in next swc versions
-            |_, _comments| {
+            |_| {
               internal_transform_before_pass(
                 config,
                 plugin_context.clone()
               )
             },
-            |_, _comments| {
+            |_| {
               internal_transform_after_pass(
                 config,
                 plugin_context.clone()
