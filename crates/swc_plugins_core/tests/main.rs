@@ -33,7 +33,7 @@ fn test() {
     "".into(),
     code,
     None,
-    Some("".into())
+    Some("".into()),
   )
   .unwrap();
   insta::assert_snapshot!("plugin-import", res.code);
