@@ -32,3 +32,26 @@ fn minify_large_bundle(bencher: &mut test::Bencher) -> impl Termination {
     ).unwrap());
   })
 }
+
+#[bench]
+fn minify_large_bundle_with_sourcemap(bencher: &mut test::Bencher) -> impl Termination {
+  let config = shared::serde_json::from_str(
+    r#"{
+    "compress": {},
+    "mangle": true,
+    "sourceMap": true
+  }"#,
+  )
+  .unwrap();
+  bencher.iter(|| {
+    test::black_box(minify(
+      &config,
+      "large_file.js".into(),
+      &read_to_string(
+        &current_dir()
+          .unwrap()
+          .join("benches/fixtures/minify/large_file.js"),
+      ),
+    ).unwrap());
+  })
+}
