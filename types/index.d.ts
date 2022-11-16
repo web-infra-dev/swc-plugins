@@ -1,3 +1,5 @@
+import { JsMinifyOptions, Options } from "./swcTypes";
+
 /**
  * Internal plugins
  */
@@ -50,27 +52,17 @@ export interface Extensions {
   }
 }
 
-export interface TransformConfig {
-  /** Raw swc options */
-  swc?: import("./swcTypes").Options;
-  /** Internal rust-swc Plugins */
-  extensions?: Extensions;
-}
-
-export interface TransformConfigNapi {
-  /** Raw swc options */
-  swc?: string;
-  /** Internal rust-swc Plugins */
-  extensions?: Extensions;
-}
-
 export interface Output {
   code: string;
   map?: string;
 }
 
+export interface TransformConfig extends Options {
+  extensions?: Extensions
+}
+
 export class Compiler {
-  constructor(config: TransformConfigNapi);
+  constructor(config: TransformConfig);
 
   transformSync(filename: string, code: string, map?: string): Output;
 
@@ -80,15 +72,13 @@ export class Compiler {
 }
 
 function minify(
-  config: string,
   filename: string,
   code: string,
-  map?: string
+  config: JsMinifyOptions,
 ): Promise<Output>;
 
 function minifySync(
-  config: string,
   filename: string,
   code: string,
-  map?: string
+  config: JsMinifyOptions,
 ): Output;

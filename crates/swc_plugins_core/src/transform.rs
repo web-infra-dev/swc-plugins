@@ -52,7 +52,13 @@ pub fn transform(
       },
       |handler| {
         compiler.run_transform(handler, true, || {
-          let fm = cm.new_source_file(FileName::Real(PathBuf::from(&filename)), code.to_string());
+          let cm_filename = if filename.is_empty() {
+            FileName::Anon
+          } else {
+            FileName::Real(PathBuf::from(filename.clone()))
+          };
+      
+          let fm = cm.new_source_file(cm_filename, code.to_string());
 
           let mut swc_config = config::Options {
             ..config.swc.clone()

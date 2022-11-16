@@ -13,7 +13,13 @@ static COMPILER: Lazy<Arc<Compiler>> = Lazy::new(|| Arc::new(Compiler::new(Defau
 pub fn minify(config: &JsMinifyOptions, filename: String, src: &str) -> Result<TransformOutput> {
   GLOBALS.set(&Globals::default(), || {
     let cm = COMPILER.cm.clone();
-    let fm = cm.new_source_file(FileName::Real(PathBuf::from(filename)), src.to_string());
+
+    let filename = if filename.is_empty() {
+      FileName::Anon
+    } else {
+      FileName::Real(PathBuf::from(filename))
+    };
+    let fm = cm.new_source_file(filename, src.to_string());
 
     try_with_handler(
       cm,
