@@ -5,7 +5,7 @@
   "bugs": "https://github.com/modern-js-dev/swc-plugins/issues",
   "repository": "modern-js-dev/swc-plugins",
   "license": "MIT",
-  "main": "./index.js",
+  "main": "./binding.js",
   "types": "./types/index.d.ts",
   "version": "0.0.6",
   "devDependencies": {
