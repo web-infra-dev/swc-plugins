@@ -1,4 +1,5 @@
 import { JsMinifyOptions, Options } from "./swcTypes";
+export * from './swcTypes'
 
 /**
  * Internal plugins
@@ -71,13 +72,13 @@ export class Compiler {
   release(): void
 }
 
-function minify(
+export function minify(
   filename: string,
   code: string,
   config: JsMinifyOptions,
 ): Promise<Output>;
 
-function minifySync(
+export function minifySync(
   filename: string,
   code: string,
   config: JsMinifyOptions,
