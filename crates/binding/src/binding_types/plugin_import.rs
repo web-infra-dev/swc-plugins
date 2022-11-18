@@ -44,7 +44,7 @@ impl From<SyncEnv> for Env {
 pub struct ReplaceJsConfigNapi {
   #[serde(skip_serializing)]
   pub replace_expr: Option<JsFunction>,
-  pub replace_tpl: Option<String>,
+  pub template: Option<String>,
   pub ignore_es_component: Option<Vec<String>>,
   pub lower: Option<bool>,
   pub camel2_dash_component_name: Option<bool>,
@@ -58,7 +58,7 @@ pub struct ReplaceCssConfigNapi {
   pub ignore_style_component: Option<Vec<String>>,
   #[serde(skip_serializing)]
   pub replace_expr: Option<JsFunction>,
-  pub replace_tpl: Option<String>,
+  pub template: Option<String>,
   pub lower: Option<bool>,
   pub camel2_dash_component_name: Option<bool>,
 }
@@ -77,7 +77,7 @@ impl IntoRawConfig<PluginImportConfig> for PluginImportConfigNapi {
         let ReplaceCssConfigNapi {
           ignore_style_component,
           replace_expr,
-          replace_tpl,
+          template,
           lower,
           camel2_dash_component_name,
         } = replace_css;
@@ -115,7 +115,7 @@ impl IntoRawConfig<PluginImportConfig> for PluginImportConfigNapi {
               })
             }) as Box<dyn Sync + Send + Fn(String) -> Option<String>>
           }),
-          replace_tpl,
+          template,
           lower,
           camel2_dash_component_name,
         }
@@ -124,7 +124,7 @@ impl IntoRawConfig<PluginImportConfig> for PluginImportConfigNapi {
         let ReplaceJsConfigNapi {
           ignore_es_component,
           replace_expr,
-          replace_tpl,
+          template,
           lower,
           camel2_dash_component_name,
           transform_to_default_import,
@@ -163,7 +163,7 @@ impl IntoRawConfig<PluginImportConfig> for PluginImportConfigNapi {
               })
             }) as Box<dyn Sync + Send + Fn(String) -> Option<String>>
           }),
-          replace_tpl,
+          template,
           lower,
           camel2_dash_component_name,
           transform_to_default_import,

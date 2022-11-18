@@ -34,7 +34,7 @@ pub struct PluginImportConfig {
 pub struct ReplaceJsConfig {
   #[serde(skip)]
   pub replace_expr: Option<Box<dyn Send + Sync + Fn(String) -> Option<String>>>,
-  pub replace_tpl: Option<String>,
+  pub template: Option<String>,
   pub ignore_es_component: Option<Vec<String>>,
   pub lower: Option<bool>,
   pub camel2_dash_component_name: Option<bool>,
@@ -44,9 +44,9 @@ pub struct ReplaceJsConfig {
 impl Debug for ReplaceJsConfig {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     f.write_str(&format!(
-      "ReplaceJsConfig: {{\nreplace_expr: {:?},\nreplace_tpl: {:?},\nignore_es_component: {:?},\nlower: {:?},\ncamel2_dash_component_name: {:?},\ntransform_to_default_import: {:?},\n}}\n",
+      "ReplaceJsConfig: {{\nreplace_expr: {:?},\ntemplate: {:?},\nignore_es_component: {:?},\nlower: {:?},\ncamel2_dash_component_name: {:?},\ntransform_to_default_import: {:?},\n}}\n",
       self.replace_expr.as_ref().map(|_| Some("Func")).unwrap_or(None),
-      self.replace_tpl,
+      self.template,
       self.ignore_es_component,
       self.lower,
       self.camel2_dash_component_name,
@@ -60,7 +60,7 @@ impl Debug for ReplaceJsConfig {
 pub struct ReplaceCssConfig {
   #[serde(skip)]
   pub replace_expr: Option<Box<dyn Send + Sync + Fn(String) -> Option<String>>>,
-  pub replace_tpl: Option<String>,
+  pub template: Option<String>,
   pub ignore_style_component: Option<Vec<String>>,
   pub lower: Option<bool>,
   pub camel2_dash_component_name: Option<bool>,
@@ -69,9 +69,9 @@ pub struct ReplaceCssConfig {
 impl Debug for ReplaceCssConfig {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     f.write_str(&format!(
-      "ReplaceCssConfig: {{\nreplace_expr: {:?},\nreplace_tpl: {:?},\nignore_style_component: {:?},\nlower: {:?},\ncamel2_dash_component_name: {:?},\n}}\n",
+      "ReplaceCssConfig: {{\nreplace_expr: {:?},\ntemplate: {:?},\nignore_style_component: {:?},\nlower: {:?},\ncamel2_dash_component_name: {:?},\n}}\n",
       self.replace_expr.as_ref().map(|_| Some("Func")).unwrap_or(None),
-      self.replace_tpl,
+      self.template,
       self.ignore_style_component,
       self.lower,
       self.camel2_dash_component_name,
@@ -141,7 +141,7 @@ pub fn plugin_import<'a>(config: &'a Vec<PluginImportConfig>) -> impl Fold + 'a 
 
   config.iter().for_each(|cfg| {
     if let Some(js_config) = &cfg.replace_js {
-      if let Some(tpl) = &js_config.replace_tpl {
+      if let Some(tpl) = &js_config.template {
         renderer.register_template(
           &(cfg.from_source.clone() + "js"),
           Template::compile(tpl).unwrap(),
@@ -150,7 +150,7 @@ pub fn plugin_import<'a>(config: &'a Vec<PluginImportConfig>) -> impl Fold + 'a 
     }
 
     if let Some(css_config) = &cfg.replace_css {
-      if let Some(tpl) = &css_config.replace_tpl {
+      if let Some(tpl) = &css_config.template {
         renderer.register_template(
           &(cfg.from_source.clone() + "css"),
           Template::compile(tpl).unwrap(),
@@ -238,7 +238,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
                         .as_ref()
                         .and_then(|replace_expr| replace_expr(css_ident.clone()))
                         .or_else(|| {
-                          css.replace_tpl.as_ref().map(|_| {
+                          css.template.as_ref().map(|_| {
                             self
                               .renderer
                               .render(&(child_config.from_source.clone() + "css"), &css_ident)
@@ -277,7 +277,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
                         .as_ref()
                         .and_then(|replace_expr| replace_expr(js_ident.clone()))
                         .or_else(|| {
-                          js_config.replace_tpl.as_ref().map(|_| {
+                          js_config.template.as_ref().map(|_| {
                             self
                               .renderer
                               .render(&(child_config.from_source.clone() + "js"), &js_ident)

@@ -9,7 +9,7 @@ export * from './swcTypes'
   replaceJs?: {
     ignoreEsComponent?: string[];
     replaceExpr?: (member: string) => (string | false);
-    replaceTpl?: string;
+    template?: string;
     lower?: boolean;
     camel2DashComponentName?: boolean;
     transformToDefaultImport?: boolean;
@@ -17,7 +17,7 @@ export * from './swcTypes'
   replaceCss?: {
     ignoreStyleComponent?: string[];
     replaceExpr?: (member: string) => (string | false);
-    replaceTpl?: string;
+    template?: string;
     lower?: boolean;
     camel2DashComponentName?: boolean;
   };
