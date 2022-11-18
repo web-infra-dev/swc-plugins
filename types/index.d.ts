@@ -34,8 +34,8 @@ export interface Extensions {
   pluginImport?: ImportItem[];
   reactUtils?: {
     autoImportReact?: boolean,
-    rmEffect?: boolean,
-    rmPropTypes?: {
+    removeEffect?: boolean,
+    removePropTypes?: {
       mode?: "remove" | "unwrap" | "unsafe-wrap",
       removeImport?: bool,
       ignoreFilenames?: String[],
