@@ -26,7 +26,7 @@ fn main() {
       let mut tests = vec![];
 
       let options_path = fixture_path.join("options.json");
-      let rm_prop_types: ReactRemovePropTypeConfig = if options_path.exists() {
+      let remove_prop_types: ReactRemovePropTypeConfig = if options_path.exists() {
         shared::serde_json::from_str(&read(&options_path)).unwrap()
       } else {
         Default::default()
@@ -36,7 +36,7 @@ fn main() {
         "jsc": { "target": "es2020", "externalHelpers": true, "parser": { "syntax": "ecmascript", "jsx": true } }
       }"#).unwrap();
       let react_utils = ReactUtilsConfig {
-        rm_prop_types: Some(rm_prop_types.clone()),
+        remove_prop_types: Some(remove_prop_types.clone()),
         ..Default::default()
       };
 
@@ -58,9 +58,9 @@ fn main() {
 
       let expected_remove_path = &fixture_path.join("expected-remove.js");
       if expected_remove_path.exists() {
-        let mut rm_prop_types = rm_prop_types.clone();
-        rm_prop_types.mode = Mode::Removal;
-        rm_prop_types.remove_import = true;
+        let mut remove_prop_types = remove_prop_types.clone();
+        remove_prop_types.mode = Mode::Removal;
+        remove_prop_types.remove_import = true;
 
         let expected_code = read(expected_remove_path);
         tests.push(ExpectedInfo::new(
@@ -70,7 +70,7 @@ fn main() {
             swc: swc.clone(),
             extensions: Extensions {
               react_utils: Some(ReactUtilsConfig {
-                rm_prop_types: Some(rm_prop_types),
+                remove_prop_types: Some(remove_prop_types),
                 ..Default::default()
               }),
               ..Default::default()
@@ -81,9 +81,9 @@ fn main() {
 
       let expected_wrap_path = &fixture_path.join("expected-wrap.js");
       if expected_wrap_path.exists() {
-        let mut rm_prop_types = rm_prop_types.clone();
-        rm_prop_types.mode = Mode::Wrap;
-        rm_prop_types.remove_import = false;
+        let mut remove_prop_types = remove_prop_types.clone();
+        remove_prop_types.mode = Mode::Wrap;
+        remove_prop_types.remove_import = false;
 
         let expected_code = read(expected_wrap_path);
         tests.push(ExpectedInfo::new(
@@ -93,7 +93,7 @@ fn main() {
             swc: swc.clone(),
             extensions: Extensions {
               react_utils: Some(ReactUtilsConfig {
-                rm_prop_types: Some(rm_prop_types),
+                remove_prop_types: Some(remove_prop_types),
                 ..Default::default()
               }),
               ..Default::default()
@@ -104,9 +104,9 @@ fn main() {
 
       let expected_unsafe_wrap_path = &fixture_path.join("expected-unsafe-wrap.js");
       if expected_unsafe_wrap_path.exists() {
-        let mut rm_prop_types = rm_prop_types;
-        rm_prop_types.mode = Mode::UnsafeWrap;
-        rm_prop_types.remove_import = false;
+        let mut remove_prop_types = remove_prop_types;
+        remove_prop_types.mode = Mode::UnsafeWrap;
+        remove_prop_types.remove_import = false;
 
         let expected_code = read(expected_unsafe_wrap_path);
         tests.push(ExpectedInfo::new(
@@ -116,7 +116,7 @@ fn main() {
             swc,
             extensions: Extensions {
               react_utils: Some(ReactUtilsConfig {
-                rm_prop_types: Some(rm_prop_types),
+                remove_prop_types: Some(remove_prop_types),
                 ..Default::default()
               }),
               ..Default::default()

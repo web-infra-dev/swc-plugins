@@ -22,9 +22,9 @@ pub struct ReactUtilsConfig {
   #[serde(default)]
   pub auto_import_react: bool,
   #[serde(default)]
-  pub rm_effect: bool,
+  pub remove_effect: bool,
   #[serde(default)]
-  pub rm_prop_types: Option<remove_prop_types::ReactRemovePropTypeConfig>,
+  pub remove_prop_types: Option<remove_prop_types::ReactRemovePropTypeConfig>,
 }
 
 pub fn react_utils(
@@ -37,12 +37,12 @@ pub fn react_utils(
     } else {
       Either::Right(noop())
     },
-    if config.rm_effect {
+    if config.remove_effect {
       Either::Left(remove_effect())
     } else {
       Either::Right(noop())
     },
-    if let Some(config) = &config.rm_prop_types {
+    if let Some(config) = &config.remove_prop_types {
       Either::Left(react_remove_prop_types(config, plugin_context))
     } else {
       Either::Right(noop())
