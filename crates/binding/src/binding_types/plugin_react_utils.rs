@@ -11,8 +11,8 @@ use super::IntoRawConfig;
 #[derive(Debug)]
 pub struct ReactUtilsConfigNapi {
   pub auto_import_react: Option<bool>,
-  pub rm_effect: Option<bool>,
-  pub rm_prop_types: Option<ReactUtilsRmPropTypesConfig>,
+  pub remove_effect: Option<bool>,
+  pub remove_prop_types: Option<ReactUtilsRmPropTypesConfig>,
 }
 
 #[napi(object)]
@@ -29,8 +29,8 @@ impl IntoRawConfig<ReactUtilsConfig> for ReactUtilsConfigNapi {
   fn into_raw_config(self, env: Env) -> napi::Result<ReactUtilsConfig> {
     Ok(ReactUtilsConfig {
       auto_import_react: self.auto_import_react.unwrap_or(false),
-      rm_effect: self.rm_effect.unwrap_or(false),
-      rm_prop_types: self.rm_prop_types.map(|config| ReactRemovePropTypeConfig {
+      remove_effect: self.remove_effect.unwrap_or(false),
+      remove_prop_types: self.remove_prop_types.map(|config| ReactRemovePropTypeConfig {
         mode: config.mode.unwrap_or_else(|| "remove".into()).into(),
         remove_import: config.remove_import.unwrap_or(true),
         ignore_filenames: config
