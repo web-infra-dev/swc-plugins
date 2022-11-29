@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1669710709563,
+  "lastUpdate": 1669719063714,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -243,6 +243,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1035930047,
             "range": "± 101826619",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1114550440@qq.com",
+            "name": "fengyu",
+            "username": "JSerFeng"
+          },
+          "committer": {
+            "email": "1114550440@qq.com",
+            "name": "Fy",
+            "username": "JSerFeng"
+          },
+          "distinct": true,
+          "id": "352b73d3ca370d804c7ce7eeaf326775c145912e",
+          "message": "fix: remove esModule mark when source format is esm and target format is commonjs",
+          "timestamp": "2022-11-29T18:09:11+08:00",
+          "tree_id": "10a981e55b56550810868d9384f863d1075f214e",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/352b73d3ca370d804c7ce7eeaf326775c145912e"
+        },
+        "date": 1669719061711,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 1238940309,
+            "range": "± 176826389",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1372333603,
+            "range": "± 99026549",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1408069425,
+            "range": "± 131000141",
             "unit": "ns/iter"
           }
         ]
