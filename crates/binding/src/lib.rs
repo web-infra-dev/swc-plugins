@@ -111,7 +111,7 @@ impl JsCompiler {
         filename,
         &code,
         map,
-        Some(compiler.id.to_string())
+        Some(compiler.id.to_string()),
       )
       .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
       .map(|transform_output| transform_output.into());
@@ -210,7 +210,7 @@ impl Task for TransformTask {
       self.filename.clone(),
       &self.code,
       self.map.clone(),
-      Some(compiler.id.to_string())
+      Some(compiler.id.to_string()),
     )
     .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
   }

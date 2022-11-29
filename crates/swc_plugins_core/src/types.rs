@@ -8,7 +8,7 @@ use plugin_react_utils::ReactUtilsConfig;
 use shared::{serde::Deserialize, swc_core::base::config::Options};
 
 #[derive(Default, Debug, Deserialize)]
-#[serde(crate = "shared::serde", rename_all="camelCase")]
+#[serde(crate = "shared::serde", rename_all = "camelCase")]
 pub struct Extensions {
   pub modularize_imports: Option<HashMap<String, PackageConfig>>,
   pub plugin_import: Option<Vec<PluginImportConfig>>,

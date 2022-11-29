@@ -30,25 +30,27 @@ impl IntoRawConfig<ReactUtilsConfig> for ReactUtilsConfigNapi {
     Ok(ReactUtilsConfig {
       auto_import_react: self.auto_import_react.unwrap_or(false),
       remove_effect: self.remove_effect.unwrap_or(false),
-      remove_prop_types: self.remove_prop_types.map(|config| ReactRemovePropTypeConfig {
-        mode: config.mode.unwrap_or_else(|| "remove".into()).into(),
-        remove_import: config.remove_import.unwrap_or(true),
-        ignore_filenames: config
-          .ignore_filenames
-          .unwrap_or_default()
-          .into_raw_config(env)
-          .unwrap(),
-        additional_libraries: config
-          .additional_libraries
-          .unwrap_or_default()
-          .into_raw_config(env)
-          .unwrap(),
-        class_name_matchers: config
-          .class_name_matchers
-          .unwrap_or_default()
-          .into_raw_config(env)
-          .unwrap(),
-      }),
+      remove_prop_types: self
+        .remove_prop_types
+        .map(|config| ReactRemovePropTypeConfig {
+          mode: config.mode.unwrap_or_else(|| "remove".into()).into(),
+          remove_import: config.remove_import.unwrap_or(true),
+          ignore_filenames: config
+            .ignore_filenames
+            .unwrap_or_default()
+            .into_raw_config(env)
+            .unwrap(),
+          additional_libraries: config
+            .additional_libraries
+            .unwrap_or_default()
+            .into_raw_config(env)
+            .unwrap(),
+          class_name_matchers: config
+            .class_name_matchers
+            .unwrap_or_default()
+            .into_raw_config(env)
+            .unwrap(),
+        }),
     })
   }
 }

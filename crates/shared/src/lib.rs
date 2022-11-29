@@ -16,5 +16,9 @@ pub struct PluginContext {
   pub top_level_mark: Mark,
   pub unresolved_mark: Mark,
   pub comments: SingleThreadedComments,
-  pub config_hash: Option<String> // This can be used by plugins to do caching
+  pub config_hash: Option<String>, // This can be used by plugins to do caching
+
+  // Use this to determine if we should remove __esModule mark in pure commonjs module
+  // Remove this when SWC fix https://github.com/swc-project/swc/issues/6500
+  pub is_source_esm: bool,
 }
