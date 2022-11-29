@@ -1,4 +1,4 @@
-use std::{path::PathBuf, env::current_dir};
+use std::{env::current_dir, path::PathBuf};
 
 use napi_derive::napi;
 use swc_plugins_core::plugin_lodash::PluginLodashConfig;
@@ -14,7 +14,10 @@ pub struct PluginLodashConfigNapi {
 impl IntoRawConfig<PluginLodashConfig> for PluginLodashConfigNapi {
   fn into_raw_config(self, _env: napi::Env) -> napi::Result<PluginLodashConfig> {
     Ok(PluginLodashConfig {
-      cwd: self.cwd.map(PathBuf::from).unwrap_or_else(|| current_dir().unwrap()),
+      cwd: self
+        .cwd
+        .map(PathBuf::from)
+        .unwrap_or_else(|| current_dir().unwrap()),
       ids: self.ids.unwrap_or_default(),
     })
   }

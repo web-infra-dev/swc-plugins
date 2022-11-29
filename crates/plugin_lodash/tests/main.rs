@@ -44,7 +44,7 @@ fn test_fixtures() {
     },
     BaseFixtureHook,
     vec![CachedRegex::new("error-fixtures").unwrap()],
-    Some("".into())
+    Some("".into()),
   );
 
   tester.fixtures(&cwd.join("tests/fixtures"));

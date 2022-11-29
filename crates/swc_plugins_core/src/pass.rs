@@ -1,10 +1,12 @@
 use std::{path::Path, sync::Arc};
 
-use crate::types::TransformConfig;
+use crate::types::Extensions;
 use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_lodash::plugin_lodash;
+use plugin_remove_es_module_mark::remove_es_module_mark;
 use shared::{
   swc_core::{
+    base::config::{ModuleConfig, Options},
     common::{chain, pass::Either, FileName},
     ecma::transforms::base::pass::noop,
     ecma::visit::Fold,
@@ -16,12 +18,11 @@ use plugin_import::plugin_import;
 use plugin_modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use plugin_react_utils::react_utils;
 
-pub fn internal_transform_before_pass(
-  config: &TransformConfig,
+pub fn internal_transform_before_pass<'a>(
+  extensions: &'a Extensions,
+  swc_config: &Options,
   plugin_context: Arc<PluginContext>,
-) -> impl Fold + '_ {
-  let extensions = &config.extensions;
-
+) -> impl Fold + 'a {
   let modularize_imports = extensions
     .modularize_imports
     .as_ref()
@@ -53,7 +54,7 @@ pub fn internal_transform_before_pass(
   let emotion = if let Some(emotion_options) = &extensions.emotion {
     Either::Left(swc_emotion::emotion(
       emotion_options.clone(),
-      Path::new(config.swc.filename.as_str()),
+      Path::new(swc_config.filename.as_str()),
       plugin_context.cm.clone(),
       plugin_context.comments.clone(),
     ))
@@ -64,25 +65,41 @@ pub fn internal_transform_before_pass(
   let styled_jsx = if *extensions.styled_jsx.as_ref().unwrap_or(&false) {
     Either::Left(styled_jsx::visitor::styled_jsx(
       plugin_context.cm.clone(),
-      FileName::Real(config.swc.filename.clone().into()),
+      FileName::Real(swc_config.filename.clone().into()),
     ))
   } else {
     Either::Right(noop())
   };
 
-  chain!(modularize_imports, plugin_import, react_utils, lodash, emotion, styled_jsx)
+  chain!(
+    modularize_imports,
+    plugin_import,
+    react_utils,
+    lodash,
+    emotion,
+    styled_jsx
+  )
 }
 
-pub fn internal_transform_after_pass(
-  config: &TransformConfig,
-  _plugin_context: Arc<PluginContext>,
-) -> impl Fold + '_ {
-  if let Some(config) = &config.extensions.lock_corejs_version {
+pub fn internal_transform_after_pass<'a>(
+  extensions: &Extensions,
+  swc_config: &Options,
+  plugin_context: Arc<PluginContext>,
+) -> impl Fold + 'a {
+  let lock_core_js = if let Some(config) = &extensions.lock_corejs_version {
     Either::Left(lock_corejs_version(
       config.corejs.clone(),
       config.swc_helpers.clone(),
     ))
   } else {
     Either::Right(noop())
-  }
+  };
+
+  let remove_es_module_mark = if let Some(ModuleConfig::CommonJs(_)) = swc_config.config.module && !plugin_context.is_source_esm {
+    Either::Left(remove_es_module_mark())
+  } else {
+    Either::Right(noop())
+  };
+
+  chain!(lock_core_js, remove_es_module_mark)
 }

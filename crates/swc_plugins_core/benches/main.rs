@@ -92,7 +92,8 @@ fn swc_core_minify(bencher: &mut test::Bencher) -> impl Termination {
     GLOBALS.set(&Default::default(), || {
       try_with_handler(cm.clone(), Default::default(), |handler| {
         compiler.minify(fm.clone(), handler, &config)
-      }).unwrap();
+      })
+      .unwrap();
     })
   })
 }

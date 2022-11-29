@@ -1,8 +1,3 @@
-use std::{borrow::BorrowMut, ops::DerefMut, sync::Arc};
-use swc_plugins_utils::{
-  collect_bindings, contain_ident, count_ident, is_react_component, is_react_component_class,
-  is_return_jsx, remove_invalid_expr, BindingInfo, ReactComponentType,
-};
 use shared::{
   ahash::{AHashMap, AHashSet},
   serde::Deserialize,
@@ -23,6 +18,11 @@ use shared::{
     quote,
   },
   PluginContext,
+};
+use std::{borrow::BorrowMut, ops::DerefMut, sync::Arc};
+use swc_plugins_utils::{
+  collect_bindings, contain_ident, count_ident, is_react_component, is_react_component_class,
+  is_return_jsx, remove_invalid_expr, BindingInfo, ReactComponentType,
 };
 
 pub fn react_remove_prop_types(

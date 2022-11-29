@@ -1382,6 +1382,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "plugin_remove_es_module_mark"
+version = "0.1.0"
+dependencies = [
+ "shared",
+ "swc_plugins_utils",
+]
+
+[[package]]
 name = "pmutil"
 version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2786,6 +2794,7 @@ dependencies = [
  "plugin_lodash",
  "plugin_modularize_imports",
  "plugin_react_utils",
+ "plugin_remove_es_module_mark",
  "shared",
  "styled_components",
  "styled_jsx",

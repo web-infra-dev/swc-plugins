@@ -8,7 +8,7 @@ use shared::{
       config::{self, ModuleConfig},
       try_with_handler, Compiler, HandlerOpts, TransformOutput,
     },
-    common::{errors::ColorConfig, FileName, Mark, GLOBALS, comments::SingleThreadedComments},
+    common::{comments::SingleThreadedComments, errors::ColorConfig, FileName, Mark, GLOBALS},
     ecma::{
       ast::EsVersion,
       parser::{Syntax, TsConfig},
@@ -30,7 +30,7 @@ use crate::types::TransformConfig;
 /// A `config_hash` is the unique key representing a
 /// specific `TransformConfig`.
 /// transform don't care how you create this hash.
-/// 
+///
 /// If you call `transform` from `nodejs`, this config hash
 /// is unique for each `binding::Compiler`.
 pub fn transform(
@@ -39,7 +39,7 @@ pub fn transform(
   filename: String,
   code: &str,
   input_source_map: Option<String>,
-  config_hash: Option<String>
+  config_hash: Option<String>,
 ) -> Result<TransformOutput> {
   GLOBALS.set(&Default::default(), || {
     let cm = compiler.cm.clone();
@@ -57,7 +57,7 @@ pub fn transform(
           } else {
             FileName::Real(PathBuf::from(filename.clone()))
           };
-      
+
           let fm = cm.new_source_file(cm_filename, code.to_string());
 
           let mut swc_config = config::Options {
@@ -73,26 +73,29 @@ pub fn transform(
           let comments = SingleThreadedComments::default();
 
           // Need auto detect esm
-          let program = if swc_config.config.module.is_none() {
-            let program = compiler.parse_js(
-              fm.clone(),
-              handler,
-              swc_config.config.jsc.target.unwrap_or(EsVersion::Es2022),
-              swc_config.config.jsc.syntax.unwrap_or_else(|| {
-                Syntax::Typescript(TsConfig {
-                  tsx: true,
-                  decorators: true,
-                  ..Default::default()
-                })
-              }),
-              config::IsModule::Bool(true),
-              Some(&comments),
-            )?;
+          let program = compiler.parse_js(
+            fm.clone(),
+            handler,
+            swc_config.config.jsc.target.unwrap_or(EsVersion::Es2022),
+            swc_config.config.jsc.syntax.unwrap_or_else(|| {
+              Syntax::Typescript(TsConfig {
+                tsx: true,
+                decorators: true,
+                ..Default::default()
+              })
+            }),
+            config::IsModule::Bool(true),
+            Some(&comments),
+          )?;
 
-            swc_config.config.module = Some(if is_esm(&program) {
+          let is_source_esm = is_esm(&program);
+          // Automatic set module config by it's original format
+          if swc_config.config.module.is_none() {
+            swc_config.config.module = Some(if is_source_esm {
               ModuleConfig::Es6
             } else {
               ModuleConfig::CommonJs(
+                // Remove this when `swc_core` public module config API
                 serde_json::from_str(
                   r#"{
                     "ignoreDynamic": true
@@ -101,10 +104,7 @@ pub fn transform(
                 .unwrap(),
               )
             });
-            Some(program)
-          } else {
-            None
-          };
+          }
 
           // TODO comments can be pass to `process_js_with_custom_pass` in next swc version
           let plugin_context = Arc::new(PluginContext {
@@ -113,26 +113,25 @@ pub fn transform(
             unresolved_mark,
             comments: comments.clone(),
             config_hash,
+            is_source_esm,
           });
 
           compiler.process_js_with_custom_pass(
             fm,
-            program,
+            Some(program),
             handler,
             &swc_config,
             comments,
             // TODO pass comments to internal pass in next swc versions
             |_| {
               internal_transform_before_pass(
-                config,
-                plugin_context.clone()
+                &config.extensions,
+                &swc_config,
+                plugin_context.clone(),
               )
             },
             |_| {
-              internal_transform_after_pass(
-                config,
-                plugin_context.clone()
-              )
+              internal_transform_after_pass(&config.extensions, &swc_config, plugin_context.clone())
             },
           )
         })
