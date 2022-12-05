@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1670218133845,
+  "lastUpdate": 1670218237365,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -323,6 +323,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1121569465,
             "range": "± 107986002",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1114550440@qq.com",
+            "name": "fengyu",
+            "username": "JSerFeng"
+          },
+          "committer": {
+            "email": "1114550440@qq.com",
+            "name": "Fy",
+            "username": "JSerFeng"
+          },
+          "distinct": true,
+          "id": "6ff7056a9b533c2c5c8ea84e917a7d0ab13ce32c",
+          "message": "chore(release): publish",
+          "timestamp": "2022-12-05T13:07:10+08:00",
+          "tree_id": "0d9433e40785bf884ffdeff590d8d341ade6591a",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/6ff7056a9b533c2c5c8ea84e917a7d0ab13ce32c"
+        },
+        "date": 1670218236614,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 1145156277,
+            "range": "± 52703769",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1260119373,
+            "range": "± 47205561",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1174299245,
+            "range": "± 34483005",
             "unit": "ns/iter"
           }
         ]
