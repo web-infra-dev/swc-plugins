@@ -30,7 +30,7 @@ swc_core = { features = [
   "cached",
   "base",
   "testing_transform"
-], version = "0.40.20" }
+], version = "0.45.3" }
 dashmap = "5.4.0"
 ahash = "0.7.6"
 
