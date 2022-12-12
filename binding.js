@@ -7,7 +7,7 @@ class Compiler extends RawCompiler {
 
     super({
       swc: JSON.stringify(config),
-      extensions
+      extensions: extensions || {}
     });
   }
 }
