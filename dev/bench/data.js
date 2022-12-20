@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1671521052951,
+  "lastUpdate": 1671528742244,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -445,6 +445,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1059757182,
             "range": "± 29199836",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "7355a4f4775ff46c249535de1572280577b8c86b",
+          "message": "Merge pull request #40 from modern-js-dev/qixuan-refactor\n\nrefactor(binding_types, core)",
+          "timestamp": "2022-12-20T16:55:54+08:00",
+          "tree_id": "77d99eb5a4a8b821ff77247ff01133c9daf7f934",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/7355a4f4775ff46c249535de1572280577b8c86b"
+        },
+        "date": 1671528740686,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 1179015059,
+            "range": "± 250757128",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1247182344,
+            "range": "± 71060510",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1289618831,
+            "range": "± 127466785",
             "unit": "ns/iter"
           }
         ]
