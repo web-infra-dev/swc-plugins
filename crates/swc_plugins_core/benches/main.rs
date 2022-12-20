@@ -28,7 +28,7 @@ fn minify_large_bundle_no_sourcemap(bencher: &mut test::Bencher) -> impl Termina
     test::black_box(
       minify(
         &config,
-        "large_file.js".into(),
+        "large_file.js",
         &read_to_string(
           &current_dir()
             .unwrap()
@@ -54,7 +54,7 @@ fn minify_large_bundle_with_sourcemap(bencher: &mut test::Bencher) -> impl Termi
     test::black_box(
       minify(
         &config,
-        "large_file.js".into(),
+        "large_file.js",
         &read_to_string(
           &current_dir()
             .unwrap()

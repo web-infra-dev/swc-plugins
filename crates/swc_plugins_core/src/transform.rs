@@ -36,13 +36,14 @@ use crate::types::TransformConfig;
 pub fn transform(
   compiler: Arc<Compiler>,
   config: &TransformConfig,
-  filename: String,
+  filename: impl Into<String>,
   code: &str,
   input_source_map: Option<String>,
   config_hash: Option<String>,
 ) -> Result<TransformOutput> {
   GLOBALS.set(&Default::default(), || {
     let cm = compiler.cm.clone();
+    let filename: String = filename.into();
 
     try_with_handler(
       cm.clone(),

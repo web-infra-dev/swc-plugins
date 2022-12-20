@@ -167,7 +167,7 @@ where
     let res = swc_plugins_core::transform(
       Arc::new(Compiler::new(cm)),
       config,
-      "test".into(),
+      "test",
       code,
       None,
       self.config_hash.clone(),
