@@ -10,10 +10,14 @@ use shared::{
 
 static COMPILER: Lazy<Arc<Compiler>> = Lazy::new(|| Arc::new(Compiler::new(Default::default())));
 
-pub fn minify(config: &JsMinifyOptions, filename: String, src: &str) -> Result<TransformOutput> {
+pub fn minify(
+  config: &JsMinifyOptions,
+  filename: impl Into<String>,
+  src: &str,
+) -> Result<TransformOutput> {
   GLOBALS.set(&Globals::default(), || {
     let cm = COMPILER.cm.clone();
-
+    let filename: String = filename.into();
     let filename = if filename.is_empty() {
       FileName::Anon
     } else {

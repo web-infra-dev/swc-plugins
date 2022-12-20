@@ -1,11 +1,10 @@
-use std::collections::HashMap;
-
 use plugin_import::PluginImportConfig;
 use plugin_lock_corejs_version::LockCoreJsVersion;
 use plugin_lodash::PluginLodashConfig;
 use plugin_modularize_imports::PackageConfig;
 use plugin_react_utils::ReactUtilsConfig;
 use shared::{serde::Deserialize, swc_core::base::config::Options};
+use std::collections::HashMap;
 
 #[derive(Default, Debug, Deserialize)]
 #[serde(crate = "shared::serde", rename_all = "camelCase")]

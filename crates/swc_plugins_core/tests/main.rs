@@ -28,7 +28,7 @@ fn test() {
   let res = transform(
     Arc::new(Compiler::new(Arc::new(SourceMap::default()))),
     &config,
-    "".into(),
+    "",
     code,
     None,
     Some("".into()),
@@ -47,7 +47,7 @@ fn test() {
 
   minify(
     &config,
-    "large_file.js".into(),
+    "large_file.js",
     &read_to_string(
       &current_dir()
         .unwrap()

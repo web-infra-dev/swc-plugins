@@ -99,22 +99,18 @@ impl JsCompiler {
     // This hack is for distinguish if transform is async or not, if yes, using threadsafe function, else using sync JS call
     IS_SYNC.with(|is_sync| {
       is_sync.replace(true);
-      let compilers = COMPILERS.read();
 
-      let compiler = compilers
-        .get(&self.id)
-        .expect("Compiler is released, maybe you are using compiler after call release()");
-
-      let res = swc_plugins_core::transform(
-        compiler.swc_compiler.clone(),
-        &compiler.config,
+      let res = TransformTask {
+        code,
         filename,
-        &code,
         map,
-        Some(compiler.id.to_string()),
-      )
-      .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
-      .map(|transform_output| transform_output.into());
+        compiler_id: self.id,
+      }
+      .transform()
+      .map(|output| {
+        let TransformOutput { code, map } = output;
+        Output { code, map }
+      });
 
       is_sync.replace(true);
 
@@ -136,19 +132,7 @@ pub fn minify(
   code: String,
   map: Option<String>,
 ) -> AsyncTask<Minifier> {
-  let mut js_minify_options: JsMinifyOptions =
-    serde_json::from_slice(&<String as Into<Vec<_>>>::into(config)).unwrap();
-
-  if let Some(m) = map {
-    let m: TerserSourceMapOption = serde_json::from_str(&m).expect("Invalid SourceMap string");
-    js_minify_options.source_map = m.into();
-  }
-
-  AsyncTask::new(Minifier {
-    code,
-    filename,
-    config: js_minify_options,
-  })
+  AsyncTask::new(Minifier::new(config, filename, code, map))
 }
 
 #[napi]
@@ -158,17 +142,12 @@ pub fn minify_sync(
   code: String,
   map: Option<String>,
 ) -> Result<Output> {
-  let mut js_minify_options: JsMinifyOptions =
-    serde_json::from_slice(&<String as Into<Vec<_>>>::into(config)).unwrap();
-
-  if let Some(m) = map {
-    let m: TerserSourceMapOption = serde_json::from_str(&m).expect("Invalid SourceMap string");
-    js_minify_options.source_map = m.into();
-  }
-
-  swc_plugins_core::minify(&js_minify_options, filename, &code)
-    .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
-    .map(|transform_output| transform_output.into())
+  Minifier::new(config, filename, code, map)
+    .minify()
+    .map(|output| {
+      let TransformOutput { code, map } = output;
+      Output { code, map }
+    })
 }
 
 // ======= Napi boiler plate code =======
@@ -194,10 +173,8 @@ pub struct TransformTask {
   pub map: Option<String>,
 }
 
-impl Task for TransformTask {
-  type Output = TransformOutput;
-  type JsValue = JsObject;
-  fn compute(&mut self) -> napi::Result<Self::Output> {
+impl TransformTask {
+  fn transform(&mut self) -> Result<TransformOutput> {
     let compilers = COMPILERS.read();
 
     let compiler = compilers
@@ -207,12 +184,21 @@ impl Task for TransformTask {
     swc_plugins_core::transform(
       compiler.swc_compiler.clone(),
       &compiler.config,
-      self.filename.clone(),
+      &self.filename,
       &self.code,
       self.map.clone(),
       Some(compiler.id.to_string()),
     )
     .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
+  }
+}
+
+impl Task for TransformTask {
+  type Output = TransformOutput;
+  type JsValue = JsObject;
+
+  fn compute(&mut self) -> napi::Result<Self::Output> {
+    self.transform()
   }
 
   fn resolve(&mut self, env: Env, output: Self::Output) -> napi::Result<Self::JsValue> {
@@ -231,13 +217,35 @@ pub struct Minifier {
   config: JsMinifyOptions,
 }
 
+impl Minifier {
+  pub fn new(config: String, filename: String, code: String, map: Option<String>) -> Self {
+    let mut js_minify_options: JsMinifyOptions =
+      serde_json::from_slice(&<String as Into<Vec<_>>>::into(config)).unwrap();
+
+    if let Some(m) = map {
+      let m: TerserSourceMapOption = serde_json::from_str(&m).expect("Invalid SourceMap string");
+      js_minify_options.source_map = m.into();
+    }
+
+    Self {
+      code,
+      filename,
+      config: js_minify_options,
+    }
+  }
+
+  fn minify(&self) -> Result<TransformOutput> {
+    swc_plugins_core::minify(&self.config, self.filename.clone(), &self.code)
+      .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
+  }
+}
+
 impl Task for Minifier {
   type Output = TransformOutput;
   type JsValue = JsObject;
 
   fn compute(&mut self) -> napi::Result<Self::Output> {
-    swc_plugins_core::minify(&self.config, self.filename.clone(), &self.code)
-      .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
+    self.minify()
   }
 
   fn resolve(&mut self, env: napi::Env, output: Self::Output) -> napi::Result<Self::JsValue> {
