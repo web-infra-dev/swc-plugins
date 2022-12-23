@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1671810486351,
+  "lastUpdate": 1671810872444,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -525,6 +525,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1038625774,
             "range": "± 101507838",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1114550440@qq.com",
+            "name": "fengyu",
+            "username": "JSerFeng"
+          },
+          "committer": {
+            "email": "1114550440@qq.com",
+            "name": "Fy",
+            "username": "JSerFeng"
+          },
+          "distinct": true,
+          "id": "384adde2a498ae22353115ec853d4e3f4a7799a4",
+          "message": "feat: add cargo clippy on CI",
+          "timestamp": "2022-12-23T23:37:27+08:00",
+          "tree_id": "181db472371faf8f1669b02cdc381d04b28416a2",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/384adde2a498ae22353115ec853d4e3f4a7799a4"
+        },
+        "date": 1671810871568,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 801002119,
+            "range": "± 35735597",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 885126277,
+            "range": "± 87478337",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 882495240,
+            "range": "± 40211715",
             "unit": "ns/iter"
           }
         ]
