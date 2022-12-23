@@ -141,6 +141,9 @@ jobs:
         run: ${{ matrix.settings.setup }}
         if: ${{ matrix.settings.setup }}
         shell: bash
+      
+      - name: Add clippy,
+        run: rustup component add clippy
 
       - name: "Install dependencies"
         run: pnpm install --no-frozen-lockfile
