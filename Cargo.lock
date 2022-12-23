@@ -1340,6 +1340,7 @@ dependencies = [
  "regex",
  "serde",
  "shared",
+ "test_plugins",
 ]
 
 [[package]]

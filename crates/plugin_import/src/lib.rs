@@ -3,6 +3,7 @@ mod visit;
 use handlebars::{Context, Helper, HelperResult, Output, RenderContext, Template};
 use heck::ToKebabCase;
 use serde::Deserialize;
+use shared::ahash::{AHashMap as HashMap, AHashSet as HashSet};
 use shared::swc_core::{
   common::{util::take::Take, BytePos, Span, SyntaxContext, DUMMY_SP},
   ecma::{
@@ -14,70 +15,68 @@ use shared::swc_core::{
     visit::{as_folder, Fold, VisitMut, VisitWith},
   },
 };
-
-use std::collections::HashSet;
 use std::fmt::Debug;
 
 use crate::visit::IdentComponent;
 
-/* ======= Real struct ======= */
-#[derive(Debug, Default, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
+#[serde(crate = "shared::serde")]
+pub enum StyleConfig {
+  StyleLibraryDirectory(String),
+  #[serde(skip)]
+  Custom(CustomTransform),
+  Css,
+  Bool(bool),
+  None,
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "shared::serde")]
+pub enum CustomTransform {
+  #[serde(skip)]
+  Fn(Box<dyn Sync + Send + Fn(String) -> Option<String>>),
+  Tpl(String),
+}
+
+impl Clone for CustomTransform {
+  fn clone(&self) -> Self {
+    match self {
+      Self::Fn(_) => panic!("Function cannot be cloned"),
+      Self::Tpl(s) => Self::Tpl(s.clone()),
+    }
+  }
+}
+
+impl Debug for CustomTransform {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    match self {
+      CustomTransform::Fn(_) => f.write_str("Function"),
+      CustomTransform::Tpl(t) => f.write_str(t),
+    }
+  }
+}
+
+#[derive(Debug, Deserialize, Default, Clone)]
 #[serde(crate = "shared::serde")]
 pub struct PluginImportConfig {
-  pub from_source: String,
-  pub replace_css: Option<ReplaceCssConfig>,
-  pub replace_js: Option<ReplaceJsConfig>,
-}
-
-#[derive(Default, Deserialize)]
-#[serde(crate = "shared::serde")]
-pub struct ReplaceJsConfig {
+  pub library_name: String,
+  pub library_directory: Option<String>, // default to `lib`
   #[serde(skip)]
-  pub replace_expr: Option<Box<dyn Send + Sync + Fn(String) -> Option<String>>>,
-  pub template: Option<String>,
-  pub ignore_es_component: Option<Vec<String>>,
-  pub lower: Option<bool>,
-  pub camel2_dash_component_name: Option<bool>,
+  pub custom_name: Option<CustomTransform>,
+  #[serde(skip)]
+  pub custom_style_name: Option<CustomTransform>, // If this is set, `style` option will be ignored
+  pub style: Option<StyleConfig>,
+
+  pub camel_to_dash_component_name: Option<bool>, // default to true
   pub transform_to_default_import: Option<bool>,
-}
 
-impl Debug for ReplaceJsConfig {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    f.write_str(&format!(
-      "ReplaceJsConfig: {{\nreplace_expr: {:?},\ntemplate: {:?},\nignore_es_component: {:?},\nlower: {:?},\ncamel2_dash_component_name: {:?},\ntransform_to_default_import: {:?},\n}}\n",
-      self.replace_expr.as_ref().map(|_| Some("Func")).unwrap_or(None),
-      self.template,
-      self.ignore_es_component,
-      self.lower,
-      self.camel2_dash_component_name,
-      self.transform_to_default_import
-    ))
-  }
-}
-
-#[derive(Default, Deserialize)]
-#[serde(crate = "shared::serde")]
-pub struct ReplaceCssConfig {
-  #[serde(skip)]
-  pub replace_expr: Option<Box<dyn Send + Sync + Fn(String) -> Option<String>>>,
-  pub template: Option<String>,
+  pub ignore_es_component: Option<Vec<String>>,
   pub ignore_style_component: Option<Vec<String>>,
-  pub lower: Option<bool>,
-  pub camel2_dash_component_name: Option<bool>,
 }
 
-impl Debug for ReplaceCssConfig {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    f.write_str(&format!(
-      "ReplaceCssConfig: {{\nreplace_expr: {:?},\ntemplate: {:?},\nignore_style_component: {:?},\nlower: {:?},\ncamel2_dash_component_name: {:?},\n}}\n",
-      self.replace_expr.as_ref().map(|_| Some("Func")).unwrap_or(None),
-      self.template,
-      self.ignore_style_component,
-      self.lower,
-      self.camel2_dash_component_name,
-    ))
-  }
-}
+const CUSTOM_JS: &str = "CUSTOM_JS_NAME";
+const CUSTOM_STYLE: &str = "CUSTOM_STYLE";
+const CUSTOM_STYLE_NAME: &str = "CUSTOM_STYLE_NAME";
 
 pub fn plugin_import<'a>(config: &'a Vec<PluginImportConfig>) -> impl Fold + 'a {
   let mut renderer = handlebars::Handlebars::new();
@@ -140,22 +139,25 @@ pub fn plugin_import<'a>(config: &'a Vec<PluginImportConfig>) -> impl Fold + 'a 
   );
 
   config.iter().for_each(|cfg| {
-    if let Some(js_config) = &cfg.replace_js {
-      if let Some(tpl) = &js_config.template {
-        renderer.register_template(
-          &(cfg.from_source.clone() + "js"),
-          Template::compile(tpl).unwrap(),
-        )
-      }
+    if let Some(CustomTransform::Tpl(tpl)) = &cfg.custom_name {
+      renderer.register_template(
+        &(cfg.library_name.clone() + CUSTOM_JS),
+        Template::compile(tpl).unwrap(),
+      )
     }
 
-    if let Some(css_config) = &cfg.replace_css {
-      if let Some(tpl) = &css_config.template {
-        renderer.register_template(
-          &(cfg.from_source.clone() + "css"),
-          Template::compile(tpl).unwrap(),
-        )
-      }
+    if let Some(CustomTransform::Tpl(tpl)) = &cfg.custom_style_name {
+      renderer.register_template(
+        &(cfg.library_name.clone() + CUSTOM_STYLE_NAME),
+        Template::compile(tpl).unwrap(),
+      )
+    }
+
+    if let Some(StyleConfig::Custom(CustomTransform::Tpl(tpl))) = &cfg.style {
+      renderer.register_template(
+        &(cfg.library_name.clone() + CUSTOM_STYLE),
+        Template::compile(tpl).unwrap(),
+      )
     }
   });
 
@@ -174,6 +176,117 @@ struct EsSpec {
 pub struct ImportPlugin<'a> {
   pub config: &'a Vec<PluginImportConfig>,
   pub renderer: handlebars::Handlebars<'a>,
+}
+
+impl<'a> ImportPlugin<'a> {
+  // return (import_es, import_css)
+  fn transform(
+    &self,
+    name: String,
+    config: &PluginImportConfig,
+  ) -> (Option<String>, Option<String>) {
+    let should_ignore = &config
+      .ignore_es_component
+      .as_ref()
+      .map(|list| list.iter().any(|c| c == &name))
+      .unwrap_or(false);
+
+    if *should_ignore {
+      return (None, None);
+    }
+
+    let should_ignore_css = &config
+      .ignore_style_component
+      .as_ref()
+      .map(|list| list.iter().any(|c| c == &name))
+      .unwrap_or(false);
+
+    let transformed_name = if config.camel_to_dash_component_name.unwrap_or(true) {
+      name.to_kebab_case()
+    } else {
+      name.clone()
+    };
+
+    let path = if let Some(transform) = &config.custom_name {
+      match transform {
+        CustomTransform::Fn(f) => f(name.clone()),
+        CustomTransform::Tpl(_) => Some(
+          self
+            .renderer
+            .render(
+              format!("{}{}", &config.library_name, CUSTOM_JS).as_str(),
+              &render_context(name.clone()),
+            )
+            .unwrap(),
+        ),
+      }
+    } else {
+      Some(format!(
+        "{}/{}/{}",
+        &config.library_name,
+        config
+          .library_directory
+          .as_ref()
+          .unwrap_or(&"lib".to_string()),
+        transformed_name
+      ))
+    };
+
+    if path.is_none() {
+      return (None, None);
+    }
+
+    let js_source = path.unwrap();
+
+    let css = if *should_ignore_css {
+      None
+    } else if let Some(custom) = &config.custom_style_name {
+      match custom {
+        CustomTransform::Fn(f) => f(name),
+        CustomTransform::Tpl(_) => Some(
+          self
+            .renderer
+            .render(
+              &format!("{}{}", &config.library_name, CUSTOM_STYLE_NAME),
+              &render_context(name),
+            )
+            .unwrap(),
+        ),
+      }
+    } else if let Some(style) = &config.style {
+      match style {
+        StyleConfig::StyleLibraryDirectory(lib) => Some(format!(
+          "{}/{}/{}",
+          config.library_name, lib, &transformed_name
+        )),
+        StyleConfig::Custom(custom) => match custom {
+          CustomTransform::Fn(f) => f(js_source.clone()),
+          CustomTransform::Tpl(_) => Some(
+            self
+              .renderer
+              .render(
+                &format!("{}{}", config.library_name, CUSTOM_STYLE),
+                &render_context(js_source.clone()),
+              )
+              .unwrap(),
+          ),
+        },
+        StyleConfig::Css => Some(format!("{}/style/css", js_source)),
+        StyleConfig::Bool(should_transform) => {
+          if *should_transform {
+            Some(format!("{}/style", &js_source))
+          } else {
+            None
+          }
+        }
+        StyleConfig::None => None,
+      }
+    } else {
+      None
+    };
+
+    (Some(js_source), css)
+  }
 }
 
 impl<'a> VisitMut for ImportPlugin<'a> {
@@ -200,8 +313,9 @@ impl<'a> VisitMut for ImportPlugin<'a> {
       if let ModuleItem::ModuleDecl(ModuleDecl::Import(var)) = item {
         let source = &*var.src.value;
 
-        if let Some(child_config) = config.iter().find(|&c| c.from_source == source) {
+        if let Some(child_config) = config.iter().find(|&c| c.library_name == source) {
           let mut rm_specifier = HashSet::new();
+
           for (specifier_idx, specifier) in var.specifiers.iter().enumerate() {
             match specifier {
               ImportSpecifier::Named(ref s) => {
@@ -214,88 +328,26 @@ impl<'a> VisitMut for ImportPlugin<'a> {
                 let ident: String = imported.unwrap_or_else(|| s.local.sym.to_string());
 
                 let mark = s.local.span.ctxt.as_u32();
+
                 if ident_referenced(&s.local) {
-                  if let Some(ref css) = child_config.replace_css {
-                    let ignore_component = &css.ignore_style_component;
-                    let need_lower = css.lower.unwrap_or(false);
-                    let camel2dash = css.camel2_dash_component_name.unwrap_or(true);
-                    let mut css_ident = ident.clone();
-                    if camel2dash {
-                      css_ident = css_ident.to_kebab_case();
-                    }
-                    if need_lower {
-                      css_ident = css_ident.to_lowercase()
-                    };
+                  let use_default_import = child_config.transform_to_default_import.unwrap_or(true);
 
-                    let mut need_replace = true;
-                    if let Some(block_list) = ignore_component {
-                      need_replace = !block_list.iter().any(|x| x == &ident);
-                    }
-                    if need_replace {
-                      #[cfg(not(target_arch = "wasm32"))]
-                      let import_css_source = css
-                        .replace_expr
-                        .as_ref()
-                        .and_then(|replace_expr| replace_expr(css_ident.clone()))
-                        .or_else(|| {
-                          css.template.as_ref().map(|_| {
-                            self
-                              .renderer
-                              .render(&(child_config.from_source.clone() + "css"), &css_ident)
-                              .unwrap()
-                          })
-                        });
+                  let (import_es_source, import_css_source) =
+                    self.transform(ident.clone(), child_config);
 
-                      if let Some(source) = import_css_source {
-                        specifiers_css.push(source);
-                      }
-                    }
+                  if let Some(source) = import_es_source {
+                    specifiers_es.push(EsSpec {
+                      source,
+                      default_spec: ident,
+                      as_name,
+                      use_default_import,
+                      mark,
+                    });
+                    rm_specifier.insert(specifier_idx);
                   }
 
-                  if let Some(ref js_config) = child_config.replace_js {
-                    let ignore_component = &js_config.ignore_es_component;
-                    let need_lower = js_config.lower.unwrap_or(false);
-                    let camel2dash = js_config.camel2_dash_component_name.unwrap_or(true);
-                    let use_default_import = js_config.transform_to_default_import.unwrap_or(true);
-
-                    let mut js_ident = ident.clone();
-                    if camel2dash {
-                      js_ident = js_ident.to_kebab_case();
-                    }
-                    if need_lower {
-                      js_ident = js_ident.to_lowercase();
-                    }
-
-                    let mut need_replace = true;
-                    if let Some(block_list) = ignore_component {
-                      need_replace = !block_list.iter().any(|x| x == &ident);
-                    }
-                    if need_replace {
-                      #[cfg(not(target_arch = "wasm32"))]
-                      let import_es_source = js_config
-                        .replace_expr
-                        .as_ref()
-                        .and_then(|replace_expr| replace_expr(js_ident.clone()))
-                        .or_else(|| {
-                          js_config.template.as_ref().map(|_| {
-                            self
-                              .renderer
-                              .render(&(child_config.from_source.clone() + "js"), &js_ident)
-                              .unwrap()
-                          })
-                        });
-
-                      if let Some(source) = import_es_source {
-                        specifiers_es.push(EsSpec {
-                          source,
-                          default_spec: ident,
-                          as_name,
-                          use_default_import,
-                          mark,
-                        });
-                        rm_specifier.insert(specifier_idx);
-                      }
-                    }
+                  if let Some(source) = import_css_source {
+                    specifiers_css.push(source);
                   }
                 } else if type_ident_referenced(&s.local) {
                   // type referenced
@@ -403,4 +455,10 @@ impl<'a> VisitMut for ImportPlugin<'a> {
       body.insert(0, dec);
     }
   }
+}
+
+fn render_context(s: String) -> HashMap<&'static str, String> {
+  let mut ctx = HashMap::new();
+  ctx.insert("member", s);
+  ctx
 }
