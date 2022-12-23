@@ -1,29 +1,81 @@
-use swc_plugins_core::plugin_import::{PluginImportConfig, ReplaceCssConfig, ReplaceJsConfig};
+use swc_plugins_core::plugin_import::{CustomTransform, PluginImportConfig, StyleConfig};
 
 use napi::{Env, JsFunction, JsString, Ref, Status};
 use napi_derive::napi;
-use shared::serde::Serialize;
 
 use crate::{thread_safe_function::ThreadSafeFunction, IS_SYNC};
 
 use super::IntoRawConfig;
 
 #[napi(object)]
-pub struct PluginImportConfigNapi {
-  pub from_source: String,
-  pub replace_css: Option<ReplaceCssConfigNapi>,
-  pub replace_js: Option<ReplaceJsConfigNapi>,
+pub struct StyleConfigNapi {
+  pub style_library_directory: Option<String>,
+  pub custom_fn: Option<JsFunction>,
+  pub custom_tpl: Option<String>,
+  pub css: Option<String>,
+  pub bool: Option<bool>,
 }
 
+impl IntoRawConfig<StyleConfig> for StyleConfigNapi {
+  fn into_raw_config(self, env: Env) -> napi::Result<StyleConfig> {
+    Ok(if let Some(tpl) = self.custom_tpl {
+      StyleConfig::Custom(CustomTransform::Tpl(tpl))
+    } else if let Some(f) = self.custom_fn {
+      StyleConfig::Custom(CustomTransform::Fn(create_js_fn(env, f)))
+    } else if let Some(style_library_directory) = self.style_library_directory {
+      StyleConfig::StyleLibraryDirectory(style_library_directory)
+    } else if self.css.is_some() {
+      StyleConfig::Css
+    } else if let Some(bool) = self.bool {
+      StyleConfig::Bool(bool)
+    } else {
+      StyleConfig::None
+    })
+  }
+}
+
+#[napi(object)]
+pub struct PluginImportConfigNapi {
+  pub library_name: String,
+  pub library_directory: Option<String>, // default to `lib`
+
+  pub custom_name_fn: Option<JsFunction>,
+  pub custom_name_tpl: Option<String>,
+
+  pub custom_style_name_fn: Option<JsFunction>, // If this is set, `style` option will be ignored
+  pub custom_style_name_tpl: Option<String>,    // If this is set, `style` option will be ignored
+
+  pub style: Option<StyleConfigNapi>,
+
+  pub camel_to_dash_component_name: Option<bool>, // default to true
+  pub transform_to_default_import: Option<bool>,
+
+  pub ignore_es_component: Option<Vec<String>>,
+  pub ignore_style_component: Option<Vec<String>>,
+}
+
+/// Wrap for env, to make it impl Send and Sync, we ensure this env won't send between threads, so it's safe
 #[derive(Clone, Copy)]
 struct SyncEnv(Env);
 
 impl SyncEnv {
   fn get_reference_value<T: napi::NapiValue>(&self, js_ref: &Ref<()>) -> napi::Result<T> {
+    IS_SYNC.with(|sync| {
+      assert!(
+        *sync.borrow(),
+        "SyncEnv can only be used in sync Javascript call"
+      );
+    });
     self.0.get_reference_value(js_ref)
   }
 
   fn create_string(&self, s: &str) -> napi::Result<JsString> {
+    IS_SYNC.with(|sync| {
+      assert!(
+        *sync.borrow(),
+        "SyncEnv can only be used in sync Javascript call. You may use transform and transform_sync the same time!"
+      );
+    });
     self.0.create_string(s)
   }
 }
@@ -38,137 +90,41 @@ impl From<SyncEnv> for Env {
   }
 }
 
-#[napi(object)]
-#[derive(Serialize)]
-#[serde(crate = "shared::serde")]
-pub struct ReplaceJsConfigNapi {
-  #[serde(skip_serializing)]
-  pub replace_expr: Option<JsFunction>,
-  pub template: Option<String>,
-  pub ignore_es_component: Option<Vec<String>>,
-  pub lower: Option<bool>,
-  pub camel2_dash_component_name: Option<bool>,
-  pub transform_to_default_import: Option<bool>,
-}
-
-#[napi(object)]
-#[derive(Serialize)]
-#[serde(crate = "shared::serde")]
-pub struct ReplaceCssConfigNapi {
-  pub ignore_style_component: Option<Vec<String>>,
-  #[serde(skip_serializing)]
-  pub replace_expr: Option<JsFunction>,
-  pub template: Option<String>,
-  pub lower: Option<bool>,
-  pub camel2_dash_component_name: Option<bool>,
-}
-
 impl IntoRawConfig<PluginImportConfig> for PluginImportConfigNapi {
   fn into_raw_config(self, env: Env) -> napi::Result<PluginImportConfig> {
     let PluginImportConfigNapi {
-      from_source,
-      replace_css,
-      replace_js,
+      library_name,
+      library_directory,
+      custom_name_fn,
+      custom_name_tpl,
+
+      custom_style_name_fn,
+      custom_style_name_tpl,
+      style,
+      camel_to_dash_component_name,
+      transform_to_default_import,
+      ignore_es_component,
+      ignore_style_component,
     } = self;
 
     Ok(PluginImportConfig {
-      from_source,
-      replace_css: replace_css.map(|replace_css| {
-        let ReplaceCssConfigNapi {
-          ignore_style_component,
-          replace_expr,
-          template,
-          lower,
-          camel2_dash_component_name,
-        } = replace_css;
-
-        ReplaceCssConfig {
-          ignore_style_component,
-          replace_expr: replace_expr.map(|js_function| {
-            let wrap_env = SyncEnv(env);
-            let js_ref = env.create_reference(js_function).unwrap();
-
-            let tsfn = ThreadSafeFunction::<String, Option<String>>::new(
-              env,
-              env.get_reference_value(&js_ref).unwrap(),
-              move |ctx| {
-                let env = ctx.env;
-                let member = ctx.value;
-                let js_function = ctx.callback;
-
-                let js_string = env.create_string(&member)?;
-                call_js(&js_function, &[js_string])
-              },
-            );
-
-            Box::new(move |s: String| {
-              IS_SYNC.with(|is_sync| {
-                if *is_sync.borrow() {
-                  let js_function: JsFunction = wrap_env.get_reference_value(&js_ref).unwrap();
-                  // sync call
-                  call_js(&js_function, &[wrap_env.create_string(&s).unwrap()]).unwrap()
-                } else {
-                  tsfn.call(s).expect(
-                    "Error occur while calling pluginImport replace_css.replace_expr() function",
-                  )
-                }
-              })
-            }) as Box<dyn Sync + Send + Fn(String) -> Option<String>>
-          }),
-          template,
-          lower,
-          camel2_dash_component_name,
-        }
-      }),
-      replace_js: replace_js.map(|replace_js| {
-        let ReplaceJsConfigNapi {
-          ignore_es_component,
-          replace_expr,
-          template,
-          lower,
-          camel2_dash_component_name,
-          transform_to_default_import,
-        } = replace_js;
-
-        ReplaceJsConfig {
-          ignore_es_component,
-          replace_expr: replace_expr.map(|js_function| {
-            let wrap_env = SyncEnv(env);
-            let js_ref = env.create_reference(js_function).unwrap();
-
-            let tsfn = ThreadSafeFunction::<String, Option<String>>::new(
-              env,
-              env.get_reference_value(&js_ref).unwrap(),
-              move |ctx| {
-                let env = ctx.env;
-                let member = ctx.value;
-                let js_function = ctx.callback;
-
-                let js_string = env.create_string(&member)?;
-                call_js(&js_function, &[js_string])
-              },
-            );
-
-            Box::new(move |s: String| {
-              IS_SYNC.with(|is_sync| {
-                if *is_sync.borrow() {
-                  let js_function: JsFunction = wrap_env.get_reference_value(&js_ref).unwrap();
-                  // sync call
-                  call_js(&js_function, &[wrap_env.create_string(&s).unwrap()]).unwrap()
-                } else {
-                  tsfn.call(s).expect(
-                    "Error occur while calling pluginImport replace_css.replace_expr() function",
-                  )
-                }
-              })
-            }) as Box<dyn Sync + Send + Fn(String) -> Option<String>>
-          }),
-          template,
-          lower,
-          camel2_dash_component_name,
-          transform_to_default_import,
-        }
-      }),
+      library_name,
+      library_directory,
+      custom_name: if let Some(tpl) = custom_name_tpl {
+        Some(CustomTransform::Tpl(tpl))
+      } else {
+        custom_name_fn.map(|f| CustomTransform::Fn(create_js_fn(env, f)))
+      },
+      custom_style_name: if let Some(tpl) = custom_style_name_tpl {
+        Some(CustomTransform::Tpl(tpl))
+      } else {
+        custom_style_name_fn.map(|f| CustomTransform::Fn(create_js_fn(env, f)))
+      },
+      style: style.into_raw_config(env)?,
+      camel_to_dash_component_name,
+      transform_to_default_import,
+      ignore_es_component,
+      ignore_style_component,
     })
   }
 }
@@ -212,4 +168,39 @@ fn call_js(js_fn: &JsFunction, args: &[JsString]) -> napi::Result<Option<String>
     }
     Err(_) => unreachable!(),
   }
+}
+
+fn create_js_fn(
+  env: Env,
+  js_fn: JsFunction,
+) -> Box<dyn Sync + Send + Fn(String) -> Option<String>> {
+  let js_ref = env.create_reference(js_fn).unwrap();
+
+  let tsfn = ThreadSafeFunction::<String, Option<String>>::new(
+    env,
+    env.get_reference_value(&js_ref).unwrap(),
+    move |ctx| {
+      let env = ctx.env;
+      let member = ctx.value;
+      let js_function = ctx.callback;
+
+      let js_string = env.create_string(&member)?;
+      call_js(&js_function, &[js_string])
+    },
+  );
+
+  let wrap_env = SyncEnv(env);
+  Box::new(move |s: String| {
+    IS_SYNC.with(|is_sync| {
+      if *is_sync.borrow() {
+        let js_function: JsFunction = wrap_env.get_reference_value(&js_ref).unwrap();
+        // sync call
+        call_js(&js_function, &[wrap_env.create_string(&s).unwrap()]).unwrap()
+      } else {
+        tsfn
+          .call(s)
+          .expect("Error occur while calling pluginImport replace_css.replace_expr() function")
+      }
+    })
+  }) as Box<dyn Sync + Send + Fn(String) -> Option<String>>
 }

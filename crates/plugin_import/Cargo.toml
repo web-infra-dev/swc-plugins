@@ -7,7 +7,10 @@ version = "0.1.0"
 
 [dependencies]
 handlebars = "4.3.3"
-regex = "1.6.0"
-shared = {path = "../shared"}
-serde = "1.0.144"
 heck = "0.4.0"
+regex = "1.6.0"
+serde = "1.0.144"
+shared = {path = "../shared"}
+
+[dev-dependencies]
+test_plugins = {path = "../test_plugins"}
