@@ -31,6 +31,7 @@ impl ExpectedInfo {
   }
 }
 
+#[derive(Debug, Default)]
 pub struct FixtureTester<H>
 where
   H: FixtureTesterHook,
@@ -42,6 +43,13 @@ where
 }
 
 pub trait FixtureTesterHook {
+  fn on_before_resolve(
+    &mut self,
+    _fixture_path: &Path,
+    _config: &mut swc_plugins_core::types::TransformConfig,
+  ) {
+  }
+
   fn on_resolve_actual_file(
     &mut self,
     fixture_path: &Path,
@@ -82,6 +90,70 @@ pub trait FixtureTesterHook {
 
 pub struct BaseFixtureHook;
 impl FixtureTesterHook for BaseFixtureHook {}
+
+impl<T> FixtureTesterHook for Option<T>
+where
+  T: FixtureTesterHook,
+{
+  fn on_before_resolve(
+    &mut self,
+    fixture_path: &Path,
+    config: &mut swc_plugins_core::types::TransformConfig,
+  ) {
+    match self {
+      Some(sub) => sub.on_before_resolve(fixture_path, config),
+      None => {}
+    }
+  }
+
+  fn on_resolve_actual_file(
+    &mut self,
+    fixture_path: &Path,
+    config: &mut swc_plugins_core::types::TransformConfig,
+  ) -> String {
+    match self {
+      Some(sub) => sub.on_resolve_actual_file(fixture_path, config),
+      None => String::from_utf8(fs::read(&fixture_path.join("actual.js")).unwrap()).unwrap(),
+    }
+  }
+
+  fn on_resolve_expected_files(
+    &mut self,
+    fixture_path: &Path,
+    config: &mut swc_plugins_core::types::TransformConfig,
+  ) -> Vec<ExpectedInfo> {
+    match self {
+      Some(sub) => sub.on_resolve_expected_files(fixture_path, config),
+      None => {
+        let expected_path = fixture_path.join("expected.js");
+        let expected = fs::read(&expected_path).unwrap();
+
+        let option_path = fixture_path.join("option.json");
+        let option = option_path.exists().then(|| {
+          shared::serde_json::from_slice(fs::read(option_path).unwrap().as_slice()).unwrap()
+        });
+
+        vec![ExpectedInfo::new(
+          expected_path.to_string_lossy().to_string(),
+          String::from_utf8(expected).unwrap(),
+          option,
+        )]
+      }
+    }
+  }
+
+  fn on_before_compare(
+    &mut self,
+    actual: &mut PathBuf,
+    expected: &mut PathBuf,
+    config: &mut swc_plugins_core::types::TransformConfig,
+  ) {
+    match self {
+      Some(sub) => sub.on_before_compare(actual, expected, config),
+      None => {}
+    }
+  }
+}
 
 impl<H> FixtureTester<H>
 where

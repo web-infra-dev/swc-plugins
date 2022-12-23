@@ -27,10 +27,7 @@ import { Compiler } from '@modern-js/swc-plugins';
 const compiler = new Compiler({
   extensions: {
     pluginImport: [{
-      fromSource: 'foo';
-      replaceJs: {
-        template: 'foo/lib/{{ member }}';
-      };
+      libraryName: 'foo'
     }]
   }
 });
@@ -116,109 +113,118 @@ Some plugins ported from Babel.
 - type
 
 ```ts
-type PluginImportOptions = Array<{
-  fromSource: string;
-  replaceJs?: {
-    ignoreEsComponent?: string[];
-    template?: string;
-    replaceExpr?: (member: string) => string | false;
-    transformToDefaultImport?: boolean;
-  };
-  replaceCss?: {
-    ignoreStyleComponent?: string[];
-    template?: string;
-    replaceExpr?: (member: string) => string | false;
-  };
-}>;
+type pluginImport = {
+  libraryName: string;
+  libraryDirectory?: string;
+
+  style?: boolean | "css" | string | ((name: string) => string | undefined);
+  styleLibraryDirectory?: string;
+
+  camelToDashComponentName?: bool; // default to true
+  transformToDefaultImport?: bool;
+
+  customName?: string | ((name: string) => string | undefined);
+  customStyleName?: string | ((name: string) => string | undefined);
+
+  ignoreEsComponent?: string[];
+  ignoreStyleComponent?: string[];
+}[];
 ```
 
 Ported from [babel-plugin-import](https://github.com/umijs/babel-plugin-import).
 
-**fromSource**
+**libraryName**
 
 - Type: `string`
 
-The package that need to be transformed，eg. in `import { a } from 'foo'`, `fromSource` should be `foo`.
+The package that need to be transformed，eg. in `import { a } from 'foo'`, `**libraryName**` should be `foo`.
 
-**replaceJs.ignoreEsComponent**
+**libraryDirectory**
 
-- Type: `string[]`
-- Default: `[]`
+- Type: `string`
+- Default: `lib`
 
-The import specifiers which don't need to be transformed.
+The path prefix that to import. For example `Button` will be transformed to `some-lib/lib/button`.
 
-**replaceJs.template**
+**style**
+
+- Type: `'css' | string | boolean | ((input: string) => string | undefined)`
+- Default: `undefined`
+
+If this field is not `undefined` or `false`, the plugin will import style for the given component path.
+
+For example, let's say the original code is `import { Button } from 'foo'`.
+If `style` is set to:
+`true`, code will be extended by: `import 'foo/lib/button/style'`.
+`'css`, code will be extended by: `import 'foo/lib/button/style/css'`.
+`(path) => path + 'less'`, code will be extended by: `import 'foo/lib/button.less'`.
+
+**styleLibraryDirectory**
 
 - Type: `string`
 - Default: `undefined`
 
-Template that represents replacement, for example:
+If this field is set, `style` will be ignored.
+
+This field decides the path of style to import, for example, set this to `'styles'`, `import { Button } from 'foo'` will become:
 
 ```ts
-import { MyButton as Btn } from "foo";
+import Button from 'foo/lib/button';
+import 'foo/styles/button';
 ```
 
-If we set:
+**camelToDashComponentName**
 
-```ts
-PluginSWC({
-  extensions: {
-    pluginImport: [
-      {
-        replaceJs: {
-          template: "foo/es/{{member}}",
-        },
-      },
-    ],
-  },
-});
-```
+- Type: `boolean`
+- Default: `true`
 
-Then the code above will be replaced to code below:
-
-```ts
-import Btn from "foo/es/MyButton";
-```
-
-We also put some naming conversion functions, take the above example again, if we set it to:
-
-```ts
-PluginSWC({
-  extensions: {
-    pluginImport: [
-      {
-        replaceJs: {
-          template: "foo/es/{{ kebabCase member }}",
-        },
-      },
-    ],
-  },
-});
-```
-
-It will be transformed to code below:
-
-```ts
-import Btn from "foo/es/my-button";
-```
-
-Besides `kebabCase`, there are also `camelCase`, `snakeCase`, `upperCase`, `lowerCase`.
-
-**replaceJs.replaceExpr**
-
-- Type: `(member: string) => string`
-- Default: `undefined`
-
-This is also used to replace import specifiers. The argument is the specifier that imported. eg. `a` in `import { a as b } from 'foo'`.
-This function is called by `Rust`，and it needs to be synchronous.
-We recommend `template` instead, because call `js` function through `node-api` will cause performance issue. `node-api` invokes `js` function actually put this `js` call inside a queue, and wait for this call to be executed, so if current `js` thread is busy, then this call will block `Rust` thread for a while.
+Wether to transform specifier to kebab case when added to import path. Eg: `myText` to `foo/lib/my-text`.
 
 **transformToDefaultImport**
 
 - Type: `boolean`
 - Default: `true`
 
-Whether transform specifier to default specifier.
+Wether to transform this import expression to default import. Eg: `import { Button } from 'foo'` will be transformed to `import { Button } from 'foo/lib/button';`.
+
+**customName**
+
+- Type: `string | ((name: string) => string | undefined)`
+- Default: `undefined`
+
+You can use this to customize the transformation.
+
+Assume the original code is:
+
+```ts
+import { Button, Input } from 'foo';
+```
+
+And set `customName` to:
+
+```ts
+const customName = (name: string) => {
+  if (name === 'Button') {
+    return undefined
+  } else {
+    return `foo/es/components/${name.toLowercase()}`
+  }
+}
+```
+
+Result:
+
+```ts
+import { Button } from 'foo';
+import Input from 'foo/es/components/input';
+```
+
+**customStyleName**
+
+- Type: `string | ((name: string) => string | undefined)`
+- Default: `undefined`
+
+The same with `customName`, but just for style import expression.
 
 #### extensions.reactUtils
 
