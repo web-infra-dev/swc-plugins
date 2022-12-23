@@ -12,6 +12,7 @@
     "@napi-rs/cli": "^2.11.4",
     "@storybook/addon-links": "^6.5.12",
     "@types/node": "^18.7.1",
+    "dotenv-cli": "^6.0.0",
     "lodash": "^4.17.21",
     "lodash-compat": "^3.10.2",
     "lodash-es": "^4.17.21",
@@ -28,7 +29,7 @@
     "build": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts --release",
     "build:dev": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts",
     "prepublishOnly": "napi prepublish -t npm",
-    "test": "echo test",
+    "test": "dotenv vitest run --segfault-retry=3",
     "version": "napi version"
   },
   "napi": {
