@@ -100,7 +100,7 @@ impl JsCompiler {
     IS_SYNC.with(|is_sync| {
       is_sync.replace(true);
 
-      let res = TransformTask {
+      TransformTask {
         code,
         filename,
         map,
@@ -110,11 +110,7 @@ impl JsCompiler {
       .map(|output| {
         let TransformOutput { code, map } = output;
         Output { code, map }
-      });
-
-      is_sync.replace(true);
-
-      res
+      })
     })
   }
 
@@ -198,7 +194,10 @@ impl Task for TransformTask {
   type JsValue = JsObject;
 
   fn compute(&mut self) -> napi::Result<Self::Output> {
-    self.transform()
+    IS_SYNC.with(|is_sync| {
+      is_sync.replace(false);
+      self.transform()
+    })
   }
 
   fn resolve(&mut self, env: Env, output: Self::Output) -> napi::Result<Self::JsValue> {

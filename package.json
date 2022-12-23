@@ -25,10 +25,10 @@
   },
   "scripts": {
     "artifacts": "napi artifacts",
-    "build": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts --release",
-    "build:dev": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts",
+    "build": "cargo lint && napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts --release",
+    "build:dev": "cargo lint && napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts",
     "prepublishOnly": "napi prepublish -t npm",
-    "test": "echo test",
+    "test": "RUST_BACKTRACE=full vitest run --segfault-retry=3",
     "version": "napi version"
   },
   "napi": {
