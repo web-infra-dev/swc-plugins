@@ -116,7 +116,9 @@ jobs:
         with:
           profile: minimal
           override: true
+          toolchain: nightly
           target: ${{ matrix.settings.target }}
+          components: rustfmt, clippy
 
       - name: Cache cargo
         uses: Swatinem/rust-cache@v1
