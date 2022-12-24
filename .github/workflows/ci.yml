@@ -116,7 +116,6 @@ jobs:
         with:
           profile: default
           override: true
-          toolchain: nightly
           target: ${{ matrix.settings.target }}
 
       - name: Cache cargo
