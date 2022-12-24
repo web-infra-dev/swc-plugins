@@ -114,11 +114,10 @@ jobs:
       - name: Install
         uses: actions-rs/toolchain@v1
         with:
-          profile: minimal
+          profile: default
           override: true
           toolchain: nightly
           target: ${{ matrix.settings.target }}
-          components: rustfmt, clippy
 
       - name: Cache cargo
         uses: Swatinem/rust-cache@v1
