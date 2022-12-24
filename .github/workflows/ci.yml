@@ -117,7 +117,6 @@ jobs:
           profile: minimal
           override: true
           target: ${{ matrix.settings.target }}
-          components: rustfmt, clippy
 
       - name: Cache cargo
         uses: Swatinem/rust-cache@v1
@@ -142,6 +141,9 @@ jobs:
         run: ${{ matrix.settings.setup }}
         if: ${{ matrix.settings.setup }}
         shell: bash
+      
+      - name: Add clippy,
+        run: rustup component add clippy
 
       - name: "Install dependencies"
         run: pnpm install --no-frozen-lockfile
