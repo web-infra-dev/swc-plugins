@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1671873076040,
+  "lastUpdate": 1672025633857,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -643,6 +643,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1177034136,
             "range": "± 232876573",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "committer": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "id": "e2184fba144418cc9e3f9de3fc2279f6f7357218",
+          "message": "refactor: refactor plugin-import to keep the same with babel",
+          "timestamp": "2022-12-24T07:50:21Z",
+          "url": "https://github.com/modern-js-dev/swc-plugins/pull/50/commits/e2184fba144418cc9e3f9de3fc2279f6f7357218"
+        },
+        "date": 1672025633055,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 831250908,
+            "range": "± 46573806",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 915070954,
+            "range": "± 49170501",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 917092452,
+            "range": "± 48066247",
             "unit": "ns/iter"
           }
         ]
