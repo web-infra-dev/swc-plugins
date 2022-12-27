@@ -290,7 +290,9 @@ jobs:
           path: node
 
       - name: List packages
-        run: ls -R .
+        run: |
+          ls -R .
+          ldd --version
         shell: bash
 
       - name: Setup and run tests
@@ -362,7 +364,9 @@ jobs:
           path: node
 
       - name: List packages
-        run: ls -R .
+        run: |
+          ls -R .
+          ldd --version
         shell: bash
 
       - name: Setup and run tests
