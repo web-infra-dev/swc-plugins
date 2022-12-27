@@ -25,7 +25,7 @@
   },
   "scripts": {
     "artifacts": "napi artifacts",
-    "build": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts --release",
+    "build": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts",
     "build:dev": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "echo test",

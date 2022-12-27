@@ -286,7 +286,9 @@ jobs:
           name: bindings-aarch64-unknown-linux-gnu
 
       - name: List packages
-        run: ls -R .
+        run: |
+          ls -R .
+          ldd --version
         shell: bash
 
       - name: Setup and run tests
@@ -356,7 +358,9 @@ jobs:
           name: bindings-armv7-unknown-linux-gnueabihf
 
       - name: List packages
-        run: ls -R .
+        run: |
+          ls -R .
+          ldd --version
         shell: bash
 
       - name: Setup and run tests
