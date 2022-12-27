@@ -937,6 +937,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "md5"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "490cc448043f947bae3cbee9c203358d62dbee0db12107a74be5c30ccfd09771"
+
+[[package]]
 name = "memchr"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1355,6 +1361,15 @@ name = "plugin_lodash"
 version = "0.1.0"
 dependencies = [
  "nodejs-resolver",
+ "shared",
+ "test_plugins",
+]
+
+[[package]]
+name = "plugin_modernjs_ssr_loader_id"
+version = "0.1.0"
+dependencies = [
+ "md5",
  "shared",
  "test_plugins",
 ]
@@ -2807,6 +2822,7 @@ dependencies = [
  "plugin_import",
  "plugin_lock_corejs_version",
  "plugin_lodash",
+ "plugin_modernjs_ssr_loader_id",
  "plugin_modularize_imports",
  "plugin_react_utils",
  "plugin_remove_es_module_mark",

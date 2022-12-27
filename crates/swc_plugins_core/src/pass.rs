@@ -51,6 +51,12 @@ pub fn internal_transform_before_pass<'a>(
     Either::Right(noop())
   };
 
+  let modernjs_ssr_loader_id = if *extensions.modernjs_ssr_loader_id.as_ref().unwrap_or(&false) {
+    Either::Left(plugin_modernjs_ssr_loader_id::plugin_modernjs_ssr_loader_id(plugin_context.clone()))
+  } else {
+    Either::Right(noop())
+  };
+
   let emotion = if let Some(emotion_options) = &extensions.emotion {
     Either::Left(swc_emotion::emotion(
       emotion_options.clone(),
@@ -76,6 +82,7 @@ pub fn internal_transform_before_pass<'a>(
     plugin_import,
     react_utils,
     lodash,
+    modernjs_ssr_loader_id,
     emotion,
     styled_jsx
   )

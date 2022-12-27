@@ -65,7 +65,7 @@ pub fn transform(
             ..config.swc.clone()
           };
           swc_config.config.input_source_map = input_source_map.map(config::InputSourceMap::Str);
-          swc_config.filename = filename;
+          swc_config.filename = filename.clone();
 
           let top_level_mark = swc_config.top_level_mark.unwrap_or_else(Mark::new);
           let unresolved_mark = Mark::new();
@@ -115,6 +115,8 @@ pub fn transform(
             comments: comments.clone(),
             config_hash,
             is_source_esm,
+            filename,
+            cwd: swc_config.cwd.clone(),
           });
 
           compiler.process_js_with_custom_pass(

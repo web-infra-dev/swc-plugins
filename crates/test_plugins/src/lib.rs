@@ -8,7 +8,6 @@ use std::{
 use colored::Colorize;
 
 use shared::swc_core::{base::Compiler, cached::regex::CachedRegex, common::SourceMap};
-
 use similar::ChangeTag;
 pub use swc_plugins_core;
 
