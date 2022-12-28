@@ -20,6 +20,7 @@ pub struct Extensions {
   pub styled_jsx: Option<bool>,
 
   pub lodash: Option<PluginLodashConfig>,
+  pub modernjs_ssr_loader_id: Option<bool>,
 }
 
 #[derive(Debug, Default, Deserialize)]

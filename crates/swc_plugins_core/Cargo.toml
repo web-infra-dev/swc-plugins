@@ -9,9 +9,10 @@ version = "0.1.0"
 plugin_import = {path = "../plugin_import"}
 plugin_lock_corejs_version = {path = "../plugin_lock_corejs_version"}
 plugin_lodash = {path = "../plugin_lodash"}
+plugin_modernjs_ssr_loader_id = {path = "../plugin_modernjs_ssr_loader_id"}
 plugin_modularize_imports = {path = "../plugin_modularize_imports"}
 plugin_react_utils = {path = "../plugin_react_utils"}
-plugin_remove_es_module_mark = {path="../plugin_remove_es_module_mark"}
+plugin_remove_es_module_mark = {path = "../plugin_remove_es_module_mark"}
 shared = {path = "../shared"}
 swc_plugins_utils = {path = "../swc_plugins_utils"}
 

@@ -1,0 +1,13 @@
+[package]
+edition = "2021"
+name = "plugin_modernjs_ssr_loader_id"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+md5 = "0.7.0"
+shared = {path = "../shared"}
+
+[dev_dependencies]
+test_plugins = {path = "../test_plugins"}
