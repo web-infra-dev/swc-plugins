@@ -299,6 +299,8 @@ jobs:
           image: ghcr.io/napi-rs/napi-rs/nodejs:aarch64-${{ matrix.node }}
           options: -v ${{ github.workspace }}:/build -w /build
           run: |
+            ls -ll
+            ldd --version
             set -e
             npm install -g pnpm@6
             pnpm install --no-frozen-lockfile
@@ -371,6 +373,8 @@ jobs:
           image: ghcr.io/napi-rs/napi-rs/nodejs:armhf-${{ matrix.node }}
           options: -v ${{ github.workspace }}:/build -w /build
           run: |
+            ldd --version
+            ls -ll
             set -e
             npm install -g pnpm@6
             pnpm install --no-frozen-lockfile
