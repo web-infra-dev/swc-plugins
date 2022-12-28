@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1672169533444,
+  "lastUpdate": 1672199671447,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -955,6 +955,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 874349967,
             "range": "± 32470574",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "57756f0030aa68f31e7546652368c63958a7e1e6",
+          "message": "Merge pull request #55 from modern-js-dev/feat/plugin-ssr-loader-id\n\nfeat: add plugin_modernjs_ssr_loader_id",
+          "timestamp": "2022-12-28T11:34:39+08:00",
+          "tree_id": "75aa3ecc9fd3a98bad9127b9adb7e6cc9049e96e",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/57756f0030aa68f31e7546652368c63958a7e1e6"
+        },
+        "date": 1672199670226,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 950832350,
+            "range": "± 69578897",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1053587154,
+            "range": "± 81972559",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1038911681,
+            "range": "± 95557388",
             "unit": "ns/iter"
           }
         ]
