@@ -19,8 +19,8 @@ export interface ImportItemNapi {
     bool?: boolean;
   };
 
-  camelToDashComponentName?: bool; // default to true
-  transformToDefaultImport?: bool;
+  camelToDashComponentName?: boolean; // default to true
+  transformToDefaultImport?: boolean;
 
   ignoreEsComponent?: string[];
   ignoreStyleComponent?: string[];
@@ -37,8 +37,8 @@ export interface ImportItem {
   styleLibraryDirectory?: string;
   style?: boolean | "css" | string | ((name: string) => string | undefined);
 
-  camelToDashComponentName?: bool; // default to true
-  transformToDefaultImport?: bool;
+  camelToDashComponentName?: boolean; // default to true
+  transformToDefaultImport?: boolean;
 
   ignoreEsComponent?: string[];
   ignoreStyleComponent?: string[];
@@ -50,19 +50,19 @@ export interface PackageConfig {
   skipDefaultConversion: boolean;
 }
 
-export interface ExtensionsInternal {
+export interface Extensions {
   modularizeImports?: Record<string, PackageConfig>;
-  pluginImport?: ImportItemNapi[];
+  pluginImport?: ImportItem[];
   reactUtils?: {
     autoImportReact?: boolean;
     removeEffect?: boolean;
     removePropTypes?: {
-      mode?: "remove" | "unwrap" | "unsafe-wrap";
-      removeImport?: bool;
-      ignoreFilenames?: String[];
-      additionalLibraries?: String[];
-      classNameMatchers?: String[];
-    };
+      mode?: "remove" | "unwrap" | "unsafe-wrap",
+      removeImport?: boolean,
+      ignoreFilenames?: String[],
+      additionalLibraries?: String[],
+      classNameMatchers?: String[],
+    }
   };
   lockCorejsVersion?: {
     corejs?: string;
@@ -72,10 +72,7 @@ export interface ExtensionsInternal {
     cwd?: string;
     ids?: string;
   };
-}
-
-export interface Extensions extends ExtensionsInternal {
-  pluginImport?: ImportItem[];
+  modernjsSsrLoaderId?: boolean
 }
 
 export interface Output {
