@@ -330,3 +330,10 @@ will become something like this:
 ```ts
 import { foo } from '/project/node_modules/your-lib/node_modules/@swc/helpers';
 ```
+
+#### extensions.modernjsSsrLoaderId
+
+- Type: `boolean`
+- Default: `undefined`
+
+Enable some transform only needed by Modern.js
