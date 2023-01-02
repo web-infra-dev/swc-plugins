@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1672671568652,
+  "lastUpdate": 1672677294908,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1153,6 +1153,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1308085254,
             "range": "± 69179050",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1114550440@qq.com",
+            "name": "fengyu",
+            "username": "JSerFeng"
+          },
+          "committer": {
+            "email": "1114550440@qq.com",
+            "name": "Fy",
+            "username": "JSerFeng"
+          },
+          "distinct": true,
+          "id": "e47056470614254120fd44470989f14c786c57e9",
+          "message": "feat: add modernjsSsrLoaderId type definition",
+          "timestamp": "2023-01-03T00:13:44+08:00",
+          "tree_id": "5a117403b9f8a6c4179dc719a31be0e288df0701",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/e47056470614254120fd44470989f14c786c57e9"
+        },
+        "date": 1672677294055,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 1038484393,
+            "range": "± 43183658",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1162114487,
+            "range": "± 101006046",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1077806408,
+            "range": "± 55989936",
             "unit": "ns/iter"
           }
         ]
