@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1672677923223,
+  "lastUpdate": 1672728162719,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1275,6 +1275,32 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1356450949,
             "range": "± 182724471",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "committer": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "id": "e6d14964f7726a375a1bc7359a7eb94f08cf218b",
+          "message": "feat: add ctrl c handler",
+          "timestamp": "2022-12-24T07:50:21Z",
+          "url": "https://github.com/modern-js-dev/swc-plugins/pull/59/commits/e6d14964f7726a375a1bc7359a7eb94f08cf218b"
+        },
+        "date": 1672728161444,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "swc_core_minify",
+            "value": 900957057,
+            "range": "± 70457802",
             "unit": "ns/iter"
           }
         ]
