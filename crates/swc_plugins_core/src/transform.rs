@@ -41,6 +41,11 @@ pub fn transform(
   input_source_map: Option<String>,
   config_hash: Option<String>,
 ) -> Result<TransformOutput> {
+  ctrlc::set_handler(|| {
+    std::process::exit(1);
+  })
+  .expect("Error setting Ctrl-C handler");
+
   GLOBALS.set(&Default::default(), || {
     let cm = compiler.cm.clone();
     let filename: String = filename.into();
