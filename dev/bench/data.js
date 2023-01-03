@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1672728162719,
+  "lastUpdate": 1672728845152,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1301,6 +1301,36 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 900957057,
             "range": "± 70457802",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "116dfb7d8f1db370798e43d8a149f4cf43638980",
+          "message": "Merge pull request #59 from modern-js-dev/feat/ctrlc\n\nfeat: add ctrl c handler",
+          "timestamp": "2023-01-03T14:35:39+08:00",
+          "tree_id": "ac1bb1d0aeaeb1bba684fe56c622f16548c0456f",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/116dfb7d8f1db370798e43d8a149f4cf43638980"
+        },
+        "date": 1672728842946,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "swc_core_minify",
+            "value": 955161224,
+            "range": "± 224845565",
             "unit": "ns/iter"
           }
         ]
