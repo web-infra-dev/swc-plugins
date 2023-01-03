@@ -19,6 +19,7 @@ swc_plugins_utils = {path = "../swc_plugins_utils"}
 styled_components = "0.52.4"
 styled_jsx = "0.29.4"
 swc_emotion = "0.28.2"
+ctrlc = "3.2.4"
 
 [dev-dependencies]
 insta = "1.18.2"
