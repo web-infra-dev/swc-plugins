@@ -1,14 +1,20 @@
 [package]
+edition = "2021"
 name = "plugin_react_utils"
 version = "0.1.0"
-edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-shared = {path="../shared"}
-swc_plugins_utils = {path="../swc_plugins_utils"}
-
+shared = {path = "../shared"}
+swc_core = {version = "0.51.1", features = [
+  "cached",
+  "common",
+  "ecma_ast",
+  "ecma_visit",
+  "ecma_quote",
+]}
+swc_plugins_utils = {path = "../swc_plugins_utils"}
 [dev-dependencies]
-test_plugins = {path="../test_plugins"}
 glob = "0.3.0"
+test_plugins = {path = "../test_plugins"}

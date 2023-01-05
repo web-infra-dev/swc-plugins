@@ -4,9 +4,6 @@ assertion_line: 36
 expression: res.code
 ---
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 var _objectSpread = require("@swc/helpers/lib/_object_spread.js").default;
 var a = {};
 var b = _objectSpread({}, a);

@@ -1,21 +1,28 @@
 use std::{fmt::Debug, path::PathBuf, sync::Arc};
 
 // reexports some same version libs
+
+#[cfg(feature = "anyhow")]
 pub use anyhow;
+
+#[cfg(feature = "serde_json")]
 pub use serde_json;
-pub use swc_core;
-use swc_core::common::{comments::SingleThreadedComments, Mark, SourceMap};
-pub use swc_core::ecma::transforms::testing as swc_ecma_transforms_testing;
-pub use testing;
+
+#[cfg(feature = "serde")]
 pub extern crate serde;
+
+#[cfg(feature = "ahash")]
 pub use ahash;
+
+#[cfg(feature = "dashmap")]
 pub use dashmap;
 
+#[cfg(feature = "plugin_context")]
 pub struct PluginContext {
-  pub cm: Arc<SourceMap>,
-  pub top_level_mark: Mark,
-  pub unresolved_mark: Mark,
-  pub comments: SingleThreadedComments,
+  pub cm: Arc<swc_core::common::SourceMap>,
+  pub top_level_mark: swc_core::common::Mark,
+  pub unresolved_mark: swc_core::common::Mark,
+  pub comments: swc_core::common::comments::SingleThreadedComments,
   pub filename: String,
   pub cwd: PathBuf,
 

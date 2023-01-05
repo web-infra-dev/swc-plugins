@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use shared::swc_core::{
+use swc_core::{
   common::util::take::Take,
   ecma::{
     ast::{BlockStmt, Expr, Id, ImportSpecifier, Module, ModuleDecl, ModuleExportName, ModuleItem},

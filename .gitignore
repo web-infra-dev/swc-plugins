@@ -183,7 +183,7 @@ $RECYCLE.BIN/
 
 #Added by cargo
 
-/target
+**/target
 
 .pnp.*
 .yarn/*
@@ -195,3 +195,4 @@ $RECYCLE.BIN/
 
 *.node
 unused.d.ts
+.swc/

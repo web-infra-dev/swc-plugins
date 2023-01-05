@@ -1,23 +1,23 @@
 use shared::{
   ahash::{AHashMap, AHashSet},
   serde::Deserialize,
-  swc_core::{
-    self,
-    cached::regex::CachedRegex,
-    common::{comments::Comments, util::take::Take, Spanned, DUMMY_SP},
-    ecma::{
-      ast::{
-        AssignExpr, BlockStmt, Class, ClassDecl, ClassExpr, ClassMember, ClassProp, Decl,
-        DefaultDecl, ExportDecl, ExportDefaultDecl, ExportDefaultExpr, Expr, ExprStmt, FnDecl, Id,
-        Ident, ImportDecl, ImportSpecifier, Module, ModuleDecl, ModuleItem, PropName, Stmt,
-        VarDecl,
-      },
-      atoms::JsWord,
-      visit::{as_folder, Fold, Visit, VisitMut, VisitMutWith, VisitWith},
+  PluginContext
+};
+use swc_core::{
+  self,
+  cached::regex::CachedRegex,
+  common::{comments::Comments, util::take::Take, Spanned, DUMMY_SP},
+  ecma::{
+    ast::{
+      AssignExpr, BlockStmt, Class, ClassDecl, ClassExpr, ClassMember, ClassProp, Decl,
+      DefaultDecl, ExportDecl, ExportDefaultDecl, ExportDefaultExpr, Expr, ExprStmt, FnDecl, Id,
+      Ident, ImportDecl, ImportSpecifier, Module, ModuleDecl, ModuleItem, PropName, Stmt,
+      VarDecl,
     },
-    quote,
+    atoms::JsWord,
+    visit::{as_folder, Fold, Visit, VisitMut, VisitMutWith, VisitWith},
   },
-  PluginContext,
+  quote,
 };
 use std::{borrow::BorrowMut, ops::DerefMut, sync::Arc};
 use swc_plugins_utils::{

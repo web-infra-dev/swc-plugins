@@ -1,7 +1,6 @@
 use std::borrow::Borrow;
-
-use shared::ahash::AHashMap;
-use shared::swc_core::{
+use ahash::AHashMap;
+use swc_core::{
   common::{SyntaxContext, DUMMY_SP},
   ecma::{
     ast::{
@@ -633,7 +632,7 @@ pub fn collect_bindings(module: &Module) -> AHashMap<Id, BindingInfo> {
 
 #[cfg(test)]
 mod test {
-  use shared::swc_core::{
+  use swc_core::{
     self,
     common::DUMMY_SP,
     ecma::ast::{Module, Program},

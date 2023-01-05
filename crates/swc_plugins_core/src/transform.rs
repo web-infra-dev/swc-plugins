@@ -1,9 +1,6 @@
 use std::{path::PathBuf, sync::Arc};
 
-use shared::{
-  anyhow::Result,
-  serde_json,
-  swc_core::{
+use swc_core::{
     base::{
       config::{self, ModuleConfig},
       try_with_handler, Compiler, HandlerOpts, TransformOutput,
@@ -15,9 +12,9 @@ use shared::{
       // TODO current version too low
       // transforms::module::common_js::Config
     },
-  },
-  PluginContext,
 };
+use shared::{PluginContext, anyhow::Result};
+
 use swc_plugins_utils::is_esm;
 
 use crate::pass::{internal_transform_after_pass, internal_transform_before_pass};
@@ -41,11 +38,6 @@ pub fn transform(
   input_source_map: Option<String>,
   config_hash: Option<String>,
 ) -> Result<TransformOutput> {
-  ctrlc::set_handler(|| {
-    std::process::exit(1);
-  })
-  .expect("Error setting Ctrl-C handler");
-
   GLOBALS.set(&Default::default(), || {
     let cm = compiler.cm.clone();
     let filename: String = filename.into();
@@ -102,7 +94,7 @@ pub fn transform(
             } else {
               ModuleConfig::CommonJs(
                 // Remove this when `swc_core` public module config API
-                serde_json::from_str(
+                shared::serde_json::from_str(
                   r#"{
                     "ignoreDynamic": true
                   }"#,

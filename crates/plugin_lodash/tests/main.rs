@@ -1,14 +1,13 @@
 use plugin_lodash::PluginLodashConfig;
-use shared::swc_core::cached::regex::CachedRegex;
+use swc_core::cached::regex::CachedRegex;
 use test_plugins::{
+  fixture::{BaseFixtureHook, FixtureTester},
   swc_plugins_core::types::{Extensions, TransformConfig},
-  BaseFixtureHook, FixtureTester,
 };
 
 #[test]
 fn test_fixtures() {
   let cwd = std::env::current_dir().unwrap();
-  // let fixtures = fs::read_dir(cwd.join("tests/fixtures").to_str().unwrap()).unwrap();
 
   let mut tester = FixtureTester::new(
     TransformConfig {

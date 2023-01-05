@@ -4,7 +4,14 @@ name = "test_plugins"
 version = "0.1.0"
 
 [dependencies]
-swc_plugins_core = {path = "../swc_plugins_core"}
-shared = {path = "../shared"}
-similar = "2.1.0"
 colored = "2.0.0"
+shared = {path = "../shared", features = ["serde", "serde_json"]}
+similar = "2.1.0"
+swc_core = {version = "0.51.1", features = [
+  "common",
+  "ecma_ast",
+  "ecma_visit",
+  "ecma_transforms",
+  "testing_transform",
+]}
+swc_plugins_core = {path = "../swc_plugins_core"}

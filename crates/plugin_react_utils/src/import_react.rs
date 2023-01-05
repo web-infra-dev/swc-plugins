@@ -1,4 +1,4 @@
-use shared::swc_core::{
+use swc_core::{
   common::{Mark, Span, DUMMY_SP},
   ecma::{
     ast::{

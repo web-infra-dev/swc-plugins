@@ -1,10 +1,10 @@
 #![feature(test)]
 #![allow(soft_unstable)]
-use shared::swc_core::{
+use std::{env::current_dir, fs, path::Path, process::Termination, sync::Arc};
+use swc_core::{
   base::{try_with_handler, Compiler},
   common::{FileName, SourceMap, GLOBALS},
 };
-use std::{env::current_dir, fs, path::Path, process::Termination, sync::Arc};
 use swc_plugins_core::minify;
 extern crate test;
 

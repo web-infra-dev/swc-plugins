@@ -1,8 +1,8 @@
-use shared::swc_core::{
+use std::{env::current_dir, fs, path::Path, sync::Arc};
+use swc_core::{
   base::{config::Options, Compiler},
   common::SourceMap,
 };
-use std::{env::current_dir, fs, path::Path, sync::Arc};
 use swc_plugins_core::{minify, transform};
 
 #[test]

@@ -3,22 +3,22 @@ use shared::{
   ahash::{AHashMap, AHashSet},
   dashmap::DashMap,
   serde::Deserialize,
-  swc_core::{
-    self,
-    common::{sync::Lazy, Mark, Span, DUMMY_SP},
-    ecma::{
-      ast::{
-        CallExpr, ExportNamedSpecifier, ExportSpecifier, Expr, Id, Ident, ImportDecl,
-        ImportDefaultSpecifier, ImportSpecifier, MemberProp, Module, ModuleDecl, ModuleExportName,
-        ModuleItem, NamedExport, Str,
-      },
-      atoms::JsWord,
-      utils::undefined,
-      visit::{as_folder, Fold, VisitMut, VisitMutWith},
-    },
-    quote,
-  },
   PluginContext,
+};
+use swc_core::{
+  self,
+  common::{sync::Lazy, Mark, Span, DUMMY_SP},
+  ecma::{
+    ast::{
+      CallExpr, ExportNamedSpecifier, ExportSpecifier, Expr, Id, Ident, ImportDecl,
+      ImportDefaultSpecifier, ImportSpecifier, MemberProp, Module, ModuleDecl, ModuleExportName,
+      ModuleItem, NamedExport, Str,
+    },
+    atoms::JsWord,
+    utils::undefined,
+    visit::{as_folder, Fold, VisitMut, VisitMutWith},
+  },
+  quote,
 };
 use std::{ops::Deref, path::PathBuf, sync::Arc};
 

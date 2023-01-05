@@ -1,8 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 const _defineProperty = require("@swc/helpers/lib/_define_property.js").default;
 class Foo1 extends Component {
   render() {}

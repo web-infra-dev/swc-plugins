@@ -3,11 +3,18 @@ edition = "2021"
 name = "plugin_modernjs_ssr_loader_id"
 version = "0.1.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["rlib", "cdylib"]
 
 [dependencies]
 md5 = "0.7.0"
-shared = {path = "../shared"}
+shared = {path = "../shared", features = ["plugin_context"]}
+swc_core = {version = "0.51.1", features = [
+  "common",
+  "ecma_ast",
+  "ecma_visit",
+  "ecma_quote",
+]}
 
 [dev_dependencies]
 test_plugins = {path = "../test_plugins"}

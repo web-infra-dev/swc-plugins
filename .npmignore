@@ -12,3 +12,4 @@ unused.d.ts
 .vscode/
 npm/
 *.node
+.swc

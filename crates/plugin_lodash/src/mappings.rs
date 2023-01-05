@@ -8,8 +8,8 @@ use shared::{
   ahash::AHashMap,
   anyhow,
   serde::{Deserialize, Serialize},
-  swc_core::{common::sync::Lazy, ecma::atoms::JsWord},
 };
+use swc_core::{common::sync::Lazy, ecma::atoms::JsWord};
 
 use crate::error::{ResolveError, ResolveErrorKind};
 

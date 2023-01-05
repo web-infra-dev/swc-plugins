@@ -1,38 +1,25 @@
 [package]
+edition = "2021"
 name = "shared"
 version = "0.1.0"
-edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+ahash = ["dep:ahash"]
+anyhow = ["dep:anyhow"]
+dashmap = ["dep:dashmap"]
+plugin_context = ["dep:swc_core"]
+serde = ["dep:serde"]
+serde_json = ["dep:serde_json"]
 
 [dependencies]
-anyhow = "1.0.62"
-serde_json = "1.0.71"
-serde = {version= "1.0.71", features=["derive"]}
-testing = "0.31.3"
-swc_core = { features = [
-  "common_concurrent",
-  "base_concurrent",
-  "ecma_ast",
-  "ecma_visit",
-  "ecma_loader_node",
-  "ecma_loader_lru",
-  "ecma_utils",
-  "ecma_minifier",
-  "ecma_transforms",
-  "ecma_transforms_react",
-  "ecma_transforms_typescript",
-  "ecma_transforms_optimization",
-  "ecma_quote",
-  "ecma_parser",
-  "ecma_parser_typescript",
-  "cached",
-  "base",
-  "testing_transform",
-  "ecma_plugin_transform"
-], version = "0.45.3" }
-dashmap = "5.4.0"
-ahash = "0.7.6"
+ahash = {version = "0.8.2", optional = true, features = ["serde"]}
+anyhow = {version = "1.0.62", optional = true}
+dashmap = {version = "5.4.0", optional = true}
+serde = {version = "1", features = ["derive"], optional = true}
+serde_json = {version = "1.0.71", optional = true}
+swc_core = {version = "0.51.1", optional = true, features = [
+  "common",
+]}
 
 [dev-dependencies]
 testing_macros = "0.2.7"

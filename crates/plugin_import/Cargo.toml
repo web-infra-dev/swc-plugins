@@ -3,14 +3,19 @@ edition = "2021"
 name = "plugin_import"
 version = "0.1.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 handlebars = "4.3.3"
 heck = "0.4.0"
 regex = "1.6.0"
-serde = "1.0.144"
-shared = {path = "../shared"}
+serde = "1"
+shared = {path = "../shared", features = [
+  "ahash",
+]}
+swc_core = {version = "0.51.1", features = [
+  "common",
+  "ecma_ast",
+  "ecma_visit",
+]}
 
 [dev-dependencies]
 test_plugins = {path = "../test_plugins"}

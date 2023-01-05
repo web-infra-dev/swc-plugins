@@ -1,6 +1,6 @@
 import _define_property from "@swc/helpers/src/_define_property.mjs";
-var _Component;
-class Foo1 extends (_Component = React.Component) {
+var _React_Component;
+class Foo1 extends (_React_Component = React.Component) {
   render() {}
 
 }
@@ -8,8 +8,8 @@ class Foo1 extends (_Component = React.Component) {
 _define_property(Foo1, "propTypes", process.env.NODE_ENV !== "production" ? {
   bar1: PropTypes.string
 } : {});
-var _Component1;
-class Foo2 extends (_Component1 = React.Component) {
+var _React_Component1;
+class Foo2 extends (_React_Component1 = React.Component) {
   render() {}
 
 }
