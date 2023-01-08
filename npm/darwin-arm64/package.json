@@ -14,7 +14,7 @@
   "description": "",
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "engines": {
     "node": ">= 14"
   },

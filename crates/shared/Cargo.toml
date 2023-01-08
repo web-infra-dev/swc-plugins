@@ -20,7 +20,6 @@ swc_core = { features = [
   "ecma_utils",
   "ecma_minifier",
   "ecma_transforms",
-  "__ecma_transforms",
   "ecma_transforms_react",
   "ecma_transforms_typescript",
   "ecma_transforms_optimization",
@@ -29,7 +28,8 @@ swc_core = { features = [
   "ecma_parser_typescript",
   "cached",
   "base",
-  "testing_transform"
+  "testing_transform",
+  "ecma_plugin_transform"
 ], version = "0.45.3" }
 dashmap = "5.4.0"
 ahash = "0.7.6"
