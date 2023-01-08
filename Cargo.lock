@@ -342,12 +342,9 @@ checksum = "f3ad85c1f65dc7b37604eb0e89748faf0b9653065f2a8ef69f96a687ec1e9279"
 
 [[package]]
 name = "convert_case"
-version = "0.6.0"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec182b0ca2f35d8fc196cf3404988fd8b8c739a4d270ff118a398feb0cbec1ca"
-dependencies = [
- "unicode-segmentation",
-]
+checksum = "fb4a24b1aaf0fd0ce8b45161144d6f42cd91677fd5940fd431183eb023b3a2b8"
 
 [[package]]
 name = "convert_case"
@@ -870,7 +867,7 @@ dependencies = [
 
 [[package]]
 name = "gimli"
-version = "0.27.0"
+version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "22030e2c5a68ec659fde1e949a745124b48e6fa8b045b7ed5bd1fe4ccc5c4e5d"
 dependencies = [
@@ -2654,7 +2651,6 @@ version = "0.51.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "296566a1029320d48c00303480075326ffd53bccd2cbeec07a8c7d41399a0bd5"
 dependencies = [
- "once_cell",
  "swc",
  "swc_atoms",
  "swc_cached",
@@ -2681,32 +2677,6 @@ checksum = "a4f3a1842506d6721944ce528867e1ee8a61429e421fde56c5ae63251643b500"
 dependencies = [
  "swc_atoms",
  "swc_cached",
- "swc_common",
- "swc_css_ast",
- "swc_css_codegen",
- "swc_css_parser",
- "swc_css_prefixer",
- "swc_css_visit",
- "swc_ecma_ast",
- "swc_ecma_codegen",
- "swc_ecma_minifier",
- "swc_ecma_parser",
- "swc_ecma_transforms_base",
- "swc_ecma_utils",
- "swc_ecma_visit",
- "swc_plugin",
- "swc_plugin_macro",
- "swc_plugin_proxy",
- "vergen",
-]
-
-[[package]]
-name = "swc_core"
-version = "0.52.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4f3a1842506d6721944ce528867e1ee8a61429e421fde56c5ae63251643b500"
-dependencies = [
- "swc_atoms",
  "swc_common",
  "swc_css_ast",
  "swc_css_codegen",
@@ -2788,7 +2758,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5d6e1bcbf15593e0252611030563683e8b3c99333e8bb898b74e305ec7cc3baf"
 dependencies = [
  "once_cell",
- "preset_env_base 0.4.0",
+ "preset_env_base",
  "serde",
  "serde_json",
  "swc_atoms",
