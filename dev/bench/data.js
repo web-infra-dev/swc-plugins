@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1673167998525,
+  "lastUpdate": 1673168241521,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1395,6 +1395,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1314313810,
             "range": "± 143056657",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "committer": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "id": "62c81659bcb82929995b53ad530824a9ce67fb79",
+          "message": "feat: add wasm support",
+          "timestamp": "2023-01-05T16:04:30Z",
+          "url": "https://github.com/modern-js-dev/swc-plugins/pull/60/commits/62c81659bcb82929995b53ad530824a9ce67fb79"
+        },
+        "date": 1673168240724,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 752162239,
+            "range": "± 34426847",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 834596060,
+            "range": "± 17688841",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 832379788,
+            "range": "± 14429789",
             "unit": "ns/iter"
           }
         ]
