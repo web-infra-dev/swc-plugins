@@ -13,7 +13,7 @@ use shared::{
 
 use crate::error::{ResolveError, ResolveErrorKind};
 
-pub type ModuleId = String; // lodash, lodash-es, lodash-compat
+pub type ModuleId = String; // lodash, lodash-es
 pub type Mappings = AHashMap<ModuleId, ModuleMap>; // lodash -> [...], lodash-es -> [...]
 
 #[derive(Debug)]

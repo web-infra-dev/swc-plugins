@@ -282,6 +282,8 @@ Remove `React` runtime type checking. This is ported from [@babel/plugin-react-t
 
 Ported from [@babel/plugin-lodash](https://github.com/lodash/babel-plugin-lodash).
 
+Note there is a small difference that `lodash-compat` is currently deprecated so we do not support `lodash-compat` package.
+
 #### extensions.modularize_imports
 
 - Type:
