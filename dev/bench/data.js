@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1673194217932,
+  "lastUpdate": 1673194562536,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1539,6 +1539,32 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 987243939,
             "range": "± 70835483",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "committer": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "id": "9ac9c1c7d36983f39a269d95c3980fe380d4d410",
+          "message": "refactor: drop support for lodash-compat",
+          "timestamp": "2023-01-05T16:04:30Z",
+          "url": "https://github.com/modern-js-dev/swc-plugins/pull/63/commits/9ac9c1c7d36983f39a269d95c3980fe380d4d410"
+        },
+        "date": 1673194561695,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "swc_core_minify",
+            "value": 924173121,
+            "range": "± 84119730",
             "unit": "ns/iter"
           }
         ]
