@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1673168241521,
+  "lastUpdate": 1673172394496,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1433,6 +1433,36 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 832379788,
             "range": "± 14429789",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "84db0cf05103a69fe2781da5ba43dee7f0cff447",
+          "message": "Merge pull request #62 from modern-js-dev/fix/ci\n\nFix/ci",
+          "timestamp": "2023-01-08T17:46:45+08:00",
+          "tree_id": "78301b80e48198c5d3ca64e0366abb997c367fbf",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/84db0cf05103a69fe2781da5ba43dee7f0cff447"
+        },
+        "date": 1673172393670,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "swc_core_minify",
+            "value": 1124671210,
+            "range": "± 66714816",
             "unit": "ns/iter"
           }
         ]
