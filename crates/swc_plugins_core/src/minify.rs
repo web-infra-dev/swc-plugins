@@ -15,11 +15,6 @@ pub fn minify(
   filename: impl Into<String>,
   src: &str,
 ) -> Result<TransformOutput> {
-  ctrlc::set_handler(|| {
-    std::process::exit(1);
-  })
-  .expect("Error setting Ctrl-C handler");
-
   GLOBALS.set(&Globals::default(), || {
     let cm = COMPILER.cm.clone();
     let filename: String = filename.into();
