@@ -6,20 +6,31 @@ version = "0.1.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+modularize_imports = "0.25.11"
 plugin_import = {path = "../plugin_import"}
 plugin_lock_corejs_version = {path = "../plugin_lock_corejs_version"}
 plugin_lodash = {path = "../plugin_lodash"}
 plugin_modernjs_ssr_loader_id = {path = "../plugin_modernjs_ssr_loader_id"}
-plugin_modularize_imports = {path = "../plugin_modularize_imports"}
 plugin_react_utils = {path = "../plugin_react_utils"}
 plugin_remove_es_module_mark = {path = "../plugin_remove_es_module_mark"}
-shared = {path = "../shared"}
-swc_plugins_utils = {path = "../swc_plugins_utils"}
-
-styled_components = "0.52.4"
-styled_jsx = "0.29.4"
+shared = {path = "../shared", features = [
+  "anyhow",
+  "serde",
+  "serde_json",
+]}
+styled_components = "0.52.11"
+styled_jsx = "0.29.11"
+swc_core = {version = "0.51.1", features = [
+  "base",
+  "common",
+  "ecma_ast",
+  "ecma_visit",
+  "ecma_transforms",
+  "ecma_parser",
+  "plugin_transform_host_native",
+]}
 swc_emotion = "0.28.2"
-ctrlc = "3.2.4"
+swc_plugins_utils = {path = "../swc_plugins_utils"}
 
 [dev-dependencies]
 insta = "1.18.2"

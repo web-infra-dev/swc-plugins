@@ -4,18 +4,18 @@ use crate::types::Extensions;
 use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_lodash::plugin_lodash;
 use plugin_remove_es_module_mark::remove_es_module_mark;
+use swc_core::{
+  base::config::{ModuleConfig, Options},
+  common::{chain, pass::Either, FileName},
+  ecma::transforms::base::pass::noop,
+  ecma::visit::Fold,
+};
 use shared::{
-  swc_core::{
-    base::config::{ModuleConfig, Options},
-    common::{chain, pass::Either, FileName},
-    ecma::transforms::base::pass::noop,
-    ecma::visit::Fold,
-  },
   PluginContext,
 };
 
 use plugin_import::plugin_import;
-use plugin_modularize_imports::{modularize_imports, Config as ModularizedConfig};
+use modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use plugin_react_utils::react_utils;
 
 pub fn internal_transform_before_pass<'a>(

@@ -1,13 +1,26 @@
 [package]
+edition = "2021"
 name = "plugin_lodash"
 version = "0.1.0"
-edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-nodejs-resolver = "0.0.42"
-shared = {path="../shared"}
+nodejs-resolver = "0.0.60"
+shared = {path = "../shared", features = [
+  "ahash",
+  "dashmap",
+  "serde",
+  "plugin_context",
+]}
+swc_core = {version = "0.51.1", features = [
+  "common",
+  "ecma_ast",
+  "ecma_visit",
+  "ecma_quote",
+  "ecma_utils",
+]}
+
+[lib]
+crate-type = ["cdylib", "rlib"]
 
 [dev_dependencies]
-test_plugins = {path="../test_plugins"}
+test_plugins = {path = "../test_plugins"}

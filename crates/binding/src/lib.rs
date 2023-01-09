@@ -6,16 +6,16 @@ use napi::{bindgen_prelude::AsyncTask, Env, JsObject, Result, Status, Task};
 use napi_derive::napi;
 use shared::{
   serde_json,
-  swc_core::{
-    base::{
-      config::{JsMinifyOptions, TerserSourceMapOption},
-      Compiler as SwcCompiler, TransformOutput,
-    },
-    common::{
-      collections::AHashMap,
-      sync::{Lazy, RwLock},
-      SourceMap,
-    },
+};
+use swc_core::{
+  base::{
+    config::{JsMinifyOptions, TerserSourceMapOption},
+    Compiler as SwcCompiler, TransformOutput,
+  },
+  common::{
+    collections::AHashMap,
+    sync::{Lazy, RwLock},
+    SourceMap,
   },
 };
 

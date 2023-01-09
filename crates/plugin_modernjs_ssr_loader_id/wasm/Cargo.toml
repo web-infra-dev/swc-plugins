@@ -1,0 +1,21 @@
+[package]
+edition = "2021"
+name = "modernjs_ssr_loader_id_transform"
+version = "0.1.0"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+md5 = "0.7.0"
+plugin_modernjs_ssr_loader_id = {path = ".."}
+shared = {path = "../../shared", features = ["plugin_context"]}
+swc_core = {version = "0.51.1", features = [
+  "ecma_plugin_transform",
+  "ecma_visit",
+  "ecma_ast",
+  "common",
+]}
+
+[dev_dependencies]
+test_plugins = {path = "../../test_plugins"}

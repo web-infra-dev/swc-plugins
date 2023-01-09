@@ -182,9 +182,8 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/windows
 
 #Added by cargo
-
-/target
-
+**.wasm
+**/target
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -195,3 +194,4 @@ $RECYCLE.BIN/
 
 *.node
 unused.d.ts
+.swc/

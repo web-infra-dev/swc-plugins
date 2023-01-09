@@ -1,10 +1,7 @@
-use swc_plugins_core::plugin_modularize_imports::PackageConfig;
-
-use shared::serde::Deserialize;
-
-use napi_derive::napi;
-
 use super::IntoRawConfig;
+use napi_derive::napi;
+use shared::serde::Deserialize;
+use swc_plugins_core::modularize_imports::PackageConfig;
 
 #[napi(object)]
 #[derive(Clone, Debug, Deserialize)]

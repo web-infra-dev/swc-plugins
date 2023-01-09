@@ -1,4 +1,4 @@
-use shared::swc_core::ecma::{
+use swc_core::ecma::{
   ast::{CallExpr, Expr, ExprStmt, MemberProp, Module, ModuleItem, Stmt},
   visit::{as_folder, Fold, VisitMut},
 };
@@ -41,7 +41,7 @@ pub fn remove_es_module_mark() -> impl Fold {
 
 #[cfg(test)]
 mod test {
-  use shared::swc_core::{self, quote};
+  use swc_core::{self, quote};
 
   use crate::is_es_module_mark;
 

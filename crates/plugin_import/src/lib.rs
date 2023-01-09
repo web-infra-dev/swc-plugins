@@ -1,10 +1,11 @@
 mod visit;
-
+use crate::visit::IdentComponent;
 use handlebars::{Context, Helper, HelperResult, Output, RenderContext, Template};
 use heck::ToKebabCase;
 use serde::Deserialize;
 use shared::ahash::{AHashMap as HashMap, AHashSet as HashSet};
-use shared::swc_core::{
+use std::fmt::Debug;
+use swc_core::{
   common::{util::take::Take, BytePos, Span, SyntaxContext, DUMMY_SP},
   ecma::{
     ast::{
@@ -15,12 +16,8 @@ use shared::swc_core::{
     visit::{as_folder, Fold, VisitMut, VisitWith},
   },
 };
-use std::fmt::Debug;
-
-use crate::visit::IdentComponent;
 
 #[derive(Debug, Deserialize, Clone)]
-#[serde(crate = "shared::serde")]
 pub enum StyleConfig {
   StyleLibraryDirectory(String),
   #[serde(skip)]

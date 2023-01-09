@@ -4,10 +4,10 @@ use plugin_react_utils::{
   remove_prop_types::{Mode, ReactRemovePropTypeConfig},
   ReactUtilsConfig,
 };
-use shared::swc_core::base::config::Options;
+use swc_core::base::config::Options;
 use test_plugins::{
+  fixture::{ExpectedInfo, FixtureTester, FixtureTesterHook},
   swc_plugins_core::types::{Extensions, TransformConfig},
-  ExpectedInfo, FixtureTester, FixtureTesterHook,
 };
 
 #[test]

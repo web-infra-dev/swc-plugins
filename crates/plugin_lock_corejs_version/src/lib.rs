@@ -1,12 +1,12 @@
 use shared::{
   serde::Deserialize,
-  swc_core::{
-    common::DUMMY_SP,
-    ecma::{
-      ast::{CallExpr, Callee, ImportDecl, Lit, Str},
-      atoms::JsWord,
-      visit::{as_folder, Fold, VisitMut},
-    },
+};
+use swc_core::{
+  common::DUMMY_SP,
+  ecma::{
+    ast::{CallExpr, Callee, ImportDecl, Lit, Str},
+    atoms::JsWord,
+    visit::{as_folder, Fold, VisitMut},
   },
 };
 

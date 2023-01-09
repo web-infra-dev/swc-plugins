@@ -1,17 +1,15 @@
-use shared::{
-  swc_core::{
-    self,
-    common::DUMMY_SP,
-    ecma::{
-      ast::{CallExpr, Expr, Id, ImportDecl, ImportSpecifier, Lit, Module, ModuleExportName, Str},
-      atoms::JsWord,
-      visit::{as_folder, Fold, Visit, VisitMut, VisitMutWith, VisitWith},
-    },
-    quote,
-  },
-  PluginContext,
-};
+use shared::PluginContext;
 use std::sync::Arc;
+use swc_core::{
+  self,
+  common::DUMMY_SP,
+  ecma::{
+    ast::{CallExpr, Expr, Id, ImportDecl, ImportSpecifier, Lit, Module, ModuleExportName, Str},
+    atoms::JsWord,
+    visit::{as_folder, Fold, Visit, VisitMut, VisitMutWith, VisitWith},
+  },
+  quote,
+};
 
 const RUNTIME_PACKAGE_NAME: &str = "@modern-js/runtime";
 const USE_LOADER: &str = "useLoader";
@@ -133,14 +131,11 @@ pub fn plugin_modernjs_ssr_loader_id(plugin_ctx: Arc<PluginContext>) -> impl Fol
 
 #[cfg(test)]
 mod test {
+  use shared::PluginContext;
   use std::{path::PathBuf, sync::Arc};
-
-  use shared::{
-    swc_core::{
-      common::{comments::SingleThreadedComments, Mark, SourceMap},
-      ecma::parser::Syntax,
-    },
-    PluginContext,
+  use swc_core::{
+    common::{comments::SingleThreadedComments, Mark, SourceMap},
+    ecma::parser::Syntax,
   };
 
   use crate::plugin_modernjs_ssr_loader_id;
@@ -148,7 +143,7 @@ mod test {
   #[test]
   fn test() {
     let cm = Arc::new(SourceMap::default());
-    shared::swc_ecma_transforms_testing::test_transform(
+    test_plugins::testing::test_transform(
       Syntax::Es(Default::default()),
       |_| {
         plugin_modernjs_ssr_loader_id(Arc::new(PluginContext {

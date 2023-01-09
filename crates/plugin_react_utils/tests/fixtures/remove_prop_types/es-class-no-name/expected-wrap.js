@@ -1,6 +1,6 @@
 import _define_property from "@swc/helpers/src/_define_property.mjs";
-var _Component;
-class _class extends (_Component = React.Component) {
+var _React_Component;
+class _class extends (_React_Component = React.Component) {
   render() {}
 
 }

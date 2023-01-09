@@ -13,7 +13,8 @@ use std::collections::HashMap;
 
 pub use config::TransformConfigNapi;
 use napi::{Env, Error, Result, Status};
-use shared::{ahash::AHashMap, swc_core::cached::regex::CachedRegex};
+use shared::{ahash::AHashMap};
+use swc_core::cached::regex::CachedRegex;
 pub trait IntoRawConfig<T> {
   fn into_raw_config(self, env: Env) -> Result<T>;
 }
