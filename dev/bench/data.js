@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1673194562536,
+  "lastUpdate": 1673231049441,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1565,6 +1565,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 924173121,
             "range": "± 84119730",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "8d6d15503212789d9eedcdeb706cae9ca963565b",
+          "message": "Merge pull request #60 from modern-js-dev/feat/wasm\n\nfeat: add wasm support",
+          "timestamp": "2023-01-09T09:54:41+08:00",
+          "tree_id": "f6d4589f0014969cd1000cbbc48faa8f69c3c29a",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/8d6d15503212789d9eedcdeb706cae9ca963565b"
+        },
+        "date": 1673231048446,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 830945208,
+            "range": "± 42337580",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 938314121,
+            "range": "± 41631572",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 947869480,
+            "range": "± 38505202",
             "unit": "ns/iter"
           }
         ]
