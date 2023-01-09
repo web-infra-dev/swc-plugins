@@ -1,8 +1,0 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var _interopRequireDefault = require("@swc/helpers/lib/_interop_require_default.js").default;
-var _map = /*#__PURE__*/ _interopRequireDefault(require("lodash-compat/collection/map"));
-var _capitalize = /*#__PURE__*/ _interopRequireDefault(require("lodash-compat/string/capitalize"));
-(0, _map.default)([], _capitalize.default);

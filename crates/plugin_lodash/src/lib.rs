@@ -43,7 +43,7 @@ pub fn plugin_lodash(
   config: &PluginLodashConfig,
   plugin_context: Arc<PluginContext>,
 ) -> impl Fold + '_ {
-  let mut ids = vec!["lodash".into(), "lodash-es".into(), "lodash-compat".into()];
+  let mut ids = vec!["lodash".into(), "lodash-es".into()];
   config.ids.iter().for_each(|id| {
     if !ids.contains(id) {
       ids.push(id.into());

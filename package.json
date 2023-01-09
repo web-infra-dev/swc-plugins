@@ -14,7 +14,6 @@
     "@types/node": "^18.7.1",
     "dotenv-cli": "^6.0.0",
     "lodash": "^4.17.21",
-    "lodash-compat": "^3.10.2",
     "lodash-es": "^4.17.21",
     "react-bootstrap": "^2.5.0",
     "tsno": "^2.0.0",
