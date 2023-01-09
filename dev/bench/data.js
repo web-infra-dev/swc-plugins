@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1673231049441,
+  "lastUpdate": 1673232043247,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1607,6 +1607,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 947869480,
             "range": "± 38505202",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1114550440@qq.com",
+            "name": "Fy",
+            "username": "JSerFeng"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "df49686c9b5d01223f9eeaa0133488c707e901a3",
+          "message": "refactor: drop support for lodash-compat (#63)",
+          "timestamp": "2023-01-09T10:10:09+08:00",
+          "tree_id": "c0bcd52cc9e0c9edd085ed4f48cf6e3994429f40",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/df49686c9b5d01223f9eeaa0133488c707e901a3"
+        },
+        "date": 1673232041940,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 933176584,
+            "range": "± 79722668",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 984513955,
+            "range": "± 69518085",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 981263941,
+            "range": "± 51595977",
             "unit": "ns/iter"
           }
         ]
