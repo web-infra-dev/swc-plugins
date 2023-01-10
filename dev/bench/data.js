@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1673337489672,
+  "lastUpdate": 1673344953805,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1687,6 +1687,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1237646941,
             "range": "± 89220411",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "committer": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "id": "3e1bc0d79131f5eba1b8de9fd4ba5ca5756215ea",
+          "message": "feat: support terminates the process when node.js process exit",
+          "timestamp": "2023-01-05T16:04:30Z",
+          "url": "https://github.com/modern-js-dev/swc-plugins/pull/64/commits/3e1bc0d79131f5eba1b8de9fd4ba5ca5756215ea"
+        },
+        "date": 1673344951526,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 1272195103,
+            "range": "± 92418925",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1355076552,
+            "range": "± 130194492",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1302440594,
+            "range": "± 190085672",
             "unit": "ns/iter"
           }
         ]
