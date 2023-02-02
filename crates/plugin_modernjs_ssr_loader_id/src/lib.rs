@@ -135,7 +135,7 @@ mod test {
   use shared::PluginContext;
   use std::{path::PathBuf, sync::Arc};
   use swc_core::{
-    common::{comments::SingleThreadedComments, Mark, SourceMap, SourceFile, FileName},
+    common::{comments::SingleThreadedComments, Mark, SourceMap, FileName},
     ecma::parser::Syntax,
   };
 
@@ -148,8 +148,8 @@ mod test {
       Syntax::Es(Default::default()),
       |_| {
         plugin_modernjs_ssr_loader_id(Arc::new(PluginContext {
-          cm,
-          file: Arc::new(cm.new_source_file(FileName::Anon, "".into())),
+          cm: cm.clone(),
+          file: cm.new_source_file(FileName::Anon, "".into()),
           top_level_mark: Mark::new(),
           unresolved_mark: Mark::new(),
           comments: SingleThreadedComments::default(),
