@@ -1,3 +1,4 @@
+#![feature(let_chains)]
 mod minify;
 mod pass;
 mod transform;

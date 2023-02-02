@@ -1,3 +1,4 @@
+#![feature(let_chains)]
 use mappings::{build_mappings, build_pkg_map, Mappings, Package};
 use shared::{
   ahash::{AHashMap, AHashSet},

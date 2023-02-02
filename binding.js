@@ -2,18 +2,23 @@ const { minify, minifySync, Compiler: RawCompiler } = require('./index')
 
 class Compiler extends RawCompiler {
   constructor(config) {
-    const extensions = config.extensions;
+    const extensions = config.extensions || {};
 
-    if (extensions && extensions.pluginImport) {
+    if (extensions.pluginImport) {
       extensions.pluginImport = transformPluginImport(extensions.pluginImport)
     }
+
+    /**
+     * Convert some options to string, let rust to deserialize it to real config,
+     */
+    optionsToString(extensions)
 
     delete config.extensions;
 
     try {
       super({
         swc: JSON.stringify(config),
-        extensions: extensions || {}
+        extensions: extensions
       });
     } catch (e) {
       console.error('[@modern-js/swc-plugins] Failed to initialize config');
@@ -81,4 +86,24 @@ function transformPluginImport(pluginImports) {
 
 function maybe(type, input) {
   return typeof input === type ? input : undefined
+}
+
+function boolToObj(input) {
+  if (typeof input === 'boolean') {
+    return input ? {} : undefined
+  }
+  return input
+}
+
+function optionsToString(options) {
+  const styledComponent = boolToObj(options.styledComponent)
+  const emotion = boolToObj(options.emotion)
+
+  if (styledComponent && typeof styledComponent !== 'string') {
+    options.styledComponent = JSON.stringify(styledComponent)
+  }
+
+  if (emotion && typeof emotion !== 'string') {
+    options.emotion = JSON.stringify(emotion)
+  }
 }

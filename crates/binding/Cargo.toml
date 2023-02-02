@@ -18,7 +18,7 @@ napi = {version = "2.9.1", default-features = false, features = [
 ]} 
 napi-derive = "2.9.1" 
 shared = {path = "../shared"} 
-swc_core = {version = "0.51.1", features = [
+swc_core = {version = "0.59.12", features = [
   "base",
   "common",
 ]} 

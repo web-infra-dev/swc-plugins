@@ -107,6 +107,7 @@ pub fn transform(
           // TODO comments can be pass to `process_js_with_custom_pass` in next swc version
           let plugin_context = Arc::new(PluginContext {
             cm,
+            file: fm.clone(),
             top_level_mark,
             unresolved_mark,
             comments: comments.clone(),

@@ -21,7 +21,7 @@
     "vitest": "^0.24.4"
   },
   "engines": {
-    "node": ">=14.18.0"
+    "node": ">=14.12.0"
   },
   "scripts": {
     "artifacts": "napi artifacts",

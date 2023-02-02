@@ -1,3 +1,4 @@
+#![feature(let_chains)]
 use std::borrow::Borrow;
 use ahash::AHashMap;
 use swc_core::{

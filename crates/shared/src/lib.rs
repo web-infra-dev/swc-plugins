@@ -20,6 +20,7 @@ pub use dashmap;
 #[cfg(feature = "plugin_context")]
 pub struct PluginContext {
   pub cm: Arc<swc_core::common::SourceMap>,
+  pub file: Arc<swc_core::common::SourceFile>,
   pub top_level_mark: swc_core::common::Mark,
   pub unresolved_mark: swc_core::common::Mark,
   pub comments: swc_core::common::comments::SingleThreadedComments,

@@ -11,7 +11,7 @@ shared = {path = "../shared", features = [
   "serde",
   "plugin_context",
 ]}
-swc_core = {version = "0.51.1", features = [
+swc_core = {version = "0.59.12", features = [
   "common",
   "ecma_ast",
   "ecma_visit",

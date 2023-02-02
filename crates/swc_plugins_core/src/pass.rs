@@ -77,6 +77,12 @@ pub fn internal_transform_before_pass<'a>(
     Either::Right(noop())
   };
 
+  let styled_components = if let Some(config) = &extensions.styled_components {
+    Either::Left(styled_components::styled_components(plugin_context.file.name.clone(), plugin_context.file.src_hash, config.clone()))
+  } else {
+    Either::Right(noop())
+  };
+
   chain!(
     modularize_imports,
     plugin_import,
