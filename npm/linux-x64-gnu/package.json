@@ -16,7 +16,7 @@
   "author": "",
   "license": "MIT",
   "engines": {
-    "node": ">= 14.12"
+    "node": ">=14.12"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
