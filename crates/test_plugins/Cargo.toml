@@ -7,7 +7,7 @@ version = "0.1.0"
 colored = "2.0.0"
 shared = {path = "../shared", features = ["serde", "serde_json"]}
 similar = "2.1.0"
-swc_core = {version = "0.51.1", features = [
+swc_core = {version = "0.59.12", features = [
   "common",
   "ecma_ast",
   "ecma_visit",

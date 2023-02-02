@@ -6,7 +6,7 @@ version = "0.1.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-modularize_imports = "0.25.11"
+modularize_imports = "0.26.4"
 plugin_import = {path = "../plugin_import"}
 plugin_lock_corejs_version = {path = "../plugin_lock_corejs_version"}
 plugin_lodash = {path = "../plugin_lodash"}
@@ -18,18 +18,17 @@ shared = {path = "../shared", features = [
   "serde",
   "serde_json",
 ]}
-styled_components = "0.52.11"
-styled_jsx = "0.29.11"
-swc_core = {version = "0.51.1", features = [
+styled_components = "0.53.4"
+styled_jsx = "0.30.4"
+swc_core = {version = "0.59.12", features = [
   "base",
   "common",
   "ecma_ast",
   "ecma_visit",
   "ecma_transforms",
   "ecma_parser",
-  "plugin_transform_host_native",
 ]}
-swc_emotion = "0.28.2"
+swc_emotion = "0.29.4"
 swc_plugins_utils = {path = "../swc_plugins_utils"}
 
 [dev-dependencies]

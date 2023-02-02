@@ -1,3 +1,4 @@
+#![feature(let_chains)]
 use std::sync::Arc;
 
 pub mod remove_prop_types;

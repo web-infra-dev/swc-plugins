@@ -1,3 +1,4 @@
+#![feature(let_chains)]
 use swc_core::ecma::{
   ast::{CallExpr, Expr, ExprStmt, MemberProp, Module, ModuleItem, Stmt},
   visit::{as_folder, Fold, VisitMut},

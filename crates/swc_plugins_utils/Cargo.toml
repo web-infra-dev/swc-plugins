@@ -5,7 +5,7 @@ version = "0.1.0"
 
 [dependencies]
 ahash = "0.8.2"
-swc_core = {version = "0.51.1", features = [
+swc_core = {version = "0.59.12", features = [
   "common",
   "ecma_ast",
   "ecma_visit",
