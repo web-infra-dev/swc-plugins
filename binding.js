@@ -1,11 +1,26 @@
 const { minify, minifySync, Compiler: RawCompiler } = require('./index')
 
+function isDev() {
+  return process.env.NODE_ENV === 'development'
+}
+
 class Compiler extends RawCompiler {
   constructor(config) {
     const extensions = config.extensions || {};
 
     if (extensions.pluginImport) {
       extensions.pluginImport = transformPluginImport(extensions.pluginImport)
+    }
+
+    extensions.emotion = boolToObj(extensions.emotion)
+    extensions.styledComponents = boolToObj(extensions.styledComponents)
+
+    if (extensions.emotion) {
+      extensions.emotion = getEmotionOptions(extensions)
+    }
+
+    if (extensions.styledComponents) {
+      extensions.styledComponents = getStyledComponentsOptions(extensions)
     }
 
     /**
@@ -18,7 +33,7 @@ class Compiler extends RawCompiler {
     try {
       super({
         swc: JSON.stringify(config),
-        extensions: extensions
+        extensions
       });
     } catch (e) {
       console.error('[@modern-js/swc-plugins] Failed to initialize config');
@@ -96,14 +111,49 @@ function boolToObj(input) {
 }
 
 function optionsToString(options) {
-  const styledComponent = boolToObj(options.styledComponent)
-  const emotion = boolToObj(options.emotion)
+  const styledComponents = options.styledComponents
+  const emotion = options.emotion
 
-  if (styledComponent && typeof styledComponent !== 'string') {
-    options.styledComponent = JSON.stringify(styledComponent)
+  if (styledComponents && typeof styledComponents !== 'string') {
+    options.styledComponents = JSON.stringify(styledComponents)
   }
 
   if (emotion && typeof emotion !== 'string') {
     options.emotion = JSON.stringify(emotion)
   }
 }
+
+function getEmotionOptions(config) {
+  const emotion = config.emotion
+  let autoLabel = false
+  switch (config.emotion?.autoLabel) {
+    case 'never':
+      autoLabel = false
+      break
+    case 'always':
+      autoLabel = true
+      break
+    case 'dev-only':
+    default:
+      autoLabel = !!isDev()
+      break
+  }
+  return {
+    enabled: true,
+    autoLabel,
+    importMap: emotion?.importMap,
+    labelFormat: emotion?.labelFormat,
+    sourcemap: isDev()
+      ? emotion?.sourceMap ?? true
+      : false,
+  }
+}
+
+function getStyledComponentsOptions(config) {
+  let styledComponentsOptions = config.styledComponents
+  return {
+    ...styledComponentsOptions,
+    displayName: styledComponentsOptions.displayName ?? isDev(),
+  }
+}
+

@@ -77,7 +77,7 @@ export interface Extensions {
     ids?: string;
   };
   modernjsSsrLoaderId?: boolean;
-  styledComponent?:
+  styledComponents?:
     | boolean
     | {
         displayName?: boolean;
@@ -93,12 +93,6 @@ export interface Extensions {
         cssProp?: boolean;
         // Empty by default.
         namespace?: string;
-        // Not supported yet.
-        minify?: boolean;
-        // Not supported yet.
-        transpileTemplateLiterals?: boolean;
-        // Not supported yet.
-        pure?: boolean;
       };
   emotion?:
     | boolean

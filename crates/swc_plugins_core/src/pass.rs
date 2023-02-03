@@ -94,8 +94,8 @@ pub fn internal_transform_before_pass<'a>(
     lodash,
     modernjs_ssr_loader_id,
     emotion,
-    styled_jsx,
-    styled_components
+    styled_components,
+    styled_jsx
   )
 }
 

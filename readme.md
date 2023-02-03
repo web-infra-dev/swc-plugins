@@ -333,7 +333,7 @@ will become something like this:
 import { foo } from '/project/node_modules/your-lib/node_modules/@swc/helpers';
 ```
 
-#### extensions.styledComponent
+#### extensions.styledComponents
 
 - Type:
 
@@ -352,12 +352,6 @@ boolean | {
   cssProp?: boolean;
   // Empty by default.
   namespace?: string;
-  // Not supported yet.
-  minify?: boolean;
-  // Not supported yet.
-  transpileTemplateLiterals?: boolean;
-  // Not supported yet.
-  pure?: boolean;
 };
 ```
 

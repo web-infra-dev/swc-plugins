@@ -29,7 +29,7 @@
     "build": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts --release",
     "build:dev": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts",
     "prepublishOnly": "napi prepublish -t npm",
-    "test": "echo Enable test when fix CI, GLIB3.22 not found",
+    "test": "vitest run --segfault-retry=3",
     "version": "napi version",
     "change": "changeset add"
   },
