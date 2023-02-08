@@ -9,6 +9,7 @@
   "types": "./types/index.d.ts",
   "version": "0.0.16",
   "devDependencies": {
+    "@changesets/cli": "^2.26.0",
     "@napi-rs/cli": "^2.11.4",
     "@storybook/addon-links": "^6.5.12",
     "@types/node": "^18.7.1",
@@ -29,7 +30,8 @@
     "build:dev": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "echo Enable test when fix CI, GLIB3.22 not found",
-    "version": "napi version"
+    "version": "napi version",
+    "change": "changeset add"
   },
   "napi": {
     "name": "swc-plugins",

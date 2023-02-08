@@ -417,9 +417,10 @@ jobs:
 
       - name: Publish
         if: "startsWith(github.event.head_commit.message, 'chore(release): publish')"
-        run: |
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          pnpm publish --no-git-checks
+        uses: changesets/action@v1
+        with:
+          publish: pnpm publish
+          commit: "chore(release): publish"
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
