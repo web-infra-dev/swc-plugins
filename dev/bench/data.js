@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677061409558,
+  "lastUpdate": 1677071835478,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1805,6 +1805,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1062571296,
             "range": "± 139633268",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "committer": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "id": "6f150be33eb13647a0160b61a6461d9d8430d252",
+          "message": "feat(CI): add publish plugin-import crate on CI",
+          "timestamp": "2023-01-31T20:19:48Z",
+          "url": "https://github.com/modern-js-dev/swc-plugins/pull/76/commits/6f150be33eb13647a0160b61a6461d9d8430d252"
+        },
+        "date": 1677071833928,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 875676636,
+            "range": "± 57857167",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 949071776,
+            "range": "± 79660684",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 889143536,
+            "range": "± 69109698",
             "unit": "ns/iter"
           }
         ]
