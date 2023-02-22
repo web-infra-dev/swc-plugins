@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1673344953805,
+  "lastUpdate": 1677059317931,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1725,6 +1725,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1302440594,
             "range": "± 190085672",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "committer": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "id": "082f93ef33900f620de5d33675b5b870840e1ef8",
+          "message": "fix: fix wrong Rust toolchain on CI",
+          "timestamp": "2023-01-31T20:19:48Z",
+          "url": "https://github.com/modern-js-dev/swc-plugins/pull/75/commits/082f93ef33900f620de5d33675b5b870840e1ef8"
+        },
+        "date": 1677059316722,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 986999289,
+            "range": "± 92570884",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1065829498,
+            "range": "± 67849155",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1071025991,
+            "range": "± 48094150",
             "unit": "ns/iter"
           }
         ]
