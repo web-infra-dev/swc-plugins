@@ -788,7 +788,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "fxhash"
+name = "rustc_hash"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c31b6d751ae2c7f11320402d34e41349dd1016f8d5d45e48c4312bc8625af50c"
@@ -3223,7 +3223,7 @@ checksum = "5243ed5fe92080ec259becaa10a1fafba44adf04e99165b2503b82e9f9d119fe"
 dependencies = [
  "base64",
  "byteorder",
- "fxhash",
+ "rustc_hash",
  "once_cell",
  "radix_fmt",
  "regex",

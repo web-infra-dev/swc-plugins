@@ -1,5 +1,4 @@
 use napi::Status;
-use shared::serde_json;
 
 use super::IntoRawConfig;
 

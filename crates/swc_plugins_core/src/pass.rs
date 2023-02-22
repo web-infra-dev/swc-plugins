@@ -2,7 +2,6 @@ use std::{path::Path, sync::Arc};
 
 use crate::types::Extensions;
 use plugin_lock_corejs_version::lock_corejs_version;
-use plugin_lodash::plugin_lodash;
 use plugin_remove_es_module_mark::remove_es_module_mark;
 use swc_core::{
   base::config::{ModuleConfig, Options},
@@ -10,13 +9,12 @@ use swc_core::{
   ecma::transforms::base::pass::noop,
   ecma::visit::Fold,
 };
-use shared::{
-  PluginContext,
-};
+use swc_plugin_lodash::plugin_lodash;
+use swc_plugins_utils::PluginContext;
 
-use plugin_import::plugin_import;
 use modularize_imports::{modularize_imports, Config as ModularizedConfig};
-use plugin_react_utils::react_utils;
+use swc_plugin_import::plugin_import;
+use swc_plugin_react_utils::react_utils;
 
 pub fn internal_transform_before_pass<'a>(
   extensions: &'a Extensions,
@@ -52,7 +50,9 @@ pub fn internal_transform_before_pass<'a>(
   };
 
   let modernjs_ssr_loader_id = if *extensions.modernjs_ssr_loader_id.as_ref().unwrap_or(&false) {
-    Either::Left(plugin_modernjs_ssr_loader_id::plugin_modernjs_ssr_loader_id(plugin_context.clone()))
+    Either::Left(
+      plugin_modernjs_ssr_loader_id::plugin_modernjs_ssr_loader_id(plugin_context.clone()),
+    )
   } else {
     Either::Right(noop())
   };
@@ -78,7 +78,11 @@ pub fn internal_transform_before_pass<'a>(
   };
 
   let styled_components = if let Some(config) = &extensions.styled_components {
-    Either::Left(styled_components::styled_components(plugin_context.file.name.clone(), plugin_context.file.src_hash, config.clone()))
+    Either::Left(styled_components::styled_components(
+      plugin_context.file.name.clone(),
+      plugin_context.file.src_hash,
+      config.clone(),
+    ))
   } else {
     Either::Right(noop())
   };
@@ -90,7 +94,8 @@ pub fn internal_transform_before_pass<'a>(
     lodash,
     modernjs_ssr_loader_id,
     emotion,
-    styled_jsx
+    styled_jsx,
+    styled_components
   )
 }
 

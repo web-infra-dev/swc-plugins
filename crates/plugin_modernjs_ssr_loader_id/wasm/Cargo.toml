@@ -8,14 +8,14 @@ crate-type = ["rlib", "cdylib"]
 
 [dependencies]
 md5 = "0.7.0"
-plugin_modernjs_ssr_loader_id = {path = ".."}
-shared = {path = "../../shared", features = ["plugin_context"]}
-swc_core = {version = "0.59.12", features = [
+plugin_modernjs_ssr_loader_id = { path = ".." }
+swc_core = { workspace = true, features = [
   "ecma_plugin_transform",
   "ecma_visit",
   "ecma_ast",
   "common",
-]}
+] }
+swc_plugins_utils = { workspace = true }
 
 [dev_dependencies]
-test_plugins = {path = "../../test_plugins"}
+test_plugins = { path = "../../test_plugins" }

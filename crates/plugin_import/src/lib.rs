@@ -1,9 +1,8 @@
 mod visit;
 use crate::visit::IdentComponent;
+use rustc_hash::{FxHashMap as HashMap, FxHashSet as HashSet};
 use handlebars::{Context, Helper, HelperResult, Output, RenderContext, Template};
-use heck::ToKebabCase;
 use serde::Deserialize;
-use shared::ahash::{AHashMap as HashMap, AHashSet as HashSet};
 use std::fmt::Debug;
 use swc_core::{
   common::{util::take::Take, BytePos, Span, SyntaxContext, DUMMY_SP},
@@ -28,7 +27,6 @@ pub enum StyleConfig {
 }
 
 #[derive(Deserialize)]
-#[serde(crate = "shared::serde")]
 pub enum CustomTransform {
   #[serde(skip)]
   Fn(Box<dyn Sync + Send + Fn(String) -> Option<String>>),
@@ -54,7 +52,6 @@ impl Debug for CustomTransform {
 }
 
 #[derive(Debug, Deserialize, Default, Clone)]
-#[serde(crate = "shared::serde")]
 pub struct PluginImportConfig {
   pub library_name: String,
   pub library_directory: Option<String>, // default to `lib`
@@ -91,7 +88,7 @@ pub fn plugin_import<'a>(config: &'a Vec<PluginImportConfig>) -> impl Fold + 'a 
           .param(0)
           .and_then(|v| v.value().as_str())
           .unwrap_or("");
-        out.write(param.to_kebab_case().as_ref())?;
+        out.write(param.camel_to_kebab().as_ref())?;
         Ok(())
       },
     ),
@@ -199,7 +196,7 @@ impl<'a> ImportPlugin<'a> {
       .unwrap_or(false);
 
     let transformed_name = if config.camel_to_dash_component_name.unwrap_or(true) {
-      name.to_kebab_case()
+      name.camel_to_kebab()
     } else {
       name.clone()
     };
@@ -290,8 +287,8 @@ impl<'a> VisitMut for ImportPlugin<'a> {
   fn visit_mut_module(&mut self, module: &mut Module) {
     // use visitor to collect all ident reference, and then remove imported component and type that is never referenced
     let mut visitor = IdentComponent {
-      ident_set: HashSet::new(),
-      type_ident_set: HashSet::new(),
+      ident_set: HashSet::default(),
+      type_ident_set: HashSet::default(),
       in_ts_type_ref: false,
     };
     module.body.visit_with(&mut visitor);
@@ -302,7 +299,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
 
     let mut specifiers_css = vec![];
     let mut specifiers_es = vec![];
-    let mut specifiers_rm_es = HashSet::new();
+    let mut specifiers_rm_es = HashSet::default();
 
     let config = &self.config;
 
@@ -311,7 +308,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
         let source = &*var.src.value;
 
         if let Some(child_config) = config.iter().find(|&c| c.library_name == source) {
-          let mut rm_specifier = HashSet::new();
+          let mut rm_specifier = HashSet::default();
 
           for (specifier_idx, specifier) in var.specifiers.iter().enumerate() {
             match specifier {
@@ -455,7 +452,43 @@ impl<'a> VisitMut for ImportPlugin<'a> {
 }
 
 fn render_context(s: String) -> HashMap<&'static str, String> {
-  let mut ctx = HashMap::new();
+  let mut ctx = HashMap::default();
   ctx.insert("member", s);
   ctx
+}
+
+trait KebabCase {
+  fn camel_to_kebab(&self) -> String;
+}
+
+impl<T> KebabCase for T
+where
+  T: AsRef<str>,
+{
+  fn camel_to_kebab(&self) -> String {
+    let s: &str = self.as_ref();
+    let mut output = String::with_capacity(s.len());
+
+    s.chars().enumerate().for_each(|(idx, c)| {
+      if c.is_uppercase() {
+        if idx > 0 {
+          output.push('-');
+        }
+        output.push_str(c.to_lowercase().to_string().as_str());
+      } else {
+        output.push(c);
+      }
+    });
+
+    output
+  }
+}
+
+#[test]
+fn test_kebab_case() {
+  assert_eq!("ABCD".camel_to_kebab(), "a-b-c-d");
+  assert_eq!("AbCd".camel_to_kebab(), "ab-cd");
+  assert_eq!("Aaaa".camel_to_kebab(), "aaaa");
+  assert_eq!("A".camel_to_kebab(), "a");
+  assert_eq!("".camel_to_kebab(), "");
 }

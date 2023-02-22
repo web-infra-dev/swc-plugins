@@ -1,6 +1,6 @@
 #![feature(let_chains)]
-use std::borrow::Borrow;
-use ahash::AHashMap;
+use std::{borrow::Borrow, path::PathBuf, sync::Arc};
+use rustc_hash::FxHashMap as HashMap;
 use swc_core::{
   common::{SyntaxContext, DUMMY_SP},
   ecma::{
@@ -124,7 +124,7 @@ pub fn contain_ident(id: &Id, expr: &Expr) -> bool {
 }
 
 pub struct IdentCount {
-  inner: AHashMap<Id, usize>,
+  inner: HashMap<Id, usize>,
 }
 impl Visit for IdentCount {
   fn visit_ident(&mut self, ident: &Ident) {
@@ -135,7 +135,7 @@ impl Visit for IdentCount {
       .or_insert(1);
   }
 }
-pub fn count_ident(module: &impl VisitWith<IdentCount>) -> AHashMap<Id, usize> {
+pub fn count_ident(module: &impl VisitWith<IdentCount>) -> HashMap<Id, usize> {
   let mut ident_count = IdentCount {
     inner: Default::default(),
   };
@@ -200,7 +200,7 @@ static PURE_COMPONENT_NAME: &str = "PureComponent";
 
 pub fn is_react_component(
   expr: &Expr,
-  bindings: Option<&AHashMap<Id, BindingInfo>>,
+  bindings: Option<&HashMap<Id, BindingInfo>>,
 ) -> ReactComponentType {
   match expr {
     Expr::Fn(function) => {
@@ -258,7 +258,7 @@ pub fn is_react_component(
 
 pub fn is_react_component_class(
   class: &Class,
-  bindings: Option<&AHashMap<Id, BindingInfo>>,
+  bindings: Option<&HashMap<Id, BindingInfo>>,
 ) -> bool {
   if let Some(super_class) = class.super_class.as_deref() {
     let is = match super_class {
@@ -301,7 +301,7 @@ pub fn is_react_component_class(
 
 pub fn is_return_jsx<'a>(
   stmts: impl Iterator<Item = &'a Stmt>,
-  bindings: Option<&AHashMap<Id, BindingInfo>>,
+  bindings: Option<&HashMap<Id, BindingInfo>>,
 ) -> bool {
   for stmt in stmts {
     if let Stmt::Return(return_stmt) = stmt {
@@ -338,7 +338,7 @@ pub fn is_creating_component(expr: &Expr) -> bool {
   }
 }
 
-pub fn is_jsx(expr: &Expr, bindings: Option<&AHashMap<Id, BindingInfo>>) -> bool {
+pub fn is_jsx(expr: &Expr, bindings: Option<&HashMap<Id, BindingInfo>>) -> bool {
   if is_creating_component(expr) {
     return true;
   }
@@ -469,7 +469,7 @@ pub struct BindingInfo {
 }
 
 pub struct CollectBindings {
-  pub bindings: AHashMap<Id, BindingInfo>,
+  pub bindings: HashMap<Id, BindingInfo>,
 }
 
 impl CollectBindings {
@@ -584,7 +584,7 @@ impl Visit for CollectBindings {
 }
 
 pub struct DetectReAssigned<'a> {
-  pub bindings: &'a mut AHashMap<Id, BindingInfo>,
+  pub bindings: &'a mut HashMap<Id, BindingInfo>,
 }
 
 impl<'a> DetectReAssigned<'a> {
@@ -621,14 +621,45 @@ impl<'a> Visit for DetectReAssigned<'a> {
   }
 }
 
-pub fn collect_bindings(module: &Module) -> AHashMap<Id, BindingInfo> {
+pub fn collect_bindings(module: &Module) -> HashMap<Id, BindingInfo> {
   let mut collect_bindings = CollectBindings {
-    bindings: AHashMap::default(),
+    bindings: HashMap::default(),
   };
 
   module.visit_with(&mut collect_bindings);
 
   collect_bindings.bindings
+}
+
+pub struct PluginContext {
+  pub cm: Arc<swc_core::common::SourceMap>,
+  pub file: Arc<swc_core::common::SourceFile>,
+  pub top_level_mark: swc_core::common::Mark,
+  pub unresolved_mark: swc_core::common::Mark,
+  pub comments: swc_core::common::comments::SingleThreadedComments,
+  pub filename: String,
+  pub cwd: PathBuf,
+
+  pub config_hash: Option<String>, // This can be used by plugins to do caching
+
+  // Use this to determine if we should remove __esModule mark in pure commonjs module
+  // Remove this when SWC fix https://github.com/swc-project/swc/issues/6500
+  pub is_source_esm: bool,
+}
+
+impl std::fmt::Debug for PluginContext {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    f.debug_struct("PluginContext")
+      .field("cm", &"Arc<SourceMap>")
+      .field("top_level_mark", &self.top_level_mark)
+      .field("unresolved_mark", &self.unresolved_mark)
+      .field("comments", &self.comments)
+      .field("filename", &self.filename)
+      .field("cwd", &self.cwd)
+      .field("config_hash", &self.config_hash)
+      .field("is_source_esm", &self.is_source_esm)
+      .finish()
+  }
 }
 
 #[cfg(test)]

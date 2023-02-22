@@ -1,11 +1,10 @@
 use super::IntoRawConfig;
 use napi_derive::napi;
-use shared::serde::Deserialize;
+use serde::Deserialize;
 use swc_plugins_core::modularize_imports::PackageConfig;
 
 #[napi(object)]
 #[derive(Clone, Debug, Deserialize)]
-#[serde(crate = "shared::serde")]
 pub struct PackageConfigNapi {
   pub transform: String,
   pub prevent_full_import: bool,

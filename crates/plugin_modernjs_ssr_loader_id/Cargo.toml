@@ -8,13 +8,13 @@ crate-type = ["rlib", "cdylib"]
 
 [dependencies]
 md5 = "0.7.0"
-shared = {path = "../shared", features = ["plugin_context"]}
-swc_core = {version = "0.59.12", features = [
+swc_plugins_utils = { path = "../swc_plugins_utils" }
+swc_core = { workspace = true, features = [
   "common",
   "ecma_ast",
   "ecma_visit",
   "ecma_quote",
-]}
+] }
 
 [dev_dependencies]
-test_plugins = {path = "../test_plugins"}
+test_plugins = { path = "../test_plugins" }

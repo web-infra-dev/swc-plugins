@@ -4,9 +4,6 @@ use binding_types::{IntoRawConfig, TransformConfigNapi};
 use napi::{bindgen_prelude::AsyncTask, Env, JsObject, Result, Status, Task};
 
 use napi_derive::napi;
-use shared::{
-  serde_json,
-};
 use swc_core::{
   base::{
     config::{JsMinifyOptions, TerserSourceMapOption},

@@ -1,11 +1,7 @@
 #![feature(let_chains)]
 use mappings::{build_mappings, build_pkg_map, Mappings, Package};
-use shared::{
-  ahash::{AHashMap, AHashSet},
-  dashmap::DashMap,
-  serde::Deserialize,
-  PluginContext,
-};
+use serde::Deserialize;
+use swc_plugins_utils::PluginContext;
 use swc_core::{
   self,
   common::{sync::Lazy, Mark, Span, DUMMY_SP},
@@ -22,19 +18,18 @@ use swc_core::{
   quote,
 };
 use std::{ops::Deref, path::PathBuf, sync::Arc};
-
+use rustc_hash::{FxHashMap as HashMap, FxHashSet as HashSet};
 mod error;
 mod mappings;
 
 struct CacheItem {
   mappings: Arc<Mappings>,
-  pkg_map: Arc<AHashMap<JsWord, Package>>,
+  pkg_map: Arc<HashMap<JsWord, Package>>,
 }
 
-static CACHE: Lazy<DashMap<String, CacheItem>> = Lazy::new(Default::default);
+static CACHE: Lazy<dashmap::DashMap<String, CacheItem>> = Lazy::new(Default::default);
 
 #[derive(Debug, Default, Deserialize)]
-#[serde(crate = "shared::serde")]
 pub struct PluginLodashConfig {
   pub cwd: PathBuf,
   pub ids: Vec<String>,
@@ -85,20 +80,20 @@ pub fn plugin_lodash(
 #[derive(Debug, Default)]
 pub struct PluginLodash {
   pub cwd: PathBuf,
-  pkg_map: Arc<AHashMap<JsWord, Package>>,
+  pkg_map: Arc<HashMap<JsWord, Package>>,
   mappings: Arc<Mappings>,
 
   top_level_mark: Mark,
 
   // AHashMap<(module_id, local_id, imported), imported_ident>
-  imported_names: AHashMap<(JsWord, JsWord, JsWord), Id>,
+  imported_names: HashMap<(JsWord, JsWord, JsWord), Id>,
 
   // Eg: "_" -> "lodash"
-  namespace_map: AHashMap<Id, JsWord>,
+  namespace_map: HashMap<Id, JsWord>,
   imports: Vec<ImportDecl>,
   exports: Vec<Id>,
 
-  lodash_vars: AHashSet<Id>,
+  lodash_vars: HashSet<Id>,
 }
 
 impl PluginLodash {
@@ -326,9 +321,9 @@ fn imported_to_id(imported: Option<ModuleExportName>) -> Option<Id> {
 // Remove useless import decl and export decl
 // Replace every lodash global variable with (void 0)
 struct PostProcess<'a> {
-  pkg_map: &'a AHashMap<JsWord, Package>,
-  namespaces: &'a AHashMap<Id, JsWord>,
-  lodash_vars: &'a AHashSet<Id>,
+  pkg_map: &'a HashMap<JsWord, Package>,
+  namespaces: &'a HashMap<Id, JsWord>,
+  lodash_vars: &'a HashSet<Id>,
   in_lodash_call: Option<Id>,
 }
 

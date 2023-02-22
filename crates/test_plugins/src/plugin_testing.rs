@@ -1,6 +1,4 @@
 use std::sync::Arc;
-
-use shared::serde_json;
 use swc_core::{base::Compiler, common::sync::Lazy};
 use swc_plugins_core::{transform, types::TransformConfig};
 

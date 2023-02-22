@@ -12,7 +12,7 @@ fn test() {
 
   let config = swc_plugins_core::types::TransformConfig {
     swc: Options {
-      config: shared::serde_json::from_str(
+      config: serde_json::from_str(
         r#"{
         "jsc": {
           "externalHelpers": true
@@ -36,7 +36,7 @@ fn test() {
   .unwrap();
   insta::assert_snapshot!("plugin-import", res.code);
 
-  let config = shared::serde_json::from_str(
+  let config = serde_json::from_str(
     r#"{
     "compress": {},
     "mangle": true,

@@ -4,11 +4,11 @@ name = "plugin_remove_es_module_mark"
 version = "0.1.0"
 
 [dependencies]
-shared = {path = "../shared", features = ["serde"]}
-swc_core = {version = "0.59.12", features = [
+swc_core = { workspace = true, features = [
   "common",
   "ecma_ast",
   "ecma_visit",
   "ecma_quote",
-]}
-swc_plugins_utils = {path = "../swc_plugins_utils"}
+] }
+swc_plugins_utils = { path = "../swc_plugins_utils" }
+serde = { workspace = true }

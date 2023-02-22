@@ -1,4 +1,4 @@
-use swc_plugins_core::plugin_react_utils::{
+use swc_plugins_core::swc_plugin_react_utils::{
   remove_prop_types::ReactRemovePropTypeConfig, ReactUtilsConfig,
 };
 

@@ -1,26 +1,26 @@
 [package]
 edition = "2021"
-name = "plugin_lodash"
+name = "swc_plugin_lodash"
 version = "0.1.0"
 
 [dependencies]
 nodejs-resolver = "0.0.60"
-shared = {path = "../shared", features = [
-  "ahash",
-  "dashmap",
-  "serde",
-  "plugin_context",
-]}
-swc_core = {version = "0.59.12", features = [
+serde = { workspace = true }
+serde_json = { workspace = true }
+rustc-hash = { workspace = true }
+dashmap = "5.4.0"
+anyhow = { workspace = true }
+swc_core = { workspace = true, features = [
   "common",
   "ecma_ast",
   "ecma_visit",
   "ecma_quote",
   "ecma_utils",
-]}
+] }
+swc_plugins_utils = { path = "../swc_plugins_utils" }
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [dev_dependencies]
-test_plugins = {path = "../test_plugins"}
+test_plugins = { path = "../test_plugins" }
