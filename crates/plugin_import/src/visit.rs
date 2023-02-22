@@ -1,6 +1,4 @@
-use shared::{
-  ahash::AHashSet as HashSet,
-};
+use rustc_hash::FxHashSet as HashSet;
 use swc_core::ecma::{
   ast::{Id, Ident, ImportDecl, TsTypeRef},
   visit::{Visit, VisitWith},

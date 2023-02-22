@@ -16,7 +16,7 @@ fn read_to_string(s: &Path) -> String {
 
 #[bench]
 fn minify_large_bundle_no_sourcemap(bencher: &mut test::Bencher) -> impl Termination {
-  let config = shared::serde_json::from_str(
+  let config = serde_json::from_str(
     r#"{
     "compress": {},
     "mangle": true,
@@ -42,7 +42,7 @@ fn minify_large_bundle_no_sourcemap(bencher: &mut test::Bencher) -> impl Termina
 
 #[bench]
 fn minify_large_bundle_with_sourcemap(bencher: &mut test::Bencher) -> impl Termination {
-  let config = shared::serde_json::from_str(
+  let config = serde_json::from_str(
     r#"{
     "compress": {},
     "mangle": true,
@@ -79,7 +79,7 @@ fn swc_core_minify(bencher: &mut test::Bencher) -> impl Termination {
     ),
   );
 
-  let config = shared::serde_json::from_str(
+  let config = serde_json::from_str(
     r#"{
     "compress": {},
     "mangle": true,

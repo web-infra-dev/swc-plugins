@@ -1,8 +1,6 @@
-use shared::{
-  ahash::{AHashMap, AHashSet},
-  serde::Deserialize,
-  PluginContext
-};
+use rustc_hash::{FxHashMap as HashMap, FxHashSet as HashSet};
+use serde::Deserialize;
+use swc_plugins_utils::PluginContext;
 use swc_core::{
   self,
   cached::regex::CachedRegex,
@@ -46,7 +44,6 @@ pub fn react_remove_prop_types(
 }
 
 #[derive(Debug, Clone, Deserialize)]
-#[serde(crate = "shared::serde")]
 pub enum Mode {
   Removal,
   Wrap,
@@ -71,7 +68,7 @@ impl Default for Mode {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-#[serde(crate = "shared::serde", rename_all = "camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct ReactRemovePropTypeConfig {
   #[serde(default)]
   pub mode: Mode,
@@ -118,10 +115,10 @@ where
   pub config: &'a ReactRemovePropTypeConfig,
   comments: C,
 
-  components: AHashSet<Id>,
-  namespaces: AHashSet<Id>,
+  components: HashSet<Id>,
+  namespaces: HashSet<Id>,
   inserts: Vec<(usize, ModuleItem)>,
-  bindings: AHashMap<Id, BindingInfo>,
+  bindings: HashMap<Id, BindingInfo>,
 }
 
 impl<'a, C> ReactRemovePropTypes<'a, C>
@@ -454,9 +451,9 @@ where
 
 struct CollectReactComponent<'a> {
   config: &'a ReactRemovePropTypeConfig,
-  ids: AHashSet<Id>,
-  namespaces: AHashSet<Id>,
-  bindings: &'a AHashMap<Id, BindingInfo>,
+  ids: HashSet<Id>,
+  namespaces: HashSet<Id>,
+  bindings: &'a HashMap<Id, BindingInfo>,
 }
 
 impl<'a> CollectReactComponent<'a> {
@@ -628,7 +625,7 @@ impl<'a> Visit for CollectReactComponent<'a> {
 
 struct RemoveImports<'a> {
   config: &'a ReactRemovePropTypeConfig,
-  ids: AHashMap<Id, usize>,
+  ids: HashMap<Id, usize>,
 }
 
 impl<'a> VisitMut for RemoveImports<'a> {

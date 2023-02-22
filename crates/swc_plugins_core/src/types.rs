@@ -1,14 +1,14 @@
 use modularize_imports::PackageConfig;
-use plugin_import::PluginImportConfig;
 use plugin_lock_corejs_version::LockCoreJsVersion;
-use plugin_lodash::PluginLodashConfig;
-use plugin_react_utils::ReactUtilsConfig;
-use shared::serde::Deserialize;
+use serde::Deserialize;
 use std::collections::HashMap;
 use swc_core::base::config::Options;
+use swc_plugin_import::PluginImportConfig;
+use swc_plugin_lodash::PluginLodashConfig;
+use swc_plugin_react_utils::ReactUtilsConfig;
 
 #[derive(Default, Debug, Deserialize)]
-#[serde(crate = "shared::serde", rename_all = "camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct Extensions {
   pub modularize_imports: Option<HashMap<String, PackageConfig>>,
   pub plugin_import: Option<Vec<PluginImportConfig>>,
@@ -25,7 +25,6 @@ pub struct Extensions {
 }
 
 #[derive(Debug, Default, Deserialize)]
-#[serde(crate = "shared::serde")]
 pub struct TransformConfig {
   pub swc: Options,
 

@@ -68,7 +68,7 @@ pub trait FixtureTesterHook {
     let option_path = fixture_path.join("option.json");
     let option = option_path
       .exists()
-      .then(|| shared::serde_json::from_slice(fs::read(option_path).unwrap().as_slice()).unwrap());
+      .then(|| serde_json::from_slice(fs::read(option_path).unwrap().as_slice()).unwrap());
 
     vec![ExpectedInfo::new(
       expected_path.to_string_lossy().to_string(),
@@ -128,7 +128,7 @@ where
 
         let option_path = fixture_path.join("option.json");
         let option = option_path.exists().then(|| {
-          shared::serde_json::from_slice(fs::read(option_path).unwrap().as_slice()).unwrap()
+          serde_json::from_slice(fs::read(option_path).unwrap().as_slice()).unwrap()
         });
 
         vec![ExpectedInfo::new(

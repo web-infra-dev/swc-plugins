@@ -1,4 +1,4 @@
-use plugin_lodash::PluginLodashConfig;
+use swc_plugin_lodash::PluginLodashConfig;
 use swc_core::cached::regex::CachedRegex;
 use test_plugins::{
   fixture::{BaseFixtureHook, FixtureTester},
@@ -11,7 +11,7 @@ fn test_fixtures() {
 
   let mut tester = FixtureTester::new(
     TransformConfig {
-      swc: shared::serde_json::from_str(
+      swc: serde_json::from_str(
         r#"
       {
         "jsc": {

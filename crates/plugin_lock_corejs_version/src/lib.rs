@@ -1,6 +1,4 @@
-use shared::{
-  serde::Deserialize,
-};
+use serde::Deserialize;
 use swc_core::{
   common::DUMMY_SP,
   ecma::{
@@ -14,7 +12,7 @@ static COREJS: &str = "core-js";
 static SWC_HELPERS: &str = "@swc/helpers";
 
 #[derive(Debug, Clone, Deserialize)]
-#[serde(crate = "shared::serde", rename_all = "camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct LockCoreJsVersion {
   pub swc_helpers: String,
   pub corejs: String,

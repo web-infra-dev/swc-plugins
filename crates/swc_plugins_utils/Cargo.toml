@@ -4,11 +4,11 @@ name = "swc_plugins_utils"
 version = "0.1.0"
 
 [dependencies]
-ahash = "0.8.2"
-swc_core = {version = "0.59.12", features = [
+swc_core = { workspace = true, features = [
   "common",
   "ecma_ast",
   "ecma_visit",
   "ecma_transforms",
   "ecma_quote",
-]}
+] }
+rustc-hash = { workspace = true }

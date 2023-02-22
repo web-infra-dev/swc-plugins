@@ -1,6 +1,6 @@
 use std::{fs, path::Path};
 
-use plugin_react_utils::{
+use swc_plugin_react_utils::{
   remove_prop_types::{Mode, ReactRemovePropTypeConfig},
   ReactUtilsConfig,
 };
@@ -27,12 +27,12 @@ fn main() {
 
       let options_path = fixture_path.join("options.json");
       let remove_prop_types: ReactRemovePropTypeConfig = if options_path.exists() {
-        shared::serde_json::from_str(&read(&options_path)).unwrap()
+        serde_json::from_str(&read(&options_path)).unwrap()
       } else {
         Default::default()
       };
 
-      let swc: Options = shared::serde_json::from_str(r#"{
+      let swc: Options = serde_json::from_str(r#"{
         "jsc": { "target": "es2020", "externalHelpers": true, "parser": { "syntax": "ecmascript", "jsx": true } }
       }"#).unwrap();
       let react_utils = ReactUtilsConfig {
@@ -130,7 +130,7 @@ fn main() {
   }
 
   let mut tester = FixtureTester::new(
-    shared::serde_json::from_str(r#"{
+    serde_json::from_str(r#"{
       "swc": {
         "jsc": { "target": "es2020", "externalHelpers": true, "parser": { "syntax": "ecmascript", "jsx": true } }
       },

@@ -7,7 +7,7 @@ use test_plugins::{
 
 #[test]
 fn main() {
-  let config: TransformConfig = shared::serde_json::from_str(
+  let config: TransformConfig = serde_json::from_str(
     r#"{
       "swc": { "jsc": { "externalHelpers": true }, "env": { "mode": "usage", "targets": "ie 11" } },
       "extensions": {

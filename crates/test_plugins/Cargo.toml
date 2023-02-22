@@ -5,13 +5,14 @@ version = "0.1.0"
 
 [dependencies]
 colored = "2.0.0"
-shared = {path = "../shared", features = ["serde", "serde_json"]}
+serde = { workspace = true }
+serde_json = { workspace = true }
 similar = "2.1.0"
-swc_core = {version = "0.59.12", features = [
+swc_core = { workspace = true, features = [
   "common",
   "ecma_ast",
   "ecma_visit",
   "ecma_transforms",
   "testing_transform",
-]}
-swc_plugins_core = {path = "../swc_plugins_core"}
+] }
+swc_plugins_core = { path = "../swc_plugins_core" }

@@ -40,19 +40,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ahash"
-version = "0.8.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2c99f64d1e06488f620f932677e24bc6e2897582980441ae90a671415bd7ec2f"
-dependencies = [
- "cfg-if",
- "getrandom",
- "once_cell",
- "serde",
- "version_check",
-]
-
-[[package]]
 name = "aho-corasick"
 version = "0.7.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -185,7 +172,7 @@ version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ef956561c9a03c35af46714efd0c135e21768a2a012f900ca8a59b28e75d0cd1"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "anyhow",
  "chrono",
  "either",
@@ -654,14 +641,8 @@ version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8a9ee70c43aaf417c914396645a0fa852624801b24ebb7ae78fe8272889ac888"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
 ]
-
-[[package]]
-name = "heck"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2540771e65fc8cb83cd6e8a237f70c319bd5c29f78ed1084ba5d50eeac86f7f9"
 
 [[package]]
 name = "hermit-abi"
@@ -1039,7 +1020,8 @@ dependencies = [
  "crossbeam-channel",
  "napi",
  "napi-derive",
- "shared",
+ "serde",
+ "serde_json",
  "swc_core",
  "swc_plugins_core",
 ]
@@ -1383,33 +1365,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e0a7ae3ac2f1173085d398531c705756c94a4c56843785df85a60c1a0afac116"
 
 [[package]]
-name = "plugin_import"
-version = "0.1.0"
-dependencies = [
- "handlebars",
- "heck",
- "regex",
- "serde",
- "shared",
- "swc_core",
- "test_plugins",
-]
-
-[[package]]
 name = "plugin_lock_corejs_version"
 version = "0.1.0"
 dependencies = [
- "shared",
- "swc_core",
- "test_plugins",
-]
-
-[[package]]
-name = "plugin_lodash"
-version = "0.1.0"
-dependencies = [
- "nodejs-resolver",
- "shared",
+ "serde",
+ "serde_json",
  "swc_core",
  "test_plugins",
 ]
@@ -1419,17 +1379,6 @@ name = "plugin_modernjs_ssr_loader_id"
 version = "0.1.0"
 dependencies = [
  "md5",
- "shared",
- "swc_core",
- "test_plugins",
-]
-
-[[package]]
-name = "plugin_react_utils"
-version = "0.1.0"
-dependencies = [
- "glob",
- "shared",
  "swc_core",
  "swc_plugins_utils",
  "test_plugins",
@@ -1439,7 +1388,7 @@ dependencies = [
 name = "plugin_remove_es_module_mark"
 version = "0.1.0"
 dependencies = [
- "shared",
+ "serde",
  "swc_core",
  "swc_plugins_utils",
 ]
@@ -1473,7 +1422,7 @@ version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "db4a43af74678e784b17db952b7fd726937b0a058c7c972624ddfd366e7603e4"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "anyhow",
  "browserslist-rs",
  "dashmap",
@@ -1803,19 +1752,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "shared"
-version = "0.1.0"
-dependencies = [
- "ahash 0.8.3",
- "anyhow",
- "dashmap",
- "serde",
- "serde_json",
- "swc_core",
- "testing_macros",
-]
-
-[[package]]
 name = "similar"
 version = "2.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2001,7 +1937,7 @@ version = "0.245.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b1d8e92155c4b9930563c8a450ea1e40c4e7800f26de7b8a2665ff01fda2249c"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "anyhow",
  "base64",
  "dashmap",
@@ -2063,7 +1999,7 @@ version = "0.3.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9745d42d167cb60aeb1e85d2ee813ca455c3185bf7417f11fd102d745ae2b9e1"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "anyhow",
  "dashmap",
  "once_cell",
@@ -2077,7 +2013,7 @@ version = "0.29.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a97e491d31418cd33fea58e9f893316fc04b30e2b5d0e750c066e2ba4907ae54"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "ast_node",
  "atty",
  "better_scoped_tls",
@@ -2326,7 +2262,7 @@ version = "0.71.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1d750a65b0f3988273fee9e26796ad0759097e8993df6ec7afa979bc193bff7e"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "auto_impl",
  "dashmap",
  "parking_lot",
@@ -2347,7 +2283,7 @@ version = "0.41.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c996baa947150d496c79fbd153d3df834e38d05c779abc4af987aded90e168a2"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "anyhow",
  "dashmap",
  "lru",
@@ -2369,7 +2305,7 @@ version = "0.166.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "65c45614e538da1e670059a49b12adf8493d76ae955ad957566b292dddf0127b"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "arrayvec",
  "indexmap",
  "num-bigint",
@@ -2422,7 +2358,7 @@ version = "0.180.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f410264607e55c51e1914d810d38ec7a8ba6f7eacd39bcd4f8bec114878b04cc"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "anyhow",
  "dashmap",
  "indexmap",
@@ -2533,7 +2469,7 @@ version = "0.141.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c00f5dd10140512ff3153edfe22fa3695d8e2e40d081e3052aa1476e115caea1"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "arrayvec",
  "indexmap",
  "is-macro",
@@ -2573,7 +2509,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7063237bbd74d5550771540d825ddf7a386edfe1f09ca4cfc2ae2e7b54657deb"
 dependencies = [
  "Inflector",
- "ahash 0.7.6",
+ "ahash",
  "anyhow",
  "bitflags",
  "indexmap",
@@ -2600,7 +2536,7 @@ version = "0.172.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2008483175b532b910c6eeb4d033c29fc8332386571f99c8806255d604a646c"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "dashmap",
  "indexmap",
  "once_cell",
@@ -2644,7 +2580,7 @@ version = "0.160.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b94e3884668e2e12684e4adf812dbd22d34b17da2d7637b1c9cffe393acad6c2"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "base64",
  "dashmap",
  "indexmap",
@@ -2712,7 +2648,7 @@ version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "879ed97859a1c0f47c1fda29a2fe159454897caab2921817a89e8cffa9f86597"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "indexmap",
  "rustc-hash",
  "swc_atoms",
@@ -2805,7 +2741,7 @@ version = "0.17.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42663a304e6b2aa28ff50da0c1cb49fc9d5e84a97d57d68d7eba385602deef95"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "indexmap",
  "petgraph",
  "swc_common",
@@ -2829,29 +2765,71 @@ version = "0.16.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "12375442b54c8b99a066815c7ef600e05be883d4b73e1869b3bbb60ec4ec1c93"
 dependencies = [
- "ahash 0.7.6",
+ "ahash",
  "dashmap",
  "swc_atoms",
  "swc_common",
 ]
 
 [[package]]
+name = "swc_plugin_import"
+version = "0.1.0"
+dependencies = [
+ "handlebars",
+ "regex",
+ "rustc-hash",
+ "serde",
+ "swc_core",
+ "test_plugins",
+]
+
+[[package]]
+name = "swc_plugin_lodash"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "dashmap",
+ "nodejs-resolver",
+ "rustc-hash",
+ "serde",
+ "serde_json",
+ "swc_core",
+ "swc_plugins_utils",
+ "test_plugins",
+]
+
+[[package]]
+name = "swc_plugin_react_utils"
+version = "0.1.0"
+dependencies = [
+ "glob",
+ "rustc-hash",
+ "serde",
+ "serde_json",
+ "swc_core",
+ "swc_plugins_utils",
+ "test_plugins",
+]
+
+[[package]]
 name = "swc_plugins_core"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "insta",
  "modularize_imports",
- "plugin_import",
  "plugin_lock_corejs_version",
- "plugin_lodash",
  "plugin_modernjs_ssr_loader_id",
- "plugin_react_utils",
  "plugin_remove_es_module_mark",
- "shared",
+ "serde",
+ "serde_json",
  "styled_components",
  "styled_jsx",
  "swc_core",
  "swc_emotion",
+ "swc_plugin_import",
+ "swc_plugin_lodash",
+ "swc_plugin_react_utils",
  "swc_plugins_utils",
 ]
 
@@ -2859,7 +2837,7 @@ dependencies = [
 name = "swc_plugins_utils"
 version = "0.1.0"
 dependencies = [
- "ahash 0.8.3",
+ "rustc-hash",
  "swc_core",
 ]
 
@@ -2956,7 +2934,8 @@ name = "test_plugins"
 version = "0.1.0"
 dependencies = [
  "colored",
- "shared",
+ "serde",
+ "serde_json",
  "similar",
  "swc_core",
  "swc_plugins_core",

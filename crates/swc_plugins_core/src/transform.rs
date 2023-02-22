@@ -1,21 +1,20 @@
 use std::{path::PathBuf, sync::Arc};
 
+use anyhow::Result;
 use swc_core::{
-    base::{
-      config::{self, ModuleConfig},
-      try_with_handler, Compiler, HandlerOpts, TransformOutput,
-    },
-    common::{comments::SingleThreadedComments, errors::ColorConfig, FileName, Mark, GLOBALS},
-    ecma::{
-      ast::EsVersion,
-      parser::{Syntax, TsConfig},
-      // TODO current version too low
-      // transforms::module::common_js::Config
-    },
+  base::{
+    config::{self, ModuleConfig},
+    try_with_handler, Compiler, HandlerOpts, TransformOutput,
+  },
+  common::{comments::SingleThreadedComments, errors::ColorConfig, FileName, Mark, GLOBALS},
+  ecma::{
+    ast::EsVersion,
+    parser::{Syntax, TsConfig},
+    // TODO current version too low
+    // transforms::module::common_js::Config
+  },
 };
-use shared::{PluginContext, anyhow::Result};
-
-use swc_plugins_utils::is_esm;
+use swc_plugins_utils::{is_esm, PluginContext};
 
 use crate::pass::{internal_transform_after_pass, internal_transform_before_pass};
 use crate::types::TransformConfig;
@@ -94,7 +93,7 @@ pub fn transform(
             } else {
               ModuleConfig::CommonJs(
                 // Remove this when `swc_core` public module config API
-                shared::serde_json::from_str(
+                serde_json::from_str(
                   r#"{
                     "ignoreDynamic": true
                   }"#,

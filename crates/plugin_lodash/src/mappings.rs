@@ -2,19 +2,15 @@ use std::{
   fs,
   path::{Path, PathBuf, MAIN_SEPARATOR},
 };
-
 use nodejs_resolver::{ResolveResult, Resolver};
-use shared::{
-  ahash::AHashMap,
-  anyhow,
-  serde::{Deserialize, Serialize},
-};
+use rustc_hash::FxHashMap as HashMap;
+use serde::{Deserialize, Serialize};
 use swc_core::{common::sync::Lazy, ecma::atoms::JsWord};
 
 use crate::error::{ResolveError, ResolveErrorKind};
 
 pub type ModuleId = String; // lodash, lodash-es
-pub type Mappings = AHashMap<ModuleId, ModuleMap>; // lodash -> [...], lodash-es -> [...]
+pub type Mappings = HashMap<ModuleId, ModuleMap>; // lodash -> [...], lodash-es -> [...]
 
 #[derive(Debug)]
 pub struct Package {
@@ -89,8 +85,8 @@ impl Package {
   }
 }
 
-pub type ModuleMap = AHashMap<String, Pairs>; // lib -> [...], es -> [...], dist -> [...]
-pub type Pairs = AHashMap<String, String>; // camelcase -> camelCase, kebabcase -> kebabCase
+pub type ModuleMap = HashMap<String, Pairs>; // lib -> [...], es -> [...], dist -> [...]
+pub type Pairs = HashMap<String, String>; // camelcase -> camelCase, kebabcase -> kebabCase
 
 static RESOLVER: Lazy<Resolver> = Lazy::new(|| Resolver::new(Default::default()));
 
@@ -142,7 +138,6 @@ fn get_pkg_root(mut module_root: PathBuf) -> Option<PathBuf> {
 }
 
 #[derive(Deserialize, Serialize)]
-#[serde(crate = "shared::serde")]
 struct PkgJson {
   name: String,
   main: Option<String>,
@@ -174,7 +169,7 @@ fn init_module_map(pkg_root: PathBuf) -> anyhow::Result<ModuleMap> {
 fn get_pkg_json(module_root: &Path) -> anyhow::Result<PkgJson> {
   let pkg_json_path = Path::new(&module_root).join("package.json");
 
-  Ok(shared::serde_json::from_slice::<PkgJson>(
+  Ok(serde_json::from_slice::<PkgJson>(
     fs::read(&pkg_json_path)?.as_slice(),
   )?)
 }
@@ -182,7 +177,7 @@ fn get_pkg_json(module_root: &Path) -> anyhow::Result<PkgJson> {
 fn build_pairs(pkg_root: &Path, dir_path: &Path) -> anyhow::Result<Pairs> {
   let mut pairs = Pairs::default();
 
-  let files = fs::read_dir(&dir_path)?
+  let files = fs::read_dir(dir_path)?
     .map(|it| it.unwrap().path())
     .filter(|it| it.extension().map(|ext| ext == "js").unwrap_or(false));
 
@@ -205,8 +200,8 @@ fn build_pairs(pkg_root: &Path, dir_path: &Path) -> anyhow::Result<Pairs> {
   Ok(pairs)
 }
 
-pub fn build_pkg_map(cwd: &Path, mappings: &Mappings) -> AHashMap<JsWord, Package> {
-  let mut pkg_map = AHashMap::default();
+pub fn build_pkg_map(cwd: &Path, mappings: &Mappings) -> HashMap<JsWord, Package> {
+  let mut pkg_map = HashMap::default();
 
   for (id, module_map) in mappings {
     for base in module_map.keys() {

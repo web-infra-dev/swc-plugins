@@ -12,5 +12,5 @@ pub fn show_diff(expected: &str, res: &str) {
     };
     print!("{}", sign);
   }
-  println!("");
+  println!();
 }

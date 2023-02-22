@@ -8,7 +8,7 @@ use swc_core::{
 #[plugin_transform]
 fn transform(program: Program, meta: TransformPluginProgramMetadata) -> Program {
   let cm = Arc::new(SourceMap::default());
-  let plugin_context = Arc::new(shared::PluginContext {
+  let plugin_context = Arc::new(swc_plugins_utils::PluginContext {
     cm,
     top_level_mark: Mark::new(),
     unresolved_mark: meta.unresolved_mark,
