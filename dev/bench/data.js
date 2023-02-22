@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677059317931,
+  "lastUpdate": 1677061409558,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1763,6 +1763,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1071025991,
             "range": "± 48094150",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "7ce5a8cfab6bb783d6b754552e25575c0a159d55",
+          "message": "Merge pull request #75 from modern-js-dev/fix/ci\n\nfix: fix wrong Rust toolchain on CI",
+          "timestamp": "2023-02-22T17:51:28+08:00",
+          "tree_id": "ae38ae08e7cda96bb0dbbd8d6eee7a644578b97e",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/7ce5a8cfab6bb783d6b754552e25575c0a159d55"
+        },
+        "date": 1677061408206,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 1019866563,
+            "range": "± 183859623",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1060290307,
+            "range": "± 133734261",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1062571296,
+            "range": "± 139633268",
             "unit": "ns/iter"
           }
         ]
