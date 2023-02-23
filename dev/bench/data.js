@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677138555838,
+  "lastUpdate": 1677141238519,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -2037,6 +2037,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1093954302,
             "range": "± 98040428",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1114550440@qq.com",
+            "name": "Fy",
+            "username": "JSerFeng"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "1399722c05364665f2aba7001d3b2b772972bd79",
+          "message": "feat: add error message when not resolve .node binary (#78)",
+          "timestamp": "2023-02-23T16:07:49+08:00",
+          "tree_id": "39181261d192f8323f44c3707b8ba9f9c0c2b857",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/1399722c05364665f2aba7001d3b2b772972bd79"
+        },
+        "date": 1677141236825,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 1143748111,
+            "range": "± 139225101",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1313328735,
+            "range": "± 248984262",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1304236366,
+            "range": "± 188984591",
             "unit": "ns/iter"
           }
         ]
