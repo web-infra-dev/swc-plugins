@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677123278903,
+  "lastUpdate": 1677138555838,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1999,6 +1999,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 886607957,
             "range": "± 59337902",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "committer": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "id": "ef624e5ffaaac793de8347e8d9e2448e7a4c8b18",
+          "message": "feat: add error message when not resolve .node binary",
+          "timestamp": "2023-02-23T05:32:05Z",
+          "url": "https://github.com/modern-js-dev/swc-plugins/pull/78/commits/ef624e5ffaaac793de8347e8d9e2448e7a4c8b18"
+        },
+        "date": 1677138554326,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 1049293907,
+            "range": "± 109123378",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1133100125,
+            "range": "± 147556389",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1093954302,
+            "range": "± 98040428",
             "unit": "ns/iter"
           }
         ]
