@@ -1,4 +1,12 @@
-const { minify, minifySync, Compiler: RawCompiler } = require('./index')
+let binding;
+try {
+  binding = require('./index')
+} catch (e) {
+  console.error("Can't find SWC binary, you can try following ways to solve this:\n1. Upgrade your Node.js version to 14.19, and reinstall dependencies.\n2. Make sure your Node.js matches your computer OS and CPU architecture, you can check that by printing `process.arch` and `process.platform`.\n")
+  throw e
+}
+
+const { minify, minifySync, Compiler: RawCompiler } = binding
 
 class Compiler extends RawCompiler {
   constructor(config) {
