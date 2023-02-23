@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677072699835,
+  "lastUpdate": 1677117600278,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -1919,6 +1919,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1296826897,
             "range": "± 85104176",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "37becf7dc3fd1874219255a71c8ae3726d80b62e",
+          "message": "Merge pull request #76 from modern-js-dev/feat/publish-crate\n\nfeat(CI): add publish plugin-import crate on CI",
+          "timestamp": "2023-02-23T09:39:18+08:00",
+          "tree_id": "e1bee120c4a7da8b4a46c40610bccd87b32df604",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/37becf7dc3fd1874219255a71c8ae3726d80b62e"
+        },
+        "date": 1677117599493,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 948353351,
+            "range": "± 102511190",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 895248341,
+            "range": "± 215513724",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 815883248,
+            "range": "± 64662029",
             "unit": "ns/iter"
           }
         ]
