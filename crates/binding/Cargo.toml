@@ -17,5 +17,6 @@ napi = { version = "2.9.1", default-features = false, features = ["napi7"] }
 napi-derive = "2.9.1"
 swc_core = { workspace = true, features = ["base", "common"] }
 swc_plugins_core = { path = "../swc_plugins_core" }
+swc_plugins_collection = { path = "../swc_plugins_collection" }
 serde_json = { workspace = true }
 serde = { workspace = true }

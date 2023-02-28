@@ -2,7 +2,7 @@ use std::env::current_dir;
 
 use test_plugins::{
   fixture::{BaseFixtureHook, FixtureTester},
-  swc_plugins_core::types::TransformConfig,
+  swc_plugins_collection::types::TransformConfig,
 };
 
 #[test]

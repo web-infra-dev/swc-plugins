@@ -16,3 +16,4 @@ swc_core = { workspace = true, features = [
   "testing_transform",
 ] }
 swc_plugins_core = { path = "../swc_plugins_core" }
+swc_plugins_collection = { path = "../swc_plugins_collection" }
