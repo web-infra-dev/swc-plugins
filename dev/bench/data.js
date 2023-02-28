@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677567219239,
+  "lastUpdate": 1677573375126,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -2235,6 +2235,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1099218130,
             "range": "± 72861382",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "committer": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "id": "ccd050373e15471293f4828791bc4aebdd6fcb57",
+          "message": "chore: add more publish crates",
+          "timestamp": "2023-02-23T05:32:05Z",
+          "url": "https://github.com/modern-js-dev/swc-plugins/pull/81/commits/ccd050373e15471293f4828791bc4aebdd6fcb57"
+        },
+        "date": 1677573373542,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 855374966,
+            "range": "± 106203466",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 971728868,
+            "range": "± 71000600",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 950960742,
+            "range": "± 115324417",
             "unit": "ns/iter"
           }
         ]
