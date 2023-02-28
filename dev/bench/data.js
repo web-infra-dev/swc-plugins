@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677564854426,
+  "lastUpdate": 1677567219239,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -2193,6 +2193,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1065013076,
             "range": "± 51131659",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "ba1b5f36e40daa9aecd5315ebee33fed26a02548",
+          "message": "feat: separate the plugin from the core layer (#80)\n\n* feat: separate the plugin from the core layer\r\n\r\nWe need reuse the node-binding | swc_plugins_core\r\n\r\n* docs: add changeset",
+          "timestamp": "2023-02-28T14:31:22+08:00",
+          "tree_id": "d3243cedea679def2e33a4cbf9293ea9b859fe06",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/ba1b5f36e40daa9aecd5315ebee33fed26a02548"
+        },
+        "date": 1677567218324,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 1064347284,
+            "range": "± 72898327",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1156289000,
+            "range": "± 125666441",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1099218130,
+            "range": "± 72861382",
             "unit": "ns/iter"
           }
         ]
