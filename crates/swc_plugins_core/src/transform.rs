@@ -3,21 +3,21 @@ use std::{path::PathBuf, sync::Arc};
 use anyhow::Result;
 use swc_core::{
   base::{
-    config::{self, ModuleConfig},
+    config::{self, ModuleConfig, Options},
     try_with_handler, Compiler, HandlerOpts, TransformOutput,
   },
   common::{comments::SingleThreadedComments, errors::ColorConfig, FileName, Mark, GLOBALS},
   ecma::{
     ast::EsVersion,
     parser::{Syntax, TsConfig},
+    visit::Fold,
     // TODO current version too low
     // transforms::module::common_js::Config
   },
 };
 use swc_plugins_utils::{is_esm, PluginContext};
 
-use crate::pass::{internal_transform_after_pass, internal_transform_before_pass};
-use crate::types::TransformConfig;
+use crate::TransformFn;
 
 /// As we initialize plugins at each transform,
 /// Some plugins need very heavy work on the first
@@ -29,14 +29,22 @@ use crate::types::TransformConfig;
 ///
 /// If you call `transform` from `nodejs`, this config hash
 /// is unique for each `binding::Compiler`.
-pub fn transform(
+pub fn transform<'a, E, P1, P2>(
   compiler: Arc<Compiler>,
-  config: &TransformConfig,
+  swc_config: &Options,
+  extensions: &'a E,
   filename: impl Into<String>,
   code: &str,
   input_source_map: Option<String>,
   config_hash: Option<String>,
-) -> Result<TransformOutput> {
+  transform_before_pass: TransformFn<'a, E, P1>,
+  transform_after_pass: TransformFn<'a, E, P2>,
+) -> Result<TransformOutput>
+where
+  E: 'a,
+  P1: Fold + 'a,
+  P2: Fold + 'a,
+{
   GLOBALS.set(&Default::default(), || {
     let cm = compiler.cm.clone();
     let filename: String = filename.into();
@@ -57,9 +65,7 @@ pub fn transform(
 
           let fm = cm.new_source_file(cm_filename, code.to_string());
 
-          let mut swc_config = config::Options {
-            ..config.swc.clone()
-          };
+          let mut swc_config = swc_config.clone();
           swc_config.config.input_source_map = input_source_map.map(config::InputSourceMap::Str);
           swc_config.filename = filename.clone();
 
@@ -123,16 +129,8 @@ pub fn transform(
             &swc_config,
             comments,
             // TODO pass comments to internal pass in next swc versions
-            |_| {
-              internal_transform_before_pass(
-                &config.extensions,
-                &swc_config,
-                plugin_context.clone(),
-              )
-            },
-            |_| {
-              internal_transform_after_pass(&config.extensions, &swc_config, plugin_context.clone())
-            },
+            |_| transform_before_pass(&extensions, &swc_config, plugin_context.clone()),
+            |_| transform_after_pass(&extensions, &swc_config, plugin_context.clone()),
           )
         })
       },

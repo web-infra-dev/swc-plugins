@@ -1,4 +1,4 @@
-use swc_plugins_core::types::TransformConfig;
+use swc_plugins_collection::types::TransformConfig;
 
 use napi_derive::napi;
 

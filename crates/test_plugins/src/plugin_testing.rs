@@ -1,6 +1,7 @@
 use std::sync::Arc;
 use swc_core::{base::Compiler, common::sync::Lazy};
-use swc_plugins_core::{transform, types::TransformConfig};
+use swc_plugins_core::{ transform };
+use swc_plugins_collection::{pass, types::TransformConfig};
 
 use crate::utils::show_diff;
 
@@ -8,8 +9,19 @@ static COMPILER: Lazy<Arc<Compiler>> = Lazy::new(|| Arc::new(Compiler::new(Defau
 
 pub fn test(config: &str, filename: &str, input: &str, expected: &str, hash: Option<String>) {
   let config: TransformConfig = serde_json::from_str(config).unwrap();
+  let TransformConfig { swc, extensions } = &config;
 
-  let res = transform(COMPILER.clone(), &config, filename, input, None, hash);
+  let res = transform(
+    COMPILER.clone(),
+    swc,
+    extensions,
+    filename,
+    input,
+    None,
+    hash,
+    pass::internal_transform_before_pass,
+    pass::internal_transform_after_pass,
+  );
 
   match res {
     Ok(res) => {

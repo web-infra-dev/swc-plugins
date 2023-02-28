@@ -23,7 +23,8 @@ use std::{
     Arc,
   },
 };
-use swc_plugins_core::types::TransformConfig;
+use swc_plugins_collection::pass::{internal_transform_after_pass, internal_transform_before_pass};
+use swc_plugins_collection::types::TransformConfig;
 
 // ===== Internal Rust struct under the hood =====
 pub struct Compiler {
@@ -176,11 +177,14 @@ impl TransformTask {
 
     swc_plugins_core::transform(
       compiler.swc_compiler.clone(),
-      &compiler.config,
+      &compiler.config.swc,
+      &compiler.config.extensions,
       &self.filename,
       &self.code,
       self.map.clone(),
       Some(compiler.id.to_string()),
+      internal_transform_before_pass,
+      internal_transform_after_pass,
     )
     .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
   }

@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use swc_plugins_core::types::Extensions;
+use swc_plugins_collection::types::Extensions;
 
 use super::plugin_emotion::EmotionOptionsNapi;
 use super::plugin_lock_corejs_version::LockCoreJsVersionNapi;
@@ -41,7 +41,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       styled_components,
       styled_jsx,
       lodash,
-      modernjs_ssr_loader_id
+      modernjs_ssr_loader_id,
     } = self;
 
     Ok(Extensions {
@@ -53,7 +53,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       styled_components: styled_components.into_raw_config(env)?,
       styled_jsx,
       lodash: lodash.into_raw_config(env)?,
-      modernjs_ssr_loader_id
+      modernjs_ssr_loader_id,
     })
   }
 }

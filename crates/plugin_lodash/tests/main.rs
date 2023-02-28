@@ -1,8 +1,8 @@
-use swc_plugin_lodash::PluginLodashConfig;
 use swc_core::cached::regex::CachedRegex;
+use swc_plugin_lodash::PluginLodashConfig;
 use test_plugins::{
   fixture::{BaseFixtureHook, FixtureTester},
-  swc_plugins_core::types::{Extensions, TransformConfig},
+  swc_plugins_collection::types::{Extensions, TransformConfig},
 };
 
 #[test]
