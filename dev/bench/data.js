@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677141647168,
+  "lastUpdate": 1677556294259,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -2117,6 +2117,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1071498192,
             "range": "± 117942483",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "committer": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "id": "172568472752017b364f057f26bbe77e0c8df9da",
+          "message": "feat: separate the plugin from the core layer",
+          "timestamp": "2023-02-23T05:32:05Z",
+          "url": "https://github.com/modern-js-dev/swc-plugins/pull/80/commits/172568472752017b364f057f26bbe77e0c8df9da"
+        },
+        "date": 1677556292718,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 1315432997,
+            "range": "± 145065271",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1360784630,
+            "range": "± 95398075",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1404971327,
+            "range": "± 84669744",
             "unit": "ns/iter"
           }
         ]
