@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677573618847,
+  "lastUpdate": 1677642960675,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -2311,6 +2311,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1047578982,
             "range": "± 50606795",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "committer": {
+            "name": "modern-js-dev",
+            "username": "modern-js-dev"
+          },
+          "id": "c48c5e03b8533f699163f19a79f8b15e7d65594c",
+          "message": "feat: sink more types in plugin collection",
+          "timestamp": "2023-02-23T05:32:05Z",
+          "url": "https://github.com/modern-js-dev/swc-plugins/pull/82/commits/c48c5e03b8533f699163f19a79f8b15e7d65594c"
+        },
+        "date": 1677642959102,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 793997210,
+            "range": "± 117046270",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 899548398,
+            "range": "± 89774137",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 836016068,
+            "range": "± 39707387",
             "unit": "ns/iter"
           }
         ]
