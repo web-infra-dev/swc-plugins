@@ -32,7 +32,7 @@ use crate::TransformFn;
 pub fn transform<'a, E, P1, P2>(
   compiler: Arc<Compiler>,
   swc_config: &Options,
-  extensions: &'a E,
+  extensions_config: &'a E,
   filename: impl Into<String>,
   code: &str,
   input_source_map: Option<String>,
@@ -129,8 +129,8 @@ where
             &swc_config,
             comments,
             // TODO pass comments to internal pass in next swc versions
-            |_| transform_before_pass(&extensions, &swc_config, plugin_context.clone()),
-            |_| transform_after_pass(&extensions, &swc_config, plugin_context.clone()),
+            |_| transform_before_pass(&extensions_config, &swc_config, plugin_context.clone()),
+            |_| transform_after_pass(&extensions_config, &swc_config, plugin_context.clone()),
           )
         })
       },
