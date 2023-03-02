@@ -6,7 +6,7 @@ members = ["crates/*"]
 
 [workspace.package]
 version = "0.1.0"
-description = "A suite of Modern.j SWC plugins"
+description = "SWC plugins for Modern.js Builder & Rspack."
 license = "MIT"
 repository = "https://github.com/modern-js-dev/swc-plugins"
 readme = "readme.md"
