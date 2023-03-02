@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677726948787,
+  "lastUpdate": 1677728422186,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -2505,6 +2505,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 904195638,
             "range": "± 73099934",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "b5c58eba420042c436da9d36d276acd73240f9d6",
+          "message": "Merge pull request #84 from modern-js-dev/fix/export-type-from-binding\n\nfix(binding): export more binding struct",
+          "timestamp": "2023-03-02T11:21:35+08:00",
+          "tree_id": "10011a1556d4afca20bfbff5ea040b8ccd31b112",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/b5c58eba420042c436da9d36d276acd73240f9d6"
+        },
+        "date": 1677728420861,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 836337834,
+            "range": "± 27802908",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 935221629,
+            "range": "± 25747505",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 870462461,
+            "range": "± 52845194",
             "unit": "ns/iter"
           }
         ]
