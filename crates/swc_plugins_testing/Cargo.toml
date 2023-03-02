@@ -3,7 +3,6 @@ edition = "2021"
 name = "modern_swc_plugins_testing"
 version = "0.1.0"
 
-
 [dependencies]
 colored = "2.0.0"
 serde = { workspace = true }

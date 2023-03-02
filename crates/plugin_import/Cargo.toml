@@ -3,7 +3,6 @@ edition = "2021"
 name = "swc_plugin_import"
 version = "0.1.0"
 
-
 [dependencies]
 handlebars = "4.3.3"
 regex = "1.6.0"

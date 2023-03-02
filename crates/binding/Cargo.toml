@@ -3,7 +3,6 @@ edition = "2021"
 name = "modern_swc_binding"
 version = "0.1.0"
 
-
 [lib]
 crate-type = ["cdylib", "lib"]
 

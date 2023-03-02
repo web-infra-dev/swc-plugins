@@ -3,7 +3,6 @@ edition = "2021"
 name = "swc_plugin_remove_es_module_mark"
 version = "0.1.0"
 
-
 [dependencies]
 swc_core = { workspace = true, features = [
   "common",

@@ -3,7 +3,6 @@ edition = "2021"
 name = "swc_plugin_modernjs_ssr_loader_id"
 version = "0.1.0"
 
-
 [lib]
 crate-type = ["rlib", "cdylib"]
 

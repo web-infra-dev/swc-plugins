@@ -3,7 +3,6 @@ edition = "2021"
 name = "swc_plugin_lodash"
 version = "0.1.0"
 
-
 [dependencies]
 nodejs-resolver = "0.0.60"
 serde = { workspace = true }

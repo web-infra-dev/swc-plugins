@@ -5,7 +5,7 @@ exclude = ["crates/plugin_modernjs_ssr_loader_id/wasm"]
 members = ["crates/*"]
 
 [workspace.package]
-version = "0.1.1"
+version = "0.1.0"
 description = "A suite of Modern.j SWC plugins"
 license = "MIT"
 repository = "https://github.com/modern-js-dev/swc-plugins"

@@ -19,4 +19,4 @@ jobs:
       - name: publish
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-        run: cargo publish -p swc_plugin_import
+        run: cargo publish
