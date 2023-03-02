@@ -1,5 +1,5 @@
 use modularize_imports::PackageConfig;
-use plugin_lock_corejs_version::LockCoreJsVersion;
+use swc_plugin_lock_corejs_version::LockCoreJsVersion;
 use serde::Deserialize;
 use std::collections::HashMap;
 use swc_core::base::config::Options;

@@ -1,6 +1,6 @@
 [package]
 edition = "2021"
-name = "plugin_modernjs_ssr_loader_id"
+name = "swc_plugin_modernjs_ssr_loader_id"
 version = "0.1.0"
 
 [lib]
@@ -8,7 +8,7 @@ crate-type = ["rlib", "cdylib"]
 
 [dependencies]
 md5 = "0.7.0"
-swc_plugins_utils = { path = "../swc_plugins_utils" }
+modern_swc_plugins_utils = { path = "../swc_plugins_utils" }
 swc_core = { workspace = true, features = [
   "common",
   "ecma_ast",
@@ -17,4 +17,4 @@ swc_core = { workspace = true, features = [
 ] }
 
 [dev_dependencies]
-test_plugins = { path = "../test_plugins" }
+modern_swc_plugins_testing = { path = "../swc_plugins_testing" }

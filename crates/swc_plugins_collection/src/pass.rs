@@ -1,16 +1,16 @@
 use std::{path::Path, sync::Arc};
 
 use crate::types::Extensions;
-use plugin_lock_corejs_version::lock_corejs_version;
-use plugin_remove_es_module_mark::remove_es_module_mark;
+use modern_swc_plugins_utils::PluginContext;
 use swc_core::{
   base::config::{ModuleConfig, Options},
   common::{chain, pass::Either, FileName},
   ecma::transforms::base::pass::noop,
   ecma::visit::Fold,
 };
+use swc_plugin_lock_corejs_version::lock_corejs_version;
 use swc_plugin_lodash::plugin_lodash;
-use swc_plugins_utils::PluginContext;
+use swc_plugin_remove_es_module_mark::remove_es_module_mark;
 
 use modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use swc_plugin_import::plugin_import;
@@ -51,7 +51,7 @@ pub fn internal_transform_before_pass<'a>(
 
   let modernjs_ssr_loader_id = if *extensions.modernjs_ssr_loader_id.as_ref().unwrap_or(&false) {
     Either::Left(
-      plugin_modernjs_ssr_loader_id::plugin_modernjs_ssr_loader_id(plugin_context.clone()),
+      swc_plugin_modernjs_ssr_loader_id::plugin_modernjs_ssr_loader_id(plugin_context.clone()),
     )
   } else {
     Either::Right(noop())

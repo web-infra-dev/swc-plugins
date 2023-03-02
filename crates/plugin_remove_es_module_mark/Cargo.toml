@@ -1,6 +1,6 @@
 [package]
 edition = "2021"
-name = "plugin_remove_es_module_mark"
+name = "swc_plugin_remove_es_module_mark"
 version = "0.1.0"
 
 [dependencies]
@@ -10,5 +10,5 @@ swc_core = { workspace = true, features = [
   "ecma_visit",
   "ecma_quote",
 ] }
-swc_plugins_utils = { path = "../swc_plugins_utils" }
+modern_swc_plugins_utils = { path = "../swc_plugins_utils" }
 serde = { workspace = true }

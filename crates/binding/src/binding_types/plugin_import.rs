@@ -1,4 +1,6 @@
-use swc_plugins_collection::swc_plugin_import::{CustomTransform, PluginImportConfig, StyleConfig};
+use modern_swc_plugins_collection::swc_plugin_import::{
+  CustomTransform, PluginImportConfig, StyleConfig,
+};
 
 use napi::{Env, JsFunction, JsString, Ref, Status};
 use napi_derive::napi;

@@ -1,9 +1,9 @@
+use modern_swc_plugins_testing::{
+  fixture::{BaseFixtureHook, FixtureTester},
+  modern_swc_plugins_collection::types::{Extensions, TransformConfig},
+};
 use swc_core::cached::regex::CachedRegex;
 use swc_plugin_lodash::PluginLodashConfig;
-use test_plugins::{
-  fixture::{BaseFixtureHook, FixtureTester},
-  swc_plugins_collection::types::{Extensions, TransformConfig},
-};
 
 #[test]
 fn test_fixtures() {

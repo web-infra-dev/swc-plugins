@@ -1,6 +1,6 @@
 [package]
 edition = "2021"
-name = "test_plugins"
+name = "modern_swc_plugins_testing"
 version = "0.1.0"
 
 [dependencies]
@@ -15,5 +15,5 @@ swc_core = { workspace = true, features = [
   "ecma_transforms",
   "testing_transform",
 ] }
-swc_plugins_core = { path = "../swc_plugins_core" }
-swc_plugins_collection = { path = "../swc_plugins_collection" }
+modern_swc_plugins_core = { path = "../swc_plugins_core" }
+modern_swc_plugins_collection = { path = "../swc_plugins_collection" }

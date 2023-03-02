@@ -3,8 +3,6 @@ edition = "2021"
 name = "swc_plugin_react_utils"
 version = "0.1.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 swc_core = { workspace = true, features = [
   "cached",
@@ -13,11 +11,11 @@ swc_core = { workspace = true, features = [
   "ecma_visit",
   "ecma_quote",
 ] }
-swc_plugins_utils = { path = "../swc_plugins_utils" }
+modern_swc_plugins_utils = { path = "../swc_plugins_utils" }
 serde = { workspace = true }
 rustc-hash = { workspace = true }
 
 [dev-dependencies]
 glob = "0.3.0"
 serde_json = { workspace = true }
-test_plugins = { path = "../test_plugins" }
+modern_swc_plugins_testing = { path = "../swc_plugins_testing" }

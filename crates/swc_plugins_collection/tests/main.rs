@@ -1,10 +1,10 @@
-use std::{ sync::Arc};
+use modern_swc_plugins_collection::{pass, types};
+use modern_swc_plugins_core::transform;
+use std::sync::Arc;
 use swc_core::{
   base::{config::Options, Compiler},
   common::SourceMap,
 };
-use swc_plugins_collection::{pass, types};
-use swc_plugins_core::{ transform};
 
 #[test]
 fn test() {

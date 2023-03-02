@@ -4,6 +4,13 @@ cargo-features = ["strip"]
 exclude = ["crates/plugin_modernjs_ssr_loader_id/wasm"]
 members = ["crates/*"]
 
+[workspace.package]
+version = "0.1.0"
+description = "SWC plugins for Modern.js Builder & Rspack."
+license = "MIT"
+repository = "https://github.com/modern-js-dev/swc-plugins"
+readme = "readme.md"
+
 [profile.release]
 lto = false
 
