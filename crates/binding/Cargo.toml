@@ -4,7 +4,7 @@ name = "modern_swc_binding"
 version = "0.1.0"
 
 [lib]
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "lib"]
 
 [features]
 dev = []
