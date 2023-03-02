@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677725507151,
+  "lastUpdate": 1677725584264,
   "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -2387,6 +2387,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1025962622,
             "range": "± 102927693",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "1fdadb23d9cd1004b230b5a90dfb90afc116974e",
+          "message": "Merge pull request #82 from modern-js-dev/feat/sink_more_types_in_plugin_collection\n\nfeat: sink more types in plugin collection",
+          "timestamp": "2023-03-02T10:24:15+08:00",
+          "tree_id": "43e98360fc439528569991a0db6b69203fe51087",
+          "url": "https://github.com/modern-js-dev/swc-plugins/commit/1fdadb23d9cd1004b230b5a90dfb90afc116974e"
+        },
+        "date": 1677725583010,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 867901700,
+            "range": "± 120579848",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1032176274,
+            "range": "± 286067394",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1020988252,
+            "range": "± 109412021",
             "unit": "ns/iter"
           }
         ]
