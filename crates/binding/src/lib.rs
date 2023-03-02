@@ -1,6 +1,6 @@
 mod binding_types;
 mod thread_safe_function;
-use binding_types::{IntoRawConfig, TransformConfigNapi};
+pub use binding_types::{ExtensionsNapi, IntoRawConfig, TransformConfigNapi};
 use napi::{bindgen_prelude::AsyncTask, Env, JsObject, Result, Status, Task};
 
 use napi_derive::napi;

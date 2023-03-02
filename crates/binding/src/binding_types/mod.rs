@@ -12,6 +12,7 @@ pub mod plugin_styled_jsx;
 use std::collections::HashMap;
 
 pub use config::TransformConfigNapi;
+pub use extensions::ExtensionsNapi;
 use napi::{Env, Error, Result, Status};
 use swc_core::cached::regex::CachedRegex;
 pub trait IntoRawConfig<T> {
