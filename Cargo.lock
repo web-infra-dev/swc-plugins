@@ -2840,19 +2840,9 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "insta",
- "modularize_imports",
- "plugin_lock_corejs_version",
- "plugin_modernjs_ssr_loader_id",
- "plugin_remove_es_module_mark",
  "serde",
  "serde_json",
- "styled_components",
- "styled_jsx",
  "swc_core",
- "swc_emotion",
- "swc_plugin_import",
- "swc_plugin_lodash",
- "swc_plugin_react_utils",
  "swc_plugins_utils",
 ]
 

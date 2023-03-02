@@ -1,5 +1,5 @@
 use napi_derive::napi;
-use swc_plugins_core::plugin_lock_corejs_version::LockCoreJsVersion;
+use swc_plugins_collection::plugin_lock_corejs_version::LockCoreJsVersion;
 
 use super::IntoRawConfig;
 
