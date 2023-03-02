@@ -1,7 +1,8 @@
 [package]
 edition = "2021"
-name = "swc_plugins_utils"
+name = "modern_swc_plugins_utils"
 version = "0.1.0"
+
 
 [dependencies]
 swc_core = { workspace = true, features = [

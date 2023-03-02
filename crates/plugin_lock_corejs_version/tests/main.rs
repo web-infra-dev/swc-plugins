@@ -1,8 +1,8 @@
 use std::env::current_dir;
 
-use test_plugins::{
+use modern_swc_plugins_testing::{
   fixture::{BaseFixtureHook, FixtureTester},
-  swc_plugins_collection::types::TransformConfig,
+  modern_swc_plugins_collection::types::TransformConfig,
 };
 
 #[test]

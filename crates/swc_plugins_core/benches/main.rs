@@ -1,11 +1,11 @@
 #![feature(test)]
 #![allow(soft_unstable)]
+use modern_swc_plugins_core::minify;
 use std::{env::current_dir, fs, path::Path, process::Termination, sync::Arc};
 use swc_core::{
   base::{try_with_handler, Compiler},
   common::{FileName, SourceMap, GLOBALS},
 };
-use swc_plugins_core::minify;
 extern crate test;
 
 fn read_to_string(s: &Path) -> String {

@@ -15,7 +15,7 @@ swc_core = { workspace = true, features = [
   "ecma_ast",
   "common",
 ] }
-swc_plugins_utils = { workspace = true }
+modern_swc_plugins_utils = { workspace = true }
 
 [dev_dependencies]
 test_plugins = { path = "../../test_plugins" }

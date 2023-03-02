@@ -1,12 +1,13 @@
 [package]
 edition = "2021"
-name = "plugin_lock_corejs_version"
+name = "swc_plugin_lock_corejs_version"
 version = "0.1.0"
+
 
 [dependencies]
 serde = { workspace = true }
 swc_core = { workspace = true, features = ["common", "ecma_visit", "ecma_ast"] }
 
 [dev-dependencies]
-test_plugins = { path = "../test_plugins" }
+modern_swc_plugins_testing = { path = "../swc_plugins_testing" }
 serde_json = { workspace = true }

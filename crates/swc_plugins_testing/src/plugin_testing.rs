@@ -1,7 +1,7 @@
+use modern_swc_plugins_collection::{pass, types::TransformConfig};
+use modern_swc_plugins_core::transform;
 use std::sync::Arc;
 use swc_core::{base::Compiler, common::sync::Lazy};
-use swc_plugins_core::{ transform };
-use swc_plugins_collection::{pass, types::TransformConfig};
 
 use crate::utils::show_diff;
 
