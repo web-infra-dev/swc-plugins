@@ -1,7 +1,7 @@
 use super::IntoRawConfig;
-use modern_swc_plugins_collection::modularize_imports::PackageConfig;
 use napi_derive::napi;
 use serde::Deserialize;
+use swc_plugins_collection::modularize_imports::PackageConfig;
 
 #[napi(object)]
 #[derive(Clone, Debug, Deserialize)]

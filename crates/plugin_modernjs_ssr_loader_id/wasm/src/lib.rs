@@ -1,15 +1,14 @@
 use plugin_modernjs_ssr_loader_id::plugin_modernjs_ssr_loader_id;
-use std::{env::current_dir, sync::Arc};
+use std::{sync::Arc, env::current_dir};
 use swc_core::{
-  common::{comments::SingleThreadedComments, Mark, SourceMap},
   ecma::{ast::Program, visit::FoldWith},
-  plugin::{plugin_transform, proxies::TransformPluginProgramMetadata},
+  plugin::{plugin_transform, proxies::TransformPluginProgramMetadata}, common::{SourceMap, Mark, comments::SingleThreadedComments},
 };
 
 #[plugin_transform]
 fn transform(program: Program, meta: TransformPluginProgramMetadata) -> Program {
   let cm = Arc::new(SourceMap::default());
-  let plugin_context = Arc::new(modern_swc_plugins_utils::PluginContext {
+  let plugin_context = Arc::new(swc_plugins_utils::PluginContext {
     cm,
     top_level_mark: Mark::new(),
     unresolved_mark: meta.unresolved_mark,

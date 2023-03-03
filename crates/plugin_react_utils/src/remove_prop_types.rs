@@ -1,11 +1,6 @@
-use modern_swc_plugins_utils::PluginContext;
-use modern_swc_plugins_utils::{
-  collect_bindings, contain_ident, count_ident, is_react_component, is_react_component_class,
-  is_return_jsx, remove_invalid_expr, BindingInfo, ReactComponentType,
-};
 use rustc_hash::{FxHashMap as HashMap, FxHashSet as HashSet};
 use serde::Deserialize;
-use std::{borrow::BorrowMut, ops::DerefMut, sync::Arc};
+use swc_plugins_utils::PluginContext;
 use swc_core::{
   self,
   cached::regex::CachedRegex,
@@ -14,12 +9,18 @@ use swc_core::{
     ast::{
       AssignExpr, BlockStmt, Class, ClassDecl, ClassExpr, ClassMember, ClassProp, Decl,
       DefaultDecl, ExportDecl, ExportDefaultDecl, ExportDefaultExpr, Expr, ExprStmt, FnDecl, Id,
-      Ident, ImportDecl, ImportSpecifier, Module, ModuleDecl, ModuleItem, PropName, Stmt, VarDecl,
+      Ident, ImportDecl, ImportSpecifier, Module, ModuleDecl, ModuleItem, PropName, Stmt,
+      VarDecl,
     },
     atoms::JsWord,
     visit::{as_folder, Fold, Visit, VisitMut, VisitMutWith, VisitWith},
   },
   quote,
+};
+use std::{borrow::BorrowMut, ops::DerefMut, sync::Arc};
+use swc_plugins_utils::{
+  collect_bindings, contain_ident, count_ident, is_react_component, is_react_component_class,
+  is_return_jsx, remove_invalid_expr, BindingInfo, ReactComponentType,
 };
 
 pub fn react_remove_prop_types(

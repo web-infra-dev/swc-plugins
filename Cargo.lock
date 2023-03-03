@@ -1018,68 +1018,13 @@ name = "modern_swc_binding"
 version = "0.1.0"
 dependencies = [
  "crossbeam-channel",
- "modern_swc_plugins_collection",
- "modern_swc_plugins_core",
  "napi",
  "napi-derive",
  "serde",
  "serde_json",
  "swc_core",
-]
-
-[[package]]
-name = "modern_swc_plugins_collection"
-version = "0.1.0"
-dependencies = [
- "insta",
- "modern_swc_plugins_core",
- "modern_swc_plugins_utils",
- "modularize_imports",
- "serde",
- "serde_json",
- "styled_components",
- "styled_jsx",
- "swc_core",
- "swc_emotion",
- "swc_plugin_import",
- "swc_plugin_lock_corejs_version",
- "swc_plugin_lodash",
- "swc_plugin_modernjs_ssr_loader_id",
- "swc_plugin_react_utils",
- "swc_plugin_remove_es_module_mark",
-]
-
-[[package]]
-name = "modern_swc_plugins_core"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "insta",
- "modern_swc_plugins_utils",
- "serde",
- "serde_json",
- "swc_core",
-]
-
-[[package]]
-name = "modern_swc_plugins_testing"
-version = "0.1.0"
-dependencies = [
- "colored",
- "modern_swc_plugins_collection",
- "modern_swc_plugins_core",
- "serde",
- "serde_json",
- "similar",
- "swc_core",
-]
-
-[[package]]
-name = "modern_swc_plugins_utils"
-version = "0.1.0"
-dependencies = [
- "rustc-hash",
- "swc_core",
+ "swc_plugins_collection",
+ "swc_plugins_core",
 ]
 
 [[package]]
@@ -1419,6 +1364,35 @@ name = "pin-project-lite"
 version = "0.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e0a7ae3ac2f1173085d398531c705756c94a4c56843785df85a60c1a0afac116"
+
+[[package]]
+name = "plugin_lock_corejs_version"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "swc_core",
+ "test_plugins",
+]
+
+[[package]]
+name = "plugin_modernjs_ssr_loader_id"
+version = "0.1.0"
+dependencies = [
+ "md5",
+ "swc_core",
+ "swc_plugins_utils",
+ "test_plugins",
+]
+
+[[package]]
+name = "plugin_remove_es_module_mark"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "swc_core",
+ "swc_plugins_utils",
+]
 
 [[package]]
 name = "pmutil"
@@ -2803,21 +2777,11 @@ name = "swc_plugin_import"
 version = "0.1.0"
 dependencies = [
  "handlebars",
- "modern_swc_plugins_testing",
  "regex",
  "rustc-hash",
  "serde",
  "swc_core",
-]
-
-[[package]]
-name = "swc_plugin_lock_corejs_version"
-version = "0.1.0"
-dependencies = [
- "modern_swc_plugins_testing",
- "serde",
- "serde_json",
- "swc_core",
+ "test_plugins",
 ]
 
 [[package]]
@@ -2826,23 +2790,13 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "dashmap",
- "modern_swc_plugins_testing",
- "modern_swc_plugins_utils",
  "nodejs-resolver",
  "rustc-hash",
  "serde",
  "serde_json",
  "swc_core",
-]
-
-[[package]]
-name = "swc_plugin_modernjs_ssr_loader_id"
-version = "0.1.0"
-dependencies = [
- "md5",
- "modern_swc_plugins_testing",
- "modern_swc_plugins_utils",
- "swc_core",
+ "swc_plugins_utils",
+ "test_plugins",
 ]
 
 [[package]]
@@ -2850,20 +2804,53 @@ name = "swc_plugin_react_utils"
 version = "0.1.0"
 dependencies = [
  "glob",
- "modern_swc_plugins_testing",
- "modern_swc_plugins_utils",
  "rustc-hash",
  "serde",
  "serde_json",
  "swc_core",
+ "swc_plugins_utils",
+ "test_plugins",
 ]
 
 [[package]]
-name = "swc_plugin_remove_es_module_mark"
+name = "swc_plugins_collection"
 version = "0.1.0"
 dependencies = [
- "modern_swc_plugins_utils",
+ "insta",
+ "modularize_imports",
+ "plugin_lock_corejs_version",
+ "plugin_modernjs_ssr_loader_id",
+ "plugin_remove_es_module_mark",
  "serde",
+ "serde_json",
+ "styled_components",
+ "styled_jsx",
+ "swc_core",
+ "swc_emotion",
+ "swc_plugin_import",
+ "swc_plugin_lodash",
+ "swc_plugin_react_utils",
+ "swc_plugins_core",
+ "swc_plugins_utils",
+]
+
+[[package]]
+name = "swc_plugins_core"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "insta",
+ "serde",
+ "serde_json",
+ "swc_core",
+ "swc_plugins_utils",
+]
+
+[[package]]
+name = "swc_plugins_utils"
+version = "0.1.0"
+dependencies = [
+ "rustc-hash",
  "swc_core",
 ]
 
@@ -2953,6 +2940,19 @@ checksum = "633c1a546cee861a1a6d0dc69ebeca693bf4296661ba7852b9d21d159e0506df"
 dependencies = [
  "libc",
  "winapi",
+]
+
+[[package]]
+name = "test_plugins"
+version = "0.1.0"
+dependencies = [
+ "colored",
+ "serde",
+ "serde_json",
+ "similar",
+ "swc_core",
+ "swc_plugins_collection",
+ "swc_plugins_core",
 ]
 
 [[package]]

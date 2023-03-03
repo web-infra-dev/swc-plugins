@@ -1,4 +1,3 @@
-use modern_swc_plugins_utils::change_ident_syntax_context;
 use swc_core::{
   common::{Mark, Span, DUMMY_SP},
   ecma::{
@@ -10,6 +9,7 @@ use swc_core::{
     visit::{as_folder, Fold, VisitMut, VisitMutWith},
   },
 };
+use swc_plugins_utils::change_ident_syntax_context;
 
 struct ImportReact {
   top_level_mark: Mark,

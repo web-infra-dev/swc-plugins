@@ -1,6 +1,6 @@
 use std::{env::current_dir, fs, path::Path};
 
-use modern_swc_plugins_core::minify;
+use swc_plugins_core::minify;
 
 #[test]
 fn test() {

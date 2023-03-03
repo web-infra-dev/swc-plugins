@@ -16,10 +16,6 @@ use swc_core::{
   },
 };
 
-use modern_swc_plugins_collection::pass::{
-  internal_transform_after_pass, internal_transform_before_pass,
-};
-use modern_swc_plugins_collection::types::TransformConfig;
 use std::{
   cell::RefCell,
   sync::{
@@ -27,6 +23,8 @@ use std::{
     Arc,
   },
 };
+use swc_plugins_collection::pass::{internal_transform_after_pass, internal_transform_before_pass};
+use swc_plugins_collection::types::TransformConfig;
 
 // ===== Internal Rust struct under the hood =====
 pub struct Compiler {
@@ -177,7 +175,7 @@ impl TransformTask {
       .get(&self.compiler_id)
       .expect("Compiler is released, maybe you are using compiler after call release()");
 
-    modern_swc_plugins_core::transform(
+    swc_plugins_core::transform(
       compiler.swc_compiler.clone(),
       &compiler.config.swc,
       &compiler.config.extensions,
@@ -237,7 +235,7 @@ impl Minifier {
   }
 
   fn minify(&self) -> Result<TransformOutput> {
-    modern_swc_plugins_core::minify(&self.config, self.filename.clone(), &self.code)
+    swc_plugins_core::minify(&self.config, self.filename.clone(), &self.code)
       .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
   }
 }

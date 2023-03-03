@@ -1,5 +1,5 @@
 ---
-source: crates/modern_swc_plugins_collection/tests/main.rs
+source: crates/swc_plugins_collection/tests/main.rs
 expression: res.code
 ---
 "use strict";

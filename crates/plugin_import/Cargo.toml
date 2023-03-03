@@ -11,4 +11,4 @@ rustc-hash = { workspace = true }
 swc_core = { workspace = true, features = ["common", "ecma_ast", "ecma_visit"] }
 
 [dev-dependencies]
-modern_swc_plugins_testing = { path = "../swc_plugins_testing" }
+test_plugins = { path = "../test_plugins" }

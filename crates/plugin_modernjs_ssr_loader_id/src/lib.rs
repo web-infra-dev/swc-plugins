@@ -1,5 +1,5 @@
 #![feature(let_chains)]
-use modern_swc_plugins_utils::PluginContext;
+use swc_plugins_utils::PluginContext;
 use std::sync::Arc;
 use swc_core::{
   self,
@@ -132,10 +132,10 @@ pub fn plugin_modernjs_ssr_loader_id(plugin_ctx: Arc<PluginContext>) -> impl Fol
 
 #[cfg(test)]
 mod test {
-  use modern_swc_plugins_utils::PluginContext;
+  use swc_plugins_utils::PluginContext;
   use std::{path::PathBuf, sync::Arc};
   use swc_core::{
-    common::{comments::SingleThreadedComments, FileName, Mark, SourceMap},
+    common::{comments::SingleThreadedComments, Mark, SourceMap, FileName},
     ecma::parser::Syntax,
   };
 
@@ -144,7 +144,7 @@ mod test {
   #[test]
   fn test() {
     let cm = Arc::new(SourceMap::default());
-    modern_swc_plugins_testing::testing::test_transform(
+    test_plugins::testing::test_transform(
       Syntax::Es(Default::default()),
       |_| {
         plugin_modernjs_ssr_loader_id(Arc::new(PluginContext {
