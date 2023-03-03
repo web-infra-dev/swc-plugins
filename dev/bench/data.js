@@ -1,6 +1,6 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677759013748,
-  "repoUrl": "https://github.com/modern-js-dev/swc-plugins",
+  "lastUpdate": 1677833391645,
+  "repoUrl": "https://github.com/web-infra-dev/swc-plugins",
   "entries": {
     "Benchmark": [
       {
@@ -2821,6 +2821,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1172266936,
             "range": "± 86264285",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "web-infra-dev",
+            "username": "web-infra-dev"
+          },
+          "committer": {
+            "name": "web-infra-dev",
+            "username": "web-infra-dev"
+          },
+          "id": "f19e6895e398753156f1e924134b8c258acdb24b",
+          "message": "Revert \"[WIP]chore: add more publish crates (#81)\"",
+          "timestamp": "2023-03-02T19:47:11Z",
+          "url": "https://github.com/web-infra-dev/swc-plugins/pull/89/commits/f19e6895e398753156f1e924134b8c258acdb24b"
+        },
+        "date": 1677833390861,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 875079840,
+            "range": "± 51594195",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 965869332,
+            "range": "± 60615828",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 901188249,
+            "range": "± 80567623",
             "unit": "ns/iter"
           }
         ]
