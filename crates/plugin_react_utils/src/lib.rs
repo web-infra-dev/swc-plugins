@@ -2,12 +2,12 @@
 use std::sync::Arc;
 
 pub mod remove_prop_types;
-use modern_swc_plugins_utils::PluginContext;
 use serde::Deserialize;
 use swc_core::{
   common::{chain, pass::Either},
   ecma::{transforms::base::pass::noop, visit::Fold},
 };
+use swc_plugins_utils::PluginContext;
 
 mod import_react;
 mod remove_effect;

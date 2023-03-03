@@ -5,8 +5,8 @@ mod transform;
 use std::sync::Arc;
 
 pub use minify::minify;
-use modern_swc_plugins_utils::PluginContext;
 use swc_core::base::config::Options;
+use swc_plugins_utils::PluginContext;
 pub use transform::transform;
 
 pub type TransformFn<'a, E, P> =

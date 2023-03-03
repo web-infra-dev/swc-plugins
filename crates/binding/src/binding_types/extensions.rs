@@ -1,5 +1,5 @@
-use modern_swc_plugins_collection::types::Extensions;
 use std::collections::HashMap;
+use swc_plugins_collection::types::Extensions;
 
 use super::plugin_emotion::EmotionOptionsNapi;
 use super::plugin_lock_corejs_version::LockCoreJsVersionNapi;

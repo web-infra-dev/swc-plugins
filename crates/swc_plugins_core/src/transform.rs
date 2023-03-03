@@ -1,7 +1,6 @@
 use std::{path::PathBuf, sync::Arc};
 
 use anyhow::Result;
-use modern_swc_plugins_utils::{is_esm, PluginContext};
 use swc_core::{
   base::{
     config::{self, ModuleConfig, Options},
@@ -16,6 +15,7 @@ use swc_core::{
     // transforms::module::common_js::Config
   },
 };
+use swc_plugins_utils::{is_esm, PluginContext};
 
 use crate::TransformFn;
 

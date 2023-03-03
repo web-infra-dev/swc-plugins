@@ -1,8 +1,7 @@
 [package]
 edition = "2021"
-name = "modern_swc_plugins_core"
+name = "swc_plugins_core"
 version = "0.1.0"
-
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -16,7 +15,7 @@ swc_core = { workspace = true, features = [
   "ecma_transforms",
   "ecma_parser",
 ] }
-modern_swc_plugins_utils = { path = "../swc_plugins_utils" }
+swc_plugins_utils = { path = "../swc_plugins_utils" }
 serde_json = { workspace = true }
 serde = { workspace = true }
 

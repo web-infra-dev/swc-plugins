@@ -1,13 +1,13 @@
 use std::{fs, path::Path};
 
-use modern_swc_plugins_testing::{
-  fixture::{ExpectedInfo, FixtureTester, FixtureTesterHook},
-  modern_swc_plugins_collection::types::{Extensions, TransformConfig},
-};
 use swc_core::base::config::Options;
 use swc_plugin_react_utils::{
   remove_prop_types::{Mode, ReactRemovePropTypeConfig},
   ReactUtilsConfig,
+};
+use test_plugins::{
+  fixture::{ExpectedInfo, FixtureTester, FixtureTesterHook},
+  swc_plugins_collection::types::{Extensions, TransformConfig},
 };
 
 #[test]

@@ -1,5 +1,5 @@
-use modern_swc_plugins_collection::plugin_emotion::EmotionOptions;
 use napi::Status;
+use swc_plugins_collection::plugin_emotion::EmotionOptions;
 
 use super::IntoRawConfig;
 
