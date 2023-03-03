@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677833391645,
+  "lastUpdate": 1677837218190,
   "repoUrl": "https://github.com/web-infra-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -2859,6 +2859,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 901188249,
             "range": "± 80567623",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "2c9c1a2626d2f96d55cdabb6960fe2dbfe23ad94",
+          "message": "Merge pull request #89 from web-infra-dev/revert/publish\n\nRevert \"chore: add more publish crates (#81)\"",
+          "timestamp": "2023-03-03T17:34:18+08:00",
+          "tree_id": "c1151dac54dce4b530f24c1225ef78ed4ee93cb5",
+          "url": "https://github.com/web-infra-dev/swc-plugins/commit/2c9c1a2626d2f96d55cdabb6960fe2dbfe23ad94"
+        },
+        "date": 1677837216512,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 861045485,
+            "range": "± 54115155",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 942531209,
+            "range": "± 39709975",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 883619389,
+            "range": "± 117716262",
             "unit": "ns/iter"
           }
         ]
