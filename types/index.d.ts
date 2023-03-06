@@ -159,3 +159,20 @@ export function minifySync(
   code: string,
   config: JsMinifyOptions
 ): Output;
+
+interface MinifyCssOption {
+  sourceMap?: boolean;
+  inlineSourceContent?: boolean;
+}
+
+export function minifyCss(
+  filename: string,
+  code: string,
+  config: MinifyCssOption
+): Promise<Output>;
+
+export function minifyCssSync(
+  filename: string,
+  code: string,
+  config: MinifyCssOption
+): Output;

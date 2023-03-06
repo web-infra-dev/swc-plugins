@@ -1,56 +1,61 @@
 let binding;
 try {
-  binding = require('./index')
+  binding = require("./index");
 } catch (e) {
-  console.error("Can't find SWC binary, you can try following ways to solve this:\n1. Upgrade your Node.js version to 14.19, and reinstall dependencies.\n2. Make sure your Node.js matches your computer OS and CPU architecture, you can check that by printing `process.arch` and `process.platform`.\n")
-  throw e
+  console.error(
+    "Can't find SWC binary, you can try following ways to solve this:\n1. Upgrade your Node.js version to 14.19, and reinstall dependencies.\n2. Make sure your Node.js matches your computer OS and CPU architecture, you can check that by printing `process.arch` and `process.platform`.\n"
+  );
+  throw e;
 }
 
-const { minify, minifySync, Compiler: RawCompiler } = binding
+exports.minifyCss = binding.minifyCss;
+exports.minifyCssSync = binding.minifyCssSync;
+
+const { minify, minifySync, Compiler: RawCompiler } = binding;
 
 class Compiler extends RawCompiler {
   constructor(config) {
     const extensions = config.extensions || {};
 
     if (extensions.pluginImport) {
-      extensions.pluginImport = transformPluginImport(extensions.pluginImport)
+      extensions.pluginImport = transformPluginImport(extensions.pluginImport);
     }
 
     /**
      * Convert some options to string, let rust to deserialize it to real config,
      */
-    optionsToString(extensions)
+    optionsToString(extensions);
 
     delete config.extensions;
 
     try {
       super({
         swc: JSON.stringify(config),
-        extensions: extensions
+        extensions: extensions,
       });
     } catch (e) {
-      console.error('[@modern-js/swc-plugins] Failed to initialize config');
-      throw e
+      console.error("[@modern-js/swc-plugins] Failed to initialize config");
+      throw e;
     }
   }
 }
 
-exports.Compiler = Compiler
+exports.Compiler = Compiler;
 
 exports.minify = function (filename, code, opt) {
-  return minify(JSON.stringify(opt), filename, code)
-}
+  return minify(JSON.stringify(opt), filename, code);
+};
 
 exports.minifySync = function (filename, code, opt) {
-  return minifySync(JSON.stringify(opt), filename, code)
-}
+  return minifySync(JSON.stringify(opt), filename, code);
+};
 
 /**
- * 
+ *
 @type {(pluginImports: import('./types').ImportItem) => import('./types').ImportItemNapi}
  */
 function transformPluginImport(pluginImports) {
-  return pluginImports.map(pluginImport => {
+  return pluginImports.map((pluginImport) => {
     const {
       libraryName,
       libraryDirectory,
@@ -62,7 +67,7 @@ function transformPluginImport(pluginImports) {
       transformToDefaultImport,
       ignoreEsComponent,
       ignoreStyleComponent,
-    } = pluginImport
+    } = pluginImport;
 
     const res = {
       libraryName,
@@ -86,32 +91,32 @@ function transformPluginImport(pluginImports) {
 
       ignoreEsComponent,
       ignoreStyleComponent,
-    }
+    };
 
     return res;
-  })
+  });
 }
 
 function maybe(type, input) {
-  return typeof input === type ? input : undefined
+  return typeof input === type ? input : undefined;
 }
 
 function boolToObj(input) {
-  if (typeof input === 'boolean') {
-    return input ? {} : undefined
+  if (typeof input === "boolean") {
+    return input ? {} : undefined;
   }
-  return input
+  return input;
 }
 
 function optionsToString(options) {
-  const styledComponent = boolToObj(options.styledComponent)
-  const emotion = boolToObj(options.emotion)
+  const styledComponent = boolToObj(options.styledComponent);
+  const emotion = boolToObj(options.emotion);
 
-  if (styledComponent && typeof styledComponent !== 'string') {
-    options.styledComponent = JSON.stringify(styledComponent)
+  if (styledComponent && typeof styledComponent !== "string") {
+    options.styledComponent = JSON.stringify(styledComponent);
   }
 
-  if (emotion && typeof emotion !== 'string') {
-    options.emotion = JSON.stringify(emotion)
+  if (emotion && typeof emotion !== "string") {
+    options.emotion = JSON.stringify(emotion);
   }
 }

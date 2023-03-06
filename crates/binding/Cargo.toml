@@ -12,10 +12,16 @@ dev = []
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-crossbeam-channel = "0.5.6"                                                  # used by threadsafe function
+crossbeam-channel = "0.5.6" # used by threadsafe function
 napi = { version = "2.9.1", default-features = false, features = ["napi7"] }
 napi-derive = "2.9.1"
-swc_core = { workspace = true, features = ["base", "common"] }
+swc_core = { workspace = true, features = [
+  "base",
+  "common",
+  "css_parser",
+  "css_codegen",
+  "css_minifier",
+] }
 swc_plugins_core = { path = "../swc_plugins_core" }
 swc_plugins_collection = { path = "../swc_plugins_collection" }
 serde_json = { workspace = true }

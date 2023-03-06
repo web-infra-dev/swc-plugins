@@ -1,6 +1,7 @@
 mod binding_types;
 mod thread_safe_function;
 pub use binding_types::{ExtensionsNapi, IntoRawConfig, TransformConfigNapi};
+use swc_plugins_core::CssMinifyOptions;
 use napi::{bindgen_prelude::AsyncTask, Env, JsObject, Result, Status, Task};
 
 use napi_derive::napi;
@@ -144,6 +145,26 @@ pub fn minify_sync(
     })
 }
 
+#[napi]
+pub fn minify_css_sync(
+  filename: String,
+  code: String,
+  option: NapiCssMinifyOptions,
+) -> napi::Result<Output> {
+  CssMinifier::new(code, filename, option.into())
+    .minify()
+    .map(Into::into)
+}
+
+#[napi]
+pub fn minify_css(
+  filename: String,
+  code: String,
+  option: NapiCssMinifyOptions,
+) -> AsyncTask<CssMinifier> {
+  AsyncTask::new(CssMinifier::new(code, filename, option.into()))
+}
+
 // ======= Napi boiler plate code =======
 #[napi(object)]
 pub struct Output {
@@ -241,6 +262,60 @@ impl Minifier {
 }
 
 impl Task for Minifier {
+  type Output = TransformOutput;
+  type JsValue = JsObject;
+
+  fn compute(&mut self) -> napi::Result<Self::Output> {
+    self.minify()
+  }
+
+  fn resolve(&mut self, env: napi::Env, output: Self::Output) -> napi::Result<Self::JsValue> {
+    let mut obj = env.create_object()?;
+    obj.set_named_property("code", env.create_string(&output.code)?)?;
+    if let Some(map) = output.map {
+      obj.set_named_property("map", env.create_string(&map)?)?;
+    }
+
+    Ok(obj)
+  }
+}
+
+pub struct CssMinifier {
+  input: String,
+  filename: String,
+  option: CssMinifyOptions,
+}
+
+#[napi(object)]
+pub struct NapiCssMinifyOptions {
+  pub source_map: Option<bool>,
+  pub inline_source_content: Option<bool>,
+}
+
+impl From<NapiCssMinifyOptions> for CssMinifyOptions {
+  fn from(napi_config: NapiCssMinifyOptions) -> Self {
+    Self {
+      source_map: napi_config.source_map.unwrap_or(true),
+      inline_source_content: napi_config.inline_source_content.unwrap_or(true),
+    }
+  }
+}
+
+impl CssMinifier {
+  fn new(input: String, filename: String, option: CssMinifyOptions) -> Self {
+    Self {
+      input,
+      filename,
+      option,
+    }
+  }
+  fn minify(&self) -> napi::Result<TransformOutput> {
+    swc_plugins_core::minify_css(&self.option, &self.filename, &self.input)
+      .map_err(|e| napi::Error::new(Status::GenericFailure, e.to_string()))
+  }
+}
+
+impl Task for CssMinifier {
   type Output = TransformOutput;
   type JsValue = JsObject;
 
