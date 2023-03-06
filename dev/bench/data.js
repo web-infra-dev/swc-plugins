@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1677837218190,
+  "lastUpdate": 1678073820838,
   "repoUrl": "https://github.com/web-infra-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -2901,6 +2901,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 883619389,
             "range": "± 117716262",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "41898282+github-actions[bot]@users.noreply.github.com",
+            "name": "github-actions[bot]",
+            "username": "github-actions[bot]"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "285b018757295ab9f87a66fd96a5f3aae5c37e1d",
+          "message": "chore(release): publish (#88)\n\nCo-authored-by: github-actions[bot] <github-actions[bot]@users.noreply.github.com>",
+          "timestamp": "2023-03-06T11:16:05+08:00",
+          "tree_id": "95d0e18f5afaf1747faae850805d20852e34727c",
+          "url": "https://github.com/web-infra-dev/swc-plugins/commit/285b018757295ab9f87a66fd96a5f3aae5c37e1d"
+        },
+        "date": 1678073820059,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 971279819,
+            "range": "± 35680262",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1073478355,
+            "range": "± 34040995",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1003663565,
+            "range": "± 80821950",
             "unit": "ns/iter"
           }
         ]
