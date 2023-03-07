@@ -2076,6 +2076,7 @@ dependencies = [
  "swc_common",
  "swc_css_ast",
  "swc_css_codegen",
+ "swc_css_minifier",
  "swc_css_parser",
  "swc_css_prefixer",
  "swc_css_visit",
@@ -2133,6 +2134,20 @@ dependencies = [
  "quote",
  "swc_macros_common",
  "syn",
+]
+
+[[package]]
+name = "swc_css_minifier"
+version = "0.109.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "90a6c7284b60549f1f9e4fd457d041eec52b4defd5fdcdb14140ecff57acdba9"
+dependencies = [
+ "serde",
+ "swc_atoms",
+ "swc_common",
+ "swc_css_ast",
+ "swc_css_utils",
+ "swc_css_visit",
 ]
 
 [[package]]

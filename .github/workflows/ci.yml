@@ -419,7 +419,7 @@ jobs:
         if: "startsWith(github.event.head_commit.message, 'chore(release): publish')"
         uses: changesets/action@v1
         with:
-          publish: pnpm publish
+          publish: pnpm publish --no-git-checks
           commit: "chore(release): publish"
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
