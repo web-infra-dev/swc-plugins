@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678182393257,
+  "lastUpdate": 1678188361242,
   "repoUrl": "https://github.com/web-infra-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -3019,6 +3019,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 957601591,
             "range": "± 82678236",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1114550440@qq.com",
+            "name": "Fy",
+            "username": "JSerFeng"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "1ab9cefe7e65fe5fb55996c813cf832e30c65acf",
+          "message": "feat: support minify css (#90)\n\n* feat: support minify css\r\n\r\nfix(ci): handle crate publish differently\r\n\r\n* fix: add no-git-check option for CI",
+          "timestamp": "2023-03-07T19:07:19+08:00",
+          "tree_id": "121f7a289f3cb9f938907d70581193d98fa09229",
+          "url": "https://github.com/web-infra-dev/swc-plugins/commit/1ab9cefe7e65fe5fb55996c813cf832e30c65acf"
+        },
+        "date": 1678188359857,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 796289646,
+            "range": "± 38108542",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 904078904,
+            "range": "± 63421402",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 842940252,
+            "range": "± 52302284",
             "unit": "ns/iter"
           }
         ]
