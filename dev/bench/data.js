@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678188704854,
+  "lastUpdate": 1678193290129,
   "repoUrl": "https://github.com/web-infra-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -3099,6 +3099,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1015230702,
             "range": "± 71574065",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "web-infra-dev",
+            "username": "web-infra-dev"
+          },
+          "committer": {
+            "name": "web-infra-dev",
+            "username": "web-infra-dev"
+          },
+          "id": "5c0b4bb8cc906e762907e87120b6da40d9a1dbfa",
+          "message": "chore(release): publish",
+          "timestamp": "2023-03-07T02:25:58Z",
+          "url": "https://github.com/web-infra-dev/swc-plugins/pull/94/commits/5c0b4bb8cc906e762907e87120b6da40d9a1dbfa"
+        },
+        "date": 1678193288790,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 837214990,
+            "range": "± 87711557",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 939035678,
+            "range": "± 62523667",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 928207966,
+            "range": "± 52896872",
             "unit": "ns/iter"
           }
         ]
