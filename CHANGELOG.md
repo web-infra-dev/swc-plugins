@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.2.0
+
+### Minor Changes
+
+- 1ab9cef: feat: add css minify
+
 ## 0.1.0
 
 ### Minor Changes
