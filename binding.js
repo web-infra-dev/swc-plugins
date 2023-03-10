@@ -64,6 +64,7 @@ function transformPluginImport(pluginImports) {
       style,
       styleLibraryDirectory,
       camelToDashComponentName,
+      camel2DashComponentName,
       transformToDefaultImport,
       ignoreEsComponent,
       ignoreStyleComponent,
@@ -86,7 +87,8 @@ function transformPluginImport(pluginImports) {
         bool: maybe("boolean", style),
       },
 
-      camelToDashComponentName, // default to true
+      camelToDashComponentName:
+        camelToDashComponentName ?? camel2DashComponentName, // default to true
       transformToDefaultImport,
 
       ignoreEsComponent,
