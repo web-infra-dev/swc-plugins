@@ -41,7 +41,11 @@ export interface ImportItem {
   styleLibraryDirectory?: string;
   style?: boolean | "css" | string | ((name: string) => string | undefined);
 
+  // Personally think camel2DashComponentName is a bad name as transformToDefaultImport uses differently
+  // But for compatibility, both are valid
   camelToDashComponentName?: boolean; // default to true
+  camel2DashComponentName?: boolean; // default to true
+
   transformToDefaultImport?: boolean;
 
   ignoreEsComponent?: string[];
