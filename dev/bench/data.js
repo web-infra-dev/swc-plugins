@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678199637244,
+  "lastUpdate": 1678430174039,
   "repoUrl": "https://github.com/web-infra-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -3411,6 +3411,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1101468535,
             "range": "± 84721067",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "web-infra-dev",
+            "username": "web-infra-dev"
+          },
+          "committer": {
+            "name": "web-infra-dev",
+            "username": "web-infra-dev"
+          },
+          "id": "7c806c0bc66b714eca59650da5d1767a1b54ede4",
+          "message": "feat: stay compatible with babel-plugin-import's camel2DashComponentName",
+          "timestamp": "2023-03-10T02:57:56Z",
+          "url": "https://github.com/web-infra-dev/swc-plugins/pull/98/commits/7c806c0bc66b714eca59650da5d1767a1b54ede4"
+        },
+        "date": 1678430173134,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 781423053,
+            "range": "± 51768160",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 836999082,
+            "range": "± 41598002",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 831422544,
+            "range": "± 56902997",
             "unit": "ns/iter"
           }
         ]
