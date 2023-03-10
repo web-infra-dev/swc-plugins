@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1678430174039,
+  "lastUpdate": 1678432850135,
   "repoUrl": "https://github.com/web-infra-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -3449,6 +3449,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 831422544,
             "range": "± 56902997",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1114550440@qq.com",
+            "name": "Fy",
+            "username": "JSerFeng"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "8261ababa0b7861aef972cbcc94fc59c27957741",
+          "message": "feat: stay compatible with babel-plugin-import's camel2DashComponentName (#98)\n\n* chore(release): publish\r\n\r\n* feat(plugin-import): stay compatible with babel-plugin-import",
+          "timestamp": "2023-03-10T14:59:17+08:00",
+          "tree_id": "4556d6e6204ccb9a473896a8bf23f0532651f48c",
+          "url": "https://github.com/web-infra-dev/swc-plugins/commit/8261ababa0b7861aef972cbcc94fc59c27957741"
+        },
+        "date": 1678432848456,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 780043330,
+            "range": "± 17185919",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 866982056,
+            "range": "± 21649087",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 870257681,
+            "range": "± 28070327",
             "unit": "ns/iter"
           }
         ]
