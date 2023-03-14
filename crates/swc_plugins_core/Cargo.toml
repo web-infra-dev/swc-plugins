@@ -10,6 +10,7 @@ anyhow = { workspace = true }
 swc_core = { workspace = true, features = [
   "base",
   "common",
+  "css_ast",
   "ecma_ast",
   "ecma_visit",
   "ecma_transforms",

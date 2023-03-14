@@ -1,5 +1,6 @@
 #![feature(let_chains)]
 use std::{borrow::Borrow, path::PathBuf, sync::Arc};
+
 use rustc_hash::FxHashMap as HashMap;
 use swc_core::{
   common::{SyntaxContext, DUMMY_SP},
@@ -210,8 +211,8 @@ pub fn is_react_component(
         ReactComponentType::None
       }
     },
-    Expr::Arrow(arrow) => {
-      let is_return_jsx = match &arrow.body {
+    Expr::Arrow(array) => {
+      let is_return_jsx = match &*array.body {
         BlockStmtOrExpr::BlockStmt(block) => {
           is_return_jsx(block.stmts.iter(), bindings)
         },
@@ -671,9 +672,8 @@ mod test {
     quote,
   };
 
-  use crate::{match_member, ReactComponentType};
-
   use super::{is_esm, is_react_component};
+  use crate::{match_member, ReactComponentType};
 
   #[test]
   fn detect_esm() {
