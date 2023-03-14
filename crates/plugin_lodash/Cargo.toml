@@ -8,7 +8,7 @@ nodejs-resolver = "0.0.60"
 serde = { workspace = true }
 serde_json = { workspace = true }
 rustc-hash = { workspace = true }
-dashmap = "5.4.0"
+dashmap = { workspace = true }
 anyhow = { workspace = true }
 swc_core = { workspace = true, features = [
   "common",

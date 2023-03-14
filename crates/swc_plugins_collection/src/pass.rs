@@ -1,6 +1,6 @@
 use std::{path::Path, sync::Arc};
 
-use crate::types::Extensions;
+use modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_remove_es_module_mark::remove_es_module_mark;
 use swc_core::{
@@ -9,12 +9,12 @@ use swc_core::{
   ecma::transforms::base::pass::noop,
   ecma::visit::Fold,
 };
+use swc_plugin_import::plugin_import;
 use swc_plugin_lodash::plugin_lodash;
+use swc_plugin_react_utils::react_utils;
 use swc_plugins_utils::PluginContext;
 
-use modularize_imports::{modularize_imports, Config as ModularizedConfig};
-use swc_plugin_import::plugin_import;
-use swc_plugin_react_utils::react_utils;
+use crate::types::Extensions;
 
 pub fn internal_transform_before_pass<'a>(
   extensions: &'a Extensions,
