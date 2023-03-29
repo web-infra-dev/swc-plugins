@@ -113,8 +113,7 @@ impl PluginLodash {
       .find_module(&self.mappings, &imported_name)
       .unwrap_or_else(|| {
         panic!(
-          "Cannot find appropriate import path to: {}, in package: {}",
-          imported_name, source
+          "Cannot find appropriate import path to: {imported_name}, in package: {source}"
         )
       });
     let new_source = format!("{}/{}", pkg.id, import_path);

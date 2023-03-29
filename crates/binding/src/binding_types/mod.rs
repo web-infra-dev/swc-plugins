@@ -67,7 +67,7 @@ impl IntoRawConfig<CachedRegex> for String {
     CachedRegex::new(self.as_str()).map_err(|e| {
       Error::new(
         Status::InvalidArg,
-        format!("Cannot convert string to RegExpr:\n{}", e),
+        format!("Cannot convert string to RegExpr:\n{e}"),
       )
     })
   }

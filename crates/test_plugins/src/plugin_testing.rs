@@ -31,7 +31,7 @@ pub fn test(config: &str, filename: &str, input: &str, expected: &str, hash: Opt
       }
     }
     Err(e) => {
-      println!("{}", e);
+      println!("{e}");
       panic!("Transform failed");
     }
   };

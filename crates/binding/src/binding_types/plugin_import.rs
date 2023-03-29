@@ -139,7 +139,7 @@ fn call_js(js_fn: &JsFunction, args: &[JsString]) -> napi::Result<Option<String>
         napi::ValueType::Boolean => {
           if js_return.coerce_to_bool()?.get_value()? {
             // return true : invalid
-            return Err(napi::Error::new(
+            return Err(napi::Error::new::<String>(
               Status::GenericFailure,
               "functions of pluginImport replaceExpr can only strictly return false or string"
                 .into(),
@@ -161,7 +161,7 @@ fn call_js(js_fn: &JsFunction, args: &[JsString]) -> napi::Result<Option<String>
           Err(napi::Error::new(
             Status::GenericFailure,
             format!(
-              "functions of pluginImport replaceExpr can only strictly return false or string. Received: {}", ty),
+              "functions of pluginImport replaceExpr can only strictly return false or string. Received: {ty}"),
           ))
         }
       }
