@@ -63,6 +63,7 @@ fn parse(filename: &str, fm: Arc<SourceFile>) -> Result<Stylesheet> {
       allow_wrong_line_comments: true,
       css_modules: false,
       legacy_nesting: true,
+      ..Default::default()
     },
     &mut errors,
   )
@@ -99,7 +100,7 @@ fn codegen(cm: &SourceMap, filename: &str, ast: &Stylesheet, option: &CssMinifyO
 
   codegen
     .emit(ast)
-    .map_err(|e| anyhow!(format!("Failed to generate css for {}:\n{}", filename, e)))?;
+    .map_err(|e| anyhow!(format!("Failed to generate css for {filename}:\n{e}")))?;
   let out_map = src_map
     .as_ref()
     .map(|m| cm.build_source_map_with_config(m, None, option));

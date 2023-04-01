@@ -10,7 +10,7 @@ pub fn show_diff(expected: &str, res: &str) {
       ChangeTag::Insert => format!("+{}", change.value().green()),
       ChangeTag::Equal => format!(" {}", change.value()),
     };
-    print!("{}", sign);
+    print!("{sign}");
   }
   println!();
 }

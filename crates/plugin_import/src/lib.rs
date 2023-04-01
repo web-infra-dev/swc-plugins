@@ -72,7 +72,7 @@ const CUSTOM_JS: &str = "CUSTOM_JS_NAME";
 const CUSTOM_STYLE: &str = "CUSTOM_STYLE";
 const CUSTOM_STYLE_NAME: &str = "CUSTOM_STYLE_NAME";
 
-pub fn plugin_import<'a>(config: &'a Vec<PluginImportConfig>) -> impl Fold + 'a {
+pub fn plugin_import(config: &Vec<PluginImportConfig>) -> impl Fold + '_ {
   let mut renderer = handlebars::Handlebars::new();
 
   renderer.register_helper(
@@ -265,7 +265,7 @@ impl<'a> ImportPlugin<'a> {
               .unwrap(),
           ),
         },
-        StyleConfig::Css => Some(format!("{}/style/css", js_source)),
+        StyleConfig::Css => Some(format!("{js_source}/style/css")),
         StyleConfig::Bool(should_transform) => {
           if *should_transform {
             Some(format!("{}/style", &js_source))

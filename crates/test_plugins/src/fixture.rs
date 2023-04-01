@@ -53,7 +53,7 @@ pub trait FixtureTesterHook {
     fixture_path: &Path,
     _config: &mut swc_plugins_collection::types::TransformConfig,
   ) -> String {
-    String::from_utf8(fs::read(&fixture_path.join("actual.js")).unwrap()).unwrap()
+    String::from_utf8(fs::read(fixture_path.join("actual.js")).unwrap()).unwrap()
   }
 
   /// Read all assets
@@ -111,7 +111,7 @@ where
   ) -> String {
     match self {
       Some(sub) => sub.on_resolve_actual_file(fixture_path, config),
-      None => String::from_utf8(fs::read(&fixture_path.join("actual.js")).unwrap()).unwrap(),
+      None => String::from_utf8(fs::read(fixture_path.join("actual.js")).unwrap()).unwrap(),
     }
   }
 
@@ -223,11 +223,11 @@ where
     }
   }
 
-  pub fn run_test<'a, D: Display>(
+  pub fn run_test<D: Display>(
     &self,
     test_name: D,
     config: &swc_plugins_collection::types::TransformConfig,
-    code: &'a str,
+    code: &str,
     expected: Option<impl AsRef<str>>,
   ) {
     use swc_plugins_collection::pass;
@@ -252,7 +252,7 @@ where
     if let Err(e) = res {
       if expected.is_some() {
         println!("-----[{}] Transform failed-----", test_name.red());
-        println!("{}", e);
+        println!("{e}");
       }
     } else {
       let expected = expected.expect("Not provide expected code");

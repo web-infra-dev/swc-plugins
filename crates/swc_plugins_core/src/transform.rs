@@ -129,8 +129,8 @@ where
             &swc_config,
             comments,
             // TODO pass comments to internal pass in next swc versions
-            |_| transform_before_pass(&extensions_config, &swc_config, plugin_context.clone()),
-            |_| transform_after_pass(&extensions_config, &swc_config, plugin_context.clone()),
+            |_| transform_before_pass(extensions_config, &swc_config, plugin_context.clone()),
+            |_| transform_after_pass(extensions_config, &swc_config, plugin_context.clone()),
           )
         })
       },

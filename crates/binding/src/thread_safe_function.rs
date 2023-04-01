@@ -135,7 +135,7 @@ unsafe extern "C" fn call_js_cb<T: 'static, R: 'static, F>(
   // env and/or callback can be null when shutting down
   if raw_env.is_null() || js_callback.is_null() {
     sender
-      .send(Err(napi::Error::new(
+      .send(Err(napi::Error::new::<String>(
         Status::Cancelled,
         "Internal error while calling threadsafe function".into(),
       )))

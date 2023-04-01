@@ -31,7 +31,7 @@ impl Package {
   pub fn new(pwd: &Path, source: &str, base: &str) -> anyhow::Result<Self> {
     let main_path = resolve(source, pwd)?;
     let pkg_root =
-      get_pkg_root(main_path).unwrap_or_else(|| panic!("Cannot find package root for {}", source));
+      get_pkg_root(main_path).unwrap_or_else(|| panic!("Cannot find package root for {source}"));
 
     let pkg_json = get_pkg_json(&pkg_root)?;
 
@@ -104,7 +104,7 @@ pub fn build_mappings<'a>(
 
     let pkg_root = get_pkg_root(module_root.unwrap());
     if matches!(pkg_root, None) {
-      println!("Module {} not found. Skipped", id);
+      println!("Module {id} not found. Skipped");
       continue;
     }
 
@@ -170,7 +170,7 @@ fn get_pkg_json(module_root: &Path) -> anyhow::Result<PkgJson> {
   let pkg_json_path = Path::new(&module_root).join("package.json");
 
   Ok(serde_json::from_slice::<PkgJson>(
-    fs::read(&pkg_json_path)?.as_slice(),
+    fs::read(pkg_json_path)?.as_slice(),
   )?)
 }
 

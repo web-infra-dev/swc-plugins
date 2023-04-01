@@ -12,7 +12,7 @@ impl IntoRawConfig<swc_plugins_collection::plugin_styled_components::Config>
     _env: napi::Env,
   ) -> napi::Result<swc_plugins_collection::plugin_styled_components::Config> {
     serde_json::from_str(&self).map_err(|_| {
-      napi::Error::new(
+      napi::Error::new::<String>(
         Status::InvalidArg,
         "invalid styled components options".into(),
       )
