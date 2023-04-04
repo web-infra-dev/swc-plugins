@@ -6,10 +6,12 @@ use plugin_remove_es_module_mark::remove_es_module_mark;
 use swc_core::{
   base::config::{ModuleConfig, Options},
   common::{chain, pass::Either, FileName},
-  ecma::transforms::base::pass::noop,
   ecma::visit::Fold,
+  ecma::{transforms::base::pass::noop, visit::as_folder},
+  plugin::proxies::PluginCommentsProxy,
 };
 use swc_plugin_import::plugin_import;
+use swc_plugin_loadable_components::loadable_transform;
 use swc_plugin_lodash::plugin_lodash;
 use swc_plugin_react_utils::react_utils;
 use swc_plugins_utils::PluginContext;
@@ -57,6 +59,12 @@ pub fn internal_transform_before_pass<'a>(
     Either::Right(noop())
   };
 
+  let loadable_components = if extensions.loadable_components.unwrap_or(false) {
+    Either::Left(plugin_loadable_components())
+  } else {
+    Either::Right(noop())
+  };
+
   let emotion = if let Some(emotion_options) = &extensions.emotion {
     Either::Left(swc_emotion::emotion(
       emotion_options.clone(),
@@ -95,7 +103,8 @@ pub fn internal_transform_before_pass<'a>(
     modernjs_ssr_loader_id,
     emotion,
     styled_jsx,
-    styled_components
+    styled_components,
+    loadable_components
   )
 }
 
@@ -120,4 +129,8 @@ pub fn internal_transform_after_pass<'a>(
   };
 
   chain!(lock_core_js, remove_es_module_mark)
+}
+
+fn plugin_loadable_components() -> impl Fold {
+  as_folder(loadable_transform(PluginCommentsProxy))
 }

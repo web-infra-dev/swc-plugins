@@ -28,6 +28,7 @@ pub struct ExtensionsNapi {
   pub lodash: Option<PluginLodashConfigNapi>,
 
   pub modernjs_ssr_loader_id: Option<bool>,
+  pub loadable_components: Option<bool>,
 }
 
 impl IntoRawConfig<Extensions> for ExtensionsNapi {
@@ -42,6 +43,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       styled_jsx,
       lodash,
       modernjs_ssr_loader_id,
+      loadable_components,
     } = self;
 
     Ok(Extensions {
@@ -54,6 +56,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       styled_jsx,
       lodash: lodash.into_raw_config(env)?,
       modernjs_ssr_loader_id,
+      loadable_components
     })
   }
 }
