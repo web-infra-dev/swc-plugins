@@ -22,6 +22,7 @@ pub struct Extensions {
 
   pub lodash: Option<PluginLodashConfig>,
   pub modernjs_ssr_loader_id: Option<bool>,
+  pub loadable_components: Option<bool>,
 }
 
 #[derive(Debug, Default, Deserialize)]
