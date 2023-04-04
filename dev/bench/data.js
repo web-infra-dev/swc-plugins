@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1680596815889,
+  "lastUpdate": 1680602604435,
   "repoUrl": "https://github.com/web-infra-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -3685,6 +3685,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 907653682,
             "range": "± 104917486",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "c732e39a77aaab952c300c4b653211d2423c7323",
+          "message": "Feat/add loadable components plugin (#103)\n\n* feat: add loadable-components-plugin\r\n\r\n* docs: add changeset\r\n\r\n* fix: update test snapshot",
+          "timestamp": "2023-04-04T17:36:40+08:00",
+          "tree_id": "cc558959916b2e8ada7e49d515af223dc18effd5",
+          "url": "https://github.com/web-infra-dev/swc-plugins/commit/c732e39a77aaab952c300c4b653211d2423c7323"
+        },
+        "date": 1680602602970,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 828197665,
+            "range": "± 98448020",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 903094309,
+            "range": "± 65488088",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 903048702,
+            "range": "± 83638513",
             "unit": "ns/iter"
           }
         ]
