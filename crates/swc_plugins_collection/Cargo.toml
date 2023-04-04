@@ -30,7 +30,7 @@ plugin_remove_es_module_mark = { path = "../plugin_remove_es_module_mark" }
 styled_components = "0.53.10"
 styled_jsx = "0.30.10"
 swc_emotion = "0.29.10"
-swc_plugin_loadable_components = { git = "https://github.com/swc-project/plugins", rev = "bb8f9a4" }
+swc_plugin_loadable_components = { git = "https://github.com/swc-project/plugins", rev = "baa6644" }
 
 [dev-dependencies]
 insta = "1.18.2"

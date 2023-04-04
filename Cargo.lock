@@ -3007,7 +3007,7 @@ dependencies = [
 [[package]]
 name = "swc_plugin_loadable_components"
 version = "0.12.3"
-source = "git+https://github.com/swc-project/plugins?rev=bb8f9a4#bb8f9a4b30a7130f50582f681db858ff98df921f"
+source = "git+https://github.com/swc-project/plugins?rev=baa6644#baa6644015854fce446e5d9e861a8cad94e62f57"
 dependencies = [
  "once_cell",
  "regex",
