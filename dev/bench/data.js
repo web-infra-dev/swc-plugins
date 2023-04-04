@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1680602604435,
+  "lastUpdate": 1680603226743,
   "repoUrl": "https://github.com/web-infra-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -3727,6 +3727,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 903048702,
             "range": "± 83638513",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "web-infra-dev",
+            "username": "web-infra-dev"
+          },
+          "committer": {
+            "name": "web-infra-dev",
+            "username": "web-infra-dev"
+          },
+          "id": "3e6e16d5d8e38ca4797c142f9c3e686b4d42f837",
+          "message": "fix: add loadable compnents plugins ts type.",
+          "timestamp": "2023-03-26T17:28:25Z",
+          "url": "https://github.com/web-infra-dev/swc-plugins/pull/104/commits/3e6e16d5d8e38ca4797c142f9c3e686b4d42f837"
+        },
+        "date": 1680603225160,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 1006508293,
+            "range": "± 136879312",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 1076980559,
+            "range": "± 158353554",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 1101395678,
+            "range": "± 158380920",
             "unit": "ns/iter"
           }
         ]
