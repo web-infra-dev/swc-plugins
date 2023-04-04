@@ -81,6 +81,7 @@ export interface Extensions {
     ids?: string;
   };
   modernjsSsrLoaderId?: boolean;
+  loadableComponents?: boolean;
   styledComponent?:
     | boolean
     | {
