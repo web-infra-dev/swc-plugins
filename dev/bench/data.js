@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1680603226743,
+  "lastUpdate": 1680606491081,
   "repoUrl": "https://github.com/web-infra-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -3765,6 +3765,48 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 1101395678,
             "range": "± 158380920",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "58852732+GiveMe-A-Name@users.noreply.github.com",
+            "name": "qixuan",
+            "username": "GiveMe-A-Name"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "6048199b35565f99079155d1492367eecd0cef41",
+          "message": "fix: add loadable compnents plugins ts type. (#104)",
+          "timestamp": "2023-04-04T18:48:34+08:00",
+          "tree_id": "752ac93a156e7485c402d75d7a6542ae70da18e0",
+          "url": "https://github.com/web-infra-dev/swc-plugins/commit/6048199b35565f99079155d1492367eecd0cef41"
+        },
+        "date": 1680606489745,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 814498093,
+            "range": "± 37026261",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 911973651,
+            "range": "± 78095720",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 842740564,
+            "range": "± 30059949",
             "unit": "ns/iter"
           }
         ]
