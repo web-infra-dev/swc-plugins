@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1680595295518,
+  "lastUpdate": 1680596815889,
   "repoUrl": "https://github.com/web-infra-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -3647,6 +3647,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 918827838,
             "range": "± 187229239",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "web-infra-dev",
+            "username": "web-infra-dev"
+          },
+          "committer": {
+            "name": "web-infra-dev",
+            "username": "web-infra-dev"
+          },
+          "id": "3a5627304cbce2ebc27b77dfbf9f1113d57efe94",
+          "message": "Feat/add loadable components plugin",
+          "timestamp": "2023-03-26T17:28:25Z",
+          "url": "https://github.com/web-infra-dev/swc-plugins/pull/103/commits/3a5627304cbce2ebc27b77dfbf9f1113d57efe94"
+        },
+        "date": 1680596815027,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 823168794,
+            "range": "± 57712715",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 892231132,
+            "range": "± 63376539",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 907653682,
+            "range": "± 104917486",
             "unit": "ns/iter"
           }
         ]
