@@ -46,13 +46,15 @@ pub fn minify(
 }
 
 pub fn minify_css(config: &CssMinifyOptions, filename: &str, src: &str) -> Result<TransformOutput> {
-  let cm = Arc::new(SourceMap::default());
-
-  let fm = cm.new_source_file(FileName::Real(filename.into()), src.into());
-
-  let mut ast = parse(filename, fm)?;
-  swc_minify_css(&mut ast, Default::default());
-  codegen(&cm, filename, &ast, config)
+  GLOBALS.set(&Globals::default(), || {
+    let cm = Arc::new(SourceMap::default());
+  
+    let fm = cm.new_source_file(FileName::Real(filename.into()), src.into());
+  
+    let mut ast = parse(filename, fm)?;
+    swc_minify_css(&mut ast, Default::default());
+    codegen(&cm, filename, &ast, config)
+  })
 }
 
 fn parse(filename: &str, fm: Arc<SourceFile>) -> Result<Stylesheet> {
