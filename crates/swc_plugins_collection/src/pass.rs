@@ -69,6 +69,7 @@ pub fn internal_transform_before_pass<'a>(
     Either::Left(swc_emotion::emotion(
       emotion_options.clone(),
       Path::new(swc_config.filename.as_str()),
+      plugin_context.file.src_hash as u32,
       plugin_context.cm.clone(),
       plugin_context.comments.clone(),
     ))
