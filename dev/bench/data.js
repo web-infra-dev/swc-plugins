@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1680787009512,
+  "lastUpdate": 1680835939765,
   "repoUrl": "https://github.com/web-infra-dev/swc-plugins",
   "entries": {
     "Benchmark": [
@@ -3845,6 +3845,44 @@ window.BENCHMARK_DATA = {
             "name": "swc_core_minify",
             "value": 825177319,
             "range": "± 43610986",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "web-infra-dev",
+            "username": "web-infra-dev"
+          },
+          "committer": {
+            "name": "web-infra-dev",
+            "username": "web-infra-dev"
+          },
+          "id": "21481877bac2aac978fa83e70b1d3fa8fd193f1b",
+          "message": "fix(css): set thread local when use minify css",
+          "timestamp": "2023-04-06T09:21:06Z",
+          "url": "https://github.com/web-infra-dev/swc-plugins/pull/105/commits/21481877bac2aac978fa83e70b1d3fa8fd193f1b"
+        },
+        "date": 1680835938745,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "minify_large_bundle_no_sourcemap",
+            "value": 840384331,
+            "range": "± 95231845",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "minify_large_bundle_with_sourcemap",
+            "value": 925512819,
+            "range": "± 47443211",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "swc_core_minify",
+            "value": 859342612,
+            "range": "± 60407699",
             "unit": "ns/iter"
           }
         ]
