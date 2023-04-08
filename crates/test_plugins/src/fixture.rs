@@ -1,10 +1,11 @@
-use colored::Colorize;
 use std::{
   fmt::Display,
   fs,
   path::{Path, PathBuf},
   sync::Arc,
 };
+
+use colored::Colorize;
 use swc_core::{base::Compiler, cached::regex::CachedRegex, common::SourceMap};
 
 use crate::utils::show_diff;

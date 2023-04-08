@@ -1,4 +1,6 @@
 use std::collections::HashMap;
+
+use napi_derive::napi;
 use swc_plugins_collection::types::Extensions;
 
 use super::plugin_emotion::EmotionOptionsNapi;
@@ -8,8 +10,6 @@ use super::plugin_modularize_imports::PackageConfigNapi;
 use super::plugin_react_utils;
 use super::plugin_styled_components::StyledComponentsConfigNapi;
 use super::{plugin_import, IntoRawConfig};
-
-use napi_derive::napi;
 /**
  * Internal plugin
  */
@@ -56,7 +56,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       styled_jsx,
       lodash: lodash.into_raw_config(env)?,
       modernjs_ssr_loader_id,
-      loadable_components
+      loadable_components,
     })
   }
 }

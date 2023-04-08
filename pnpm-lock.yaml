@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@changesets/cli': ^2.26.0
-  '@napi-rs/cli': ^2.11.4
+  '@napi-rs/cli': ^2.15.2
   '@storybook/addon-links': ^6.5.12
   '@types/node': ^18.7.1
   dotenv-cli: ^6.0.0
@@ -15,7 +15,7 @@ specifiers:
 
 devDependencies:
   '@changesets/cli': 2.26.0
-  '@napi-rs/cli': 2.11.4
+  '@napi-rs/cli': 2.15.2
   '@storybook/addon-links': 6.5.13
   '@types/node': 18.7.14
   dotenv-cli: 6.0.0
@@ -294,8 +294,8 @@ packages:
       read-yaml-file: 1.1.0
     dev: true
 
-  /@napi-rs/cli/2.11.4:
-    resolution: {integrity: sha512-rjU651owB4GJetO3pnu3B8TyVM3Fis3AYb+U16bKxYyykp81S+dJlIgWc8Lc0t55PYbHlBM3hxdgy4pultxMAw==}
+  /@napi-rs/cli/2.15.2:
+    resolution: {integrity: sha512-80tBCtCnEhAmFtB9oPM0FL74uW7fAmtpeqjvERH7Q1z/aZzCAs/iNfE7U3ehpwg9Q07Ob2Eh/+1guyCdX/p24w==}
     engines: {node: '>= 10'}
     hasBin: true
     dev: true

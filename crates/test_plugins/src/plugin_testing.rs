@@ -1,7 +1,8 @@
 use std::sync::Arc;
+
 use swc_core::{base::Compiler, common::sync::Lazy};
-use swc_plugins_core::{ transform };
 use swc_plugins_collection::{pass, types::TransformConfig};
+use swc_plugins_core::transform;
 
 use crate::utils::show_diff;
 

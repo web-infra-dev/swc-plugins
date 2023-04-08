@@ -11,6 +11,9 @@ dev = []
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[build-dependencies]
+napi-build = "2.0.1"
+
 [dependencies]
 crossbeam-channel = "0.5.6" # used by threadsafe function
 napi = { version = "2.9.1", default-features = false, features = ["napi7"] }
@@ -26,3 +29,4 @@ swc_plugins_core = { path = "../swc_plugins_core" }
 swc_plugins_collection = { path = "../swc_plugins_collection" }
 serde_json = { workspace = true }
 serde = { workspace = true }
+

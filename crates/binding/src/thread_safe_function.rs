@@ -1,10 +1,10 @@
-use crossbeam_channel::{unbounded, Receiver, Sender};
 use std::{
   ffi::{c_void, CString},
   marker::PhantomData,
   ptr,
 };
 
+use crossbeam_channel::{unbounded, Receiver, Sender};
 use napi::{
   check_status,
   sys::{self, ThreadsafeFunctionCallMode},

@@ -1,6 +1,7 @@
 #![feature(test)]
 #![allow(soft_unstable)]
 use std::{env::current_dir, fs, path::Path, process::Termination, sync::Arc};
+
 use swc_core::{
   base::{try_with_handler, Compiler},
   common::{FileName, SourceMap, GLOBALS},

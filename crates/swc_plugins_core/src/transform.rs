@@ -29,6 +29,7 @@ use crate::TransformFn;
 ///
 /// If you call `transform` from `nodejs`, this config hash
 /// is unique for each `binding::Compiler`.
+#[allow(clippy::too_many_arguments)]
 pub fn transform<'a, E, P1, P2>(
   compiler: Arc<Compiler>,
   swc_config: &Options,

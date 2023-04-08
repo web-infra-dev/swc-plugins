@@ -1,7 +1,8 @@
+use std::collections::HashMap;
+
 use modularize_imports::PackageConfig;
 use plugin_lock_corejs_version::LockCoreJsVersion;
 use serde::Deserialize;
-use std::collections::HashMap;
 use swc_core::base::config::Options;
 use swc_plugin_import::PluginImportConfig;
 use swc_plugin_lodash::PluginLodashConfig;

@@ -1,9 +1,8 @@
+use napi::Env;
+use napi_derive::napi;
 use swc_plugins_collection::swc_plugin_react_utils::{
   remove_prop_types::ReactRemovePropTypeConfig, ReactUtilsConfig,
 };
-
-use napi::Env;
-use napi_derive::napi;
 
 use super::IntoRawConfig;
 

@@ -13,7 +13,6 @@ pub struct IdentComponent {
 
 ///
 /// track ident reference
-///
 impl Visit for IdentComponent {
   // need to skip import decl
   fn visit_import_decl(&mut self, _: &ImportDecl) {}

@@ -1,7 +1,9 @@
 #![feature(let_chains)]
+use std::{ops::Deref, path::PathBuf, sync::Arc};
+
 use mappings::{build_mappings, build_pkg_map, Mappings, Package};
+use rustc_hash::{FxHashMap as HashMap, FxHashSet as HashSet};
 use serde::Deserialize;
-use swc_plugins_utils::PluginContext;
 use swc_core::{
   self,
   common::{sync::Lazy, Mark, Span, DUMMY_SP},
@@ -17,8 +19,7 @@ use swc_core::{
   },
   quote,
 };
-use std::{ops::Deref, path::PathBuf, sync::Arc};
-use rustc_hash::{FxHashMap as HashMap, FxHashSet as HashSet};
+use swc_plugins_utils::PluginContext;
 mod error;
 mod mappings;
 
@@ -112,9 +113,7 @@ impl PluginLodash {
     let import_path = pkg
       .find_module(&self.mappings, &imported_name)
       .unwrap_or_else(|| {
-        panic!(
-          "Cannot find appropriate import path to: {imported_name}, in package: {source}"
-        )
+        panic!("Cannot find appropriate import path to: {imported_name}, in package: {source}")
       });
     let new_source = format!("{}/{}", pkg.id, import_path);
 

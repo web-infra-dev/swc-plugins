@@ -32,7 +32,8 @@ fn test() {
     },
     "test",
     "body { color: red; }",
-  ).unwrap();
+  )
+  .unwrap();
 }
 
 fn read_to_string(s: &Path) -> String {

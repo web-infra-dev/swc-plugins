@@ -1,6 +1,5 @@
-use swc_plugins_collection::types::TransformConfig;
-
 use napi_derive::napi;
+use swc_plugins_collection::types::TransformConfig;
 
 use super::{extensions::ExtensionsNapi, IntoRawConfig};
 
