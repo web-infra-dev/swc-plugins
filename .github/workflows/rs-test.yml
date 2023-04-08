@@ -28,6 +28,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Setup node
+        uses: actions/setup-node@v3
+        if: ${{ !matrix.settings.docker }}
+        with:
+          node-version: 16
+
+      - name: Setup node dependencies
+        run: |
+          npm install -g pnpm@7
+          pnpm install
+
       - name: Install toolchain
         run: |
           rustup show
