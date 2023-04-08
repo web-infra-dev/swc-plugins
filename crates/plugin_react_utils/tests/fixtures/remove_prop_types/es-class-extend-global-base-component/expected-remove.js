@@ -1,11 +1,11 @@
 "use strict";
-const _defineProperty = require("@swc/helpers/lib/_define_property.js").default;
+const _define_property = require("@swc/helpers/_/_define_property");
 class Foo1 extends GlobalComponent {
   render() {}
 
 }
 
-_defineProperty(Foo1, "propTypes", {
+_define_property._(Foo1, "propTypes", {
   foo1: PropTypes.string
 });
 

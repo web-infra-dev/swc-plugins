@@ -8,6 +8,6 @@ Object.defineProperty(exports, "default", {
         return _default;
     }
 });
-var _interopRequireDefault = require("@swc/helpers/lib/_interop_require_default.js").default;
-var _register = /*#__PURE__*/ _interopRequireDefault(require("@storybook/addon-links/register"));
+var _interop_require_default = require("@swc/helpers/_/_interop_require_default");
+var _register = /*#__PURE__*/ _interop_require_default._(require("@storybook/addon-links/register"));
 var _default = _register.default;

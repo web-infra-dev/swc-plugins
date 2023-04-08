@@ -1,10 +1,7 @@
 import BaseComponent from 'components/base';
-
 class Foo extends BaseComponent {
-  render() {}
-
+    render() {}
 }
-
 Foo.propTypes = {
-  bar: PropTypes.string
+    bar: PropTypes.string
 };
