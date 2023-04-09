@@ -1,11 +1,8 @@
-import _define_property from "@swc/helpers/src/_define_property.mjs";
+import { _ as _define_property } from "@swc/helpers/_/_define_property";
 import BaseComponent from 'components/base';
-
 class Foo extends BaseComponent {
-  render() {}
-
+    render() {}
 }
-
 _define_property(Foo, "propTypes", {
-  foo: PropTypes.string.isRequired
+    foo: PropTypes.string.isRequired
 });

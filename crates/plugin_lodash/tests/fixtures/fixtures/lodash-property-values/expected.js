@@ -8,10 +8,10 @@ Object.defineProperty(exports, "formatters", {
         return formatters;
     }
 });
-var _interopRequireDefault = require("@swc/helpers/lib/_interop_require_default.js").default;
-var _snakeCase = /*#__PURE__*/ _interopRequireDefault(require("lodash/snakeCase"));
-var _kebabCase = /*#__PURE__*/ _interopRequireDefault(require("lodash/kebabCase"));
-var _camelCase = /*#__PURE__*/ _interopRequireDefault(require("lodash/camelCase"));
+var _interop_require_default = require("@swc/helpers/_/_interop_require_default");
+var _snakeCase = /*#__PURE__*/ _interop_require_default._(require("lodash/snakeCase"));
+var _kebabCase = /*#__PURE__*/ _interop_require_default._(require("lodash/kebabCase"));
+var _camelCase = /*#__PURE__*/ _interop_require_default._(require("lodash/camelCase"));
 var formatters = {
     camelCase: _camelCase.default,
     "kebabCase": _kebabCase.default,

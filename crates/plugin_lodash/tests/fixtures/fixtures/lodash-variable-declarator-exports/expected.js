@@ -19,8 +19,8 @@ _export(exports, {
         return case3;
     }
 });
-var _interopRequireDefault = require("@swc/helpers/lib/_interop_require_default.js").default;
-var _camelCase = /*#__PURE__*/ _interopRequireDefault(require("lodash/camelCase"));
+var _interop_require_default = require("@swc/helpers/_/_interop_require_default");
+var _camelCase = /*#__PURE__*/ _interop_require_default._(require("lodash/camelCase"));
 var _string = require("string");
 var case1 = _camelCase.default;
 var case2 = fp.kebabCase;

@@ -2,6 +2,7 @@ use std::{
   fs,
   path::{Path, PathBuf, MAIN_SEPARATOR},
 };
+
 use nodejs_resolver::{ResolveResult, Resolver};
 use rustc_hash::FxHashMap as HashMap;
 use serde::{Deserialize, Serialize};

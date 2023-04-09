@@ -1,9 +1,15 @@
 mod binding_types;
 mod thread_safe_function;
-pub use binding_types::{ExtensionsNapi, IntoRawConfig, TransformConfigNapi};
-use swc_plugins_core::CssMinifyOptions;
-use napi::{bindgen_prelude::AsyncTask, Env, JsObject, Result, Status, Task};
+use std::{
+  cell::RefCell,
+  sync::{
+    atomic::{AtomicU32, Ordering},
+    Arc,
+  },
+};
 
+pub use binding_types::{ExtensionsNapi, IntoRawConfig, TransformConfigNapi};
+use napi::{bindgen_prelude::AsyncTask, Env, JsObject, Result, Status, Task};
 use napi_derive::napi;
 use swc_core::{
   base::{
@@ -16,16 +22,9 @@ use swc_core::{
     SourceMap,
   },
 };
-
-use std::{
-  cell::RefCell,
-  sync::{
-    atomic::{AtomicU32, Ordering},
-    Arc,
-  },
-};
 use swc_plugins_collection::pass::{internal_transform_after_pass, internal_transform_before_pass};
 use swc_plugins_collection::types::TransformConfig;
+use swc_plugins_core::CssMinifyOptions;
 
 // ===== Internal Rust struct under the hood =====
 pub struct Compiler {

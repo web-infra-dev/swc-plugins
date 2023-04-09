@@ -1,10 +1,11 @@
-use anyhow::{anyhow, Result};
 use std::{path::PathBuf, sync::Arc};
+
+use anyhow::{anyhow, Result};
 use swc_core::{
   base::{config::JsMinifyOptions, try_with_handler, Compiler, HandlerOpts, TransformOutput},
   common::{
-    errors::ColorConfig, source_map::SourceMapGenConfig, sync::Lazy, FileName, Globals,
-    SourceMap, GLOBALS, SourceFile,
+    errors::ColorConfig, source_map::SourceMapGenConfig, sync::Lazy, FileName, Globals, SourceFile,
+    SourceMap, GLOBALS,
   },
   css::{
     ast::Stylesheet,
@@ -46,13 +47,15 @@ pub fn minify(
 }
 
 pub fn minify_css(config: &CssMinifyOptions, filename: &str, src: &str) -> Result<TransformOutput> {
-  let cm = Arc::new(SourceMap::default());
+  GLOBALS.set(&Globals::default(), || {
+    let cm = Arc::new(SourceMap::default());
 
-  let fm = cm.new_source_file(FileName::Real(filename.into()), src.into());
+    let fm = cm.new_source_file(FileName::Real(filename.into()), src.into());
 
-  let mut ast = parse(filename, fm)?;
-  swc_minify_css(&mut ast, Default::default());
-  codegen(&cm, filename, &ast, config)
+    let mut ast = parse(filename, fm)?;
+    swc_minify_css(&mut ast, Default::default());
+    codegen(&cm, filename, &ast, config)
+  })
 }
 
 fn parse(filename: &str, fm: Arc<SourceFile>) -> Result<Stylesheet> {
@@ -86,7 +89,12 @@ impl SourceMapGenConfig for CssMinifyOptions {
   }
 }
 
-fn codegen(cm: &SourceMap, filename: &str, ast: &Stylesheet, option: &CssMinifyOptions) -> Result<TransformOutput> {
+fn codegen(
+  cm: &SourceMap,
+  filename: &str,
+  ast: &Stylesheet,
+  option: &CssMinifyOptions,
+) -> Result<TransformOutput> {
   let mut output = String::new();
   let mut src_map = option.source_map.then(Vec::new);
 

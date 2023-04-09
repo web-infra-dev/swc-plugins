@@ -1,0 +1,71 @@
+name: rs-test
+
+on:
+  push:
+    branches:
+      - main
+    tags-ignore:
+      - "**"
+  pull_request:
+    paths: # Only run when changes are made to rust code or root Cargo
+      - "crates/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "rust-toolchain"
+      - "rustfmt.toml"
+      - "clippy.toml"
+
+# cancel previous job runs for the same workflow + pr
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  format-test:
+    name: format, spell check, test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        if: ${{ !matrix.settings.docker }}
+        with:
+          node-version: 16
+
+      - name: Setup node dependencies
+        run: |
+          npm install -g pnpm@7
+          pnpm install
+
+      - name: Install toolchain
+        run: |
+          rustup show
+          rustup component add rustfmt
+          rustup component add clippy
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: check
+
+      - name: Run rustfmt
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+      - name: Run Cargo Check
+        run: cargo check --workspace --all-targets --release --locked
+
+      - name: Run Clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --workspace --all-targets -- -D warnings
+
+      - name: Run test
+        run: |
+          node -e "console.log(process.arch)"
+          cargo test --workspace

@@ -1,6 +1,6 @@
 use std::{env::current_dir, fs, path::Path};
 
-use swc_plugins_core::minify;
+use swc_plugins_core::{minify, minify_css, CssMinifyOptions};
 
 #[test]
 fn test() {
@@ -21,6 +21,17 @@ fn test() {
         .unwrap()
         .join("benches/fixtures/minify/large_file.js"),
     ),
+  )
+  .unwrap();
+
+  // should minify success
+  minify_css(
+    &CssMinifyOptions {
+      source_map: false,
+      inline_source_content: false,
+    },
+    "test",
+    "body { color: red; }",
   )
   .unwrap();
 }

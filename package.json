@@ -10,7 +10,7 @@
   "version": "0.2.0",
   "devDependencies": {
     "@changesets/cli": "^2.26.0",
-    "@napi-rs/cli": "^2.11.4",
+    "@napi-rs/cli": "^2.15.2",
     "@storybook/addon-links": "^6.5.12",
     "@types/node": "^18.7.1",
     "dotenv-cli": "^6.0.0",
@@ -42,7 +42,6 @@
         "x86_64-unknown-linux-musl",
         "aarch64-unknown-linux-gnu",
         "x86_64-unknown-linux-gnu",
-        "armv7-unknown-linux-gnueabihf",
         "x86_64-pc-windows-msvc",
         "aarch64-pc-windows-msvc",
         "aarch64-apple-darwin",

@@ -1,10 +1,7 @@
 export const propTypes = {
-  foo: PropTypes.string
+    foo: PropTypes.string
 };
-
 class Foo extends React.Component {
-  render() {}
-
+    render() {}
 }
-
 Foo.propTypes = process.env.NODE_ENV !== "production" ? propTypes : {};

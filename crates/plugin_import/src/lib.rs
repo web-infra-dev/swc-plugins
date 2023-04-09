@@ -1,9 +1,9 @@
 mod visit;
-use crate::visit::IdentComponent;
-use rustc_hash::{FxHashMap as HashMap, FxHashSet as HashSet};
-use handlebars::{Context, Helper, HelperResult, Output, RenderContext, Template};
-use serde::Deserialize;
 use std::fmt::Debug;
+
+use handlebars::{Context, Helper, HelperResult, Output, RenderContext, Template};
+use rustc_hash::{FxHashMap as HashMap, FxHashSet as HashSet};
+use serde::Deserialize;
 use swc_core::{
   common::{util::take::Take, BytePos, Span, SyntaxContext, DUMMY_SP},
   ecma::{
@@ -15,6 +15,8 @@ use swc_core::{
     visit::{as_folder, Fold, VisitMut, VisitWith},
   },
 };
+
+use crate::visit::IdentComponent;
 
 #[derive(Debug, Deserialize, Clone)]
 pub enum StyleConfig {

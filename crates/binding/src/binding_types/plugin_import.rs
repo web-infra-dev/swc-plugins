@@ -1,11 +1,9 @@
-use swc_plugins_collection::swc_plugin_import::{CustomTransform, PluginImportConfig, StyleConfig};
-
 use napi::{Env, JsFunction, JsString, Ref, Status};
 use napi_derive::napi;
-
-use crate::{thread_safe_function::ThreadSafeFunction, IS_SYNC};
+use swc_plugins_collection::swc_plugin_import::{CustomTransform, PluginImportConfig, StyleConfig};
 
 use super::IntoRawConfig;
+use crate::{thread_safe_function::ThreadSafeFunction, IS_SYNC};
 
 #[napi(object)]
 pub struct StyleConfigNapi {

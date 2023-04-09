@@ -1,6 +1,6 @@
 #![feature(let_chains)]
-use swc_plugins_utils::PluginContext;
 use std::sync::Arc;
+
 use swc_core::{
   self,
   common::DUMMY_SP,
@@ -11,6 +11,7 @@ use swc_core::{
   },
   quote,
 };
+use swc_plugins_utils::PluginContext;
 
 const RUNTIME_PACKAGE_NAME: &str = "@modern-js/runtime";
 const USE_LOADER: &str = "useLoader";
@@ -132,12 +133,13 @@ pub fn plugin_modernjs_ssr_loader_id(plugin_ctx: Arc<PluginContext>) -> impl Fol
 
 #[cfg(test)]
 mod test {
-  use swc_plugins_utils::PluginContext;
   use std::{path::PathBuf, sync::Arc};
+
   use swc_core::{
-    common::{comments::SingleThreadedComments, Mark, SourceMap, FileName},
+    common::{comments::SingleThreadedComments, FileName, Mark, SourceMap},
     ecma::parser::Syntax,
   };
+  use swc_plugins_utils::PluginContext;
 
   use crate::plugin_modernjs_ssr_loader_id;
 

@@ -7,7 +7,6 @@ use swc_core::{
     visit::{as_folder, Fold, VisitMut, VisitMutWith},
   },
 };
-
 use swc_plugins_utils::ClearMark;
 
 struct RmUseEffect {
