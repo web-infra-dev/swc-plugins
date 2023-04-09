@@ -4,18 +4,8 @@ env:
   APP_NAME: swc-plugins
   MACOSX_DEPLOYMENT_TARGET: "10.13"
 "on":
-  push:
-    branches:
-      - main
-    tags-ignore:
-      - "**"
-    paths-ignore:
-      - "**/*.md"
-      - LICENSE
-      - "**/*.gitignore"
-      - .editorconfig
-      - docs/**
-  pull_request: null
+  workflow_dispatch: null
+
 jobs:
   build:
     strategy:
@@ -375,6 +365,7 @@ jobs:
   publish:
     name: Publish
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs:
       - test-macOS-windows-binding
       - test-linux-x64-gnu-binding
@@ -402,12 +393,17 @@ jobs:
         run: ls -R ./npm
         shell: bash
 
-      - name: Publish
-        if: "startsWith(github.event.head_commit.message, 'chore(release): publish')"
-        uses: changesets/action@v1
+      - name: Release
+        uses: web-infra-dev/actions@v2
         with:
-          publish: pnpm publish --no-git-checks
-          commit: "chore(release): publish"
+          # this expects you to have a script called release which does a build for your packages and calls changeset publish
+          version: latest
+          type: "release"
+          branch: ${{ github.ref_name }}
+          tools: "changeset"
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          REF: ${{ github.ref }}
+          ONLY_RELEASE_TAG: true

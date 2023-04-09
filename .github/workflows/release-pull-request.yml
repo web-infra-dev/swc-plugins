@@ -1,0 +1,29 @@
+name: Release Pull Request
+
+on:
+  workflow_dispatch: null
+
+jobs:
+  release:
+    name: Create Release Pull Request
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+        with:
+          # getting release note text need to get commit history
+          fetch-depth: 100
+      - name: Create Release Pull Request
+        uses: web-infra-dev/actions@v2
+        with:
+          # this expects you to have a script called release which does a build for your packages and calls changeset publish
+          version: "latest"
+          versionNumber: "auto"
+          type: "pull request"
+          tools: "changeset"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          REF: ${{ github.ref }}
