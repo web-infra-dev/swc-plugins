@@ -1,4 +1,4 @@
-name: CI
+name: Release
 env:
   DEBUG: napi:*
   APP_NAME: swc-plugins
