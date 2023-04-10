@@ -14,6 +14,16 @@ jobs:
         with:
           # getting release note text need to get commit history
           fetch-depth: 100
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: |
+          npm install -g pnpm@7
+          pnpm install
+
       - name: Create Release Pull Request
         uses: web-infra-dev/actions@v2
         with:
