@@ -1,5 +1,20 @@
 # @modern-js/swc-plugins
 
+## 0.3.0
+
+### Minor Changes
+
+- c732e39: feat: add loadable-componnets-plugin
+
+### Patch Changes
+
+- 5f13a5e: chore: bump swc
+- 6048199: fix: add loadable compnents plugins ts type.
+- 3121d85: fix: set thread-local when uses css minify
+- cc3a247: chore: upgrade swc
+- eb87186: refactor: run multi-platform compilation only when we are ready to release
+- 8261aba: feat: stay compatible with babel-plugin-import
+
 ## 0.2.0
 
 ### Minor Changes
