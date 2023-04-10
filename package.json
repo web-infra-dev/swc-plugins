@@ -32,7 +32,7 @@
     "test": "echo Enable test when fix CI, GLIB3.22 not found",
     "version": "napi version",
     "release": "changeset publish --no-git-checks",
-    "change": "changeset add"
+    "changeset": "changeset"
   },
   "napi": {
     "name": "swc-plugins",
