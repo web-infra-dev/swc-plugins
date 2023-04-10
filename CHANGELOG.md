@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.3.1
+
+### Patch Changes
+
+- 018f6d8: feat: add peer dep @swc/helpers
+
 ## 0.3.0
 
 ### Minor Changes
