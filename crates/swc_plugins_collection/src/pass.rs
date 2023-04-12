@@ -5,10 +5,9 @@ use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_remove_es_module_mark::remove_es_module_mark;
 use swc_core::{
   base::config::{ModuleConfig, Options},
-  common::{chain, pass::Either, FileName},
+  common::{chain, comments::Comments, pass::Either, FileName},
   ecma::visit::Fold,
   ecma::{transforms::base::pass::noop, visit::as_folder},
-  plugin::proxies::PluginCommentsProxy,
 };
 use swc_plugin_import::plugin_import;
 use swc_plugin_loadable_components::loadable_transform;
@@ -59,12 +58,6 @@ pub fn internal_transform_before_pass<'a>(
     Either::Right(noop())
   };
 
-  let loadable_components = if extensions.loadable_components.unwrap_or(false) {
-    Either::Left(plugin_loadable_components())
-  } else {
-    Either::Right(noop())
-  };
-
   let emotion = if let Some(emotion_options) = &extensions.emotion {
     Either::Left(swc_emotion::emotion(
       emotion_options.clone(),
@@ -105,7 +98,6 @@ pub fn internal_transform_before_pass<'a>(
     emotion,
     styled_jsx,
     styled_components,
-    loadable_components
   )
 }
 
@@ -123,15 +115,21 @@ pub fn internal_transform_after_pass<'a>(
     Either::Right(noop())
   };
 
+  let loadable_components = if extensions.loadable_components.unwrap_or(false) {
+    Either::Left(plugin_loadable_components(plugin_context.comments.clone()))
+  } else {
+    Either::Right(noop())
+  };
+
   let remove_es_module_mark = if let Some(ModuleConfig::CommonJs(_)) = swc_config.config.module && !plugin_context.is_source_esm {
     Either::Left(remove_es_module_mark())
   } else {
     Either::Right(noop())
   };
 
-  chain!(lock_core_js, remove_es_module_mark)
+  chain!(lock_core_js, remove_es_module_mark, loadable_components)
 }
 
-fn plugin_loadable_components() -> impl Fold {
-  as_folder(loadable_transform(PluginCommentsProxy))
+fn plugin_loadable_components<C: Comments>(comments: C) -> impl Fold {
+  as_folder(loadable_transform(comments))
 }

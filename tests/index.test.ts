@@ -1,4 +1,4 @@
-import { describe, test } from "vitest";
+import { describe, expect, it, test } from "vitest";
 import { fsSnapshot, walkLeafDir } from "./utils";
 import * as path from "path";
 import { Compiler, TransformConfig } from "../";
@@ -11,10 +11,28 @@ async function transform(option: Partial<TransformConfig>, filename: string, cod
 describe("extensions", () => {
   test("plugin-import", async () => {
     await walkLeafDir(
-      path.resolve(__dirname, "../crates/plugin_import/tests/fixtures/style-tpl"),
+      path.resolve(
+        __dirname,
+        "../crates/plugin_import/tests/fixtures/style-tpl"
+      ),
       async (dir) => {
         await fsSnapshot(dir, transform);
       }
     );
+  });
+});
+
+describe("loadable-components", () => {
+  it("should transform correctly", async () => {
+    const output = await transform(
+      {
+        extensions: {
+          loadableComponents: true,
+        },
+      },
+      "test.js",
+      "loadable(() => import(`./ModA`))"
+    );
+    expect(output.code).toMatchSnapshot();
   });
 });
