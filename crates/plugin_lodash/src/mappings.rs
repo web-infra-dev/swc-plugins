@@ -118,7 +118,7 @@ pub fn build_mappings<'a>(
 fn resolve(id: &str, pwd: &Path) -> Result<PathBuf, ResolveError> {
   match RESOLVER.resolve(pwd, id) {
     Ok(info) => match info {
-      ResolveResult::Info(info) => Ok(info.path),
+      ResolveResult::Resource(info) => Ok(info.path),
       ResolveResult::Ignored => Err(ResolveError::new(id.into(), ResolveErrorKind::ShouldIgnore)),
     },
     Err(_) => Err(ResolveError::new(
