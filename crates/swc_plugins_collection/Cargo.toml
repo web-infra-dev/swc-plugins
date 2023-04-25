@@ -21,17 +21,17 @@ swc_plugins_utils = { path = "../swc_plugins_utils" }
 swc_plugins_core = { path = "../swc_plugins_core" }
 
 # plugins list 
-modularize_imports = "0.27.4"
+modularize_imports = "0.27.5"
 swc_plugin_import = { path = "../plugin_import" }
 plugin_lock_corejs_version = { path = "../plugin_lock_corejs_version" }
 swc_plugin_lodash = { path = "../plugin_lodash" }
 plugin_modernjs_ssr_loader_id = { path = "../plugin_modernjs_ssr_loader_id" }
 swc_plugin_react_utils = { path = "../plugin_react_utils" }
 plugin_remove_es_module_mark = { path = "../plugin_remove_es_module_mark" }
-styled_components = "0.54.4"
-styled_jsx = "0.31.4"
-swc_emotion = "0.30.4"
-swc_plugin_loadable_components = { git = "https://github.com/swc-project/plugins", rev = "59f8af5" }
+styled_components = "0.54.5"
+styled_jsx = "0.31.5"
+swc_emotion = "0.30.5"
+swc_plugin_loadable_components = { git = "https://github.com/swc-project/plugins", rev = "a7ed1a6" }
 
 [dev-dependencies]
 insta = "1.18.2"
