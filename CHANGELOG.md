@@ -1,5 +1,13 @@
 # @modern-js/swc-plugins
 
+## 0.3.2
+
+### Patch Changes
+
+- 583e238: fix: we must use same comments obj to parser, transform && we must put the loadable-components in after pass.
+- 11d6883: chore: update dependencies
+- 0dc8f4c: chore: bump swc_core
+
 ## 0.3.1
 
 ### Patch Changes
