@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.3.3
+
+### Patch Changes
+
+- e2247ed: chore: bump dependencies
+
 ## 0.3.2
 
 ### Patch Changes
