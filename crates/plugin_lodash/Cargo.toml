@@ -4,7 +4,7 @@ name = "swc_plugin_lodash"
 version = "0.1.0"
 
 [dependencies]
-nodejs-resolver = "0.0.81"
+nodejs-resolver = "0.0.86"
 serde = { workspace = true }
 serde_json = { workspace = true }
 rustc-hash = { workspace = true }
