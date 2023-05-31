@@ -1,7 +1,7 @@
 [package]
 edition = "2021"
 name = "swc_plugin_import"
-version = "0.1.7"
+version = "0.1.5"
 license = "MIT"
 description = "babel-plugin-import rewritten in Rust"
 

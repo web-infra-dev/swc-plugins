@@ -11,6 +11,6 @@ lto = false
 rustc-hash = { version = "1.1.0" }
 anyhow = { version = "1.0.69" }
 dashmap = { version = "5.4.0" }
-serde = "1.0.163"
+serde = "1.0.152"
 serde_json = "1.0.91"
-swc_core = { version = "0.76.25", features = ["common"] }
+swc_core = { version = "0.75.36", features = ["common"] }
