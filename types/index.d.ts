@@ -78,7 +78,7 @@ export interface Extensions {
   };
   lodash?: {
     cwd?: string;
-    ids?: string;
+    ids?: string[];
   };
   modernjsSsrLoaderId?: boolean;
   loadableComponents?: boolean;
