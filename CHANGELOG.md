@@ -1,5 +1,12 @@
 # @modern-js/swc-plugins
 
+## 0.3.4
+
+### Patch Changes
+
+- aa14f49: fix: extensions.styledComponents typo
+- 0b9835a: fix: incorrect lodash.ids type
+
 ## 0.3.3
 
 ### Patch Changes
