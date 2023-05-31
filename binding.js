@@ -111,11 +111,11 @@ function boolToObj(input) {
 }
 
 function optionsToString(options) {
-  const styledComponent = boolToObj(options.styledComponent);
+  const styledComponents = boolToObj(options.styledComponents);
   const emotion = boolToObj(options.emotion);
 
-  if (styledComponent && typeof styledComponent !== "string") {
-    options.styledComponent = JSON.stringify(styledComponent);
+  if (styledComponents && typeof styledComponents !== "string") {
+    options.styledComponents = JSON.stringify(styledComponents);
   }
 
   if (emotion && typeof emotion !== "string") {

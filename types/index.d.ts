@@ -1,5 +1,5 @@
 /**
- * The type description of Extensions.emotion and Extensions.styledComponent are
+ * The type description of Extensions.emotion and Extensions.styledComponents are
  * copied from https://nextjs.org/docs/advanced-features/compiler#emotion
  */
 import { JsMinifyOptions, Options } from "./swcTypes";
@@ -82,7 +82,7 @@ export interface Extensions {
   };
   modernjsSsrLoaderId?: boolean;
   loadableComponents?: boolean;
-  styledComponent?:
+  styledComponents?:
     | boolean
     | {
         displayName?: boolean;
