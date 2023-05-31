@@ -333,7 +333,7 @@ will become something like this:
 import { foo } from '/project/node_modules/your-lib/node_modules/@swc/helpers';
 ```
 
-#### extensions.styledComponent
+#### extensions.styledComponents
 
 - Type:
 
