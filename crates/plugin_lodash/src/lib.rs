@@ -254,7 +254,7 @@ impl VisitMut for PluginLodash {
           // Check if this import should be replaced
           if self.pkg_map.get(source).is_some() {
             // Convert _.map() -> map#0()
-            let local_name = format!("_{}{}", &prop.sym, self.imported_names.len());
+            let local_name = format!("_lodash_{}{}", &prop.sym, self.imported_names.len());
             let local = Ident::new(
               JsWord::from(local_name),
               Span::dummy_with_cmt().apply_mark(self.top_level_mark),
