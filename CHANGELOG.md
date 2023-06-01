@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.3.5
+
+### Patch Changes
+
+- 8f7254c: fix(plugin-lodash): invalid local name
+
 ## 0.3.4
 
 ### Patch Changes
