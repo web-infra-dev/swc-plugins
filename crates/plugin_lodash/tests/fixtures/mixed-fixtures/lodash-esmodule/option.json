@@ -1,0 +1,12 @@
+{
+  "swc": {},
+  "extensions": {
+    "lodash": {
+      "cwd": "",
+      "ids": ["lodash", "lodash-es"]
+    }
+  },
+  "module": {
+    "type": "esmodule"
+  }
+}
