@@ -80,7 +80,12 @@ export interface Extensions {
     cwd?: string;
     ids?: string[];
   };
-  modernjsSsrLoaderId?: boolean;
+  ssrLoaderId?: {
+    runtimePackageName: string;
+    functionUseLoaderName?: string;
+    functionUseStaticLoaderName?: string;
+    functionCreateContainerName?: string;
+  };
   loadableComponents?: boolean;
   styledComponents?:
     | boolean

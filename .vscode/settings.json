@@ -6,5 +6,6 @@
     "rustc_hash",
     "Stylesheet",
     "wasi"
-  ]
+  ],
+  "rust-analyzer.procMacro.ignored": { "napi-derive": ["napi"] }
 }

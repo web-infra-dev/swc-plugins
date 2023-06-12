@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use modularize_imports::PackageConfig;
 use plugin_lock_corejs_version::LockCoreJsVersion;
+use plugin_ssr_loader_id::SSRLoaderIdConfig;
 use serde::Deserialize;
 use swc_core::base::config::Options;
 use swc_plugin_import::PluginImportConfig;
@@ -22,7 +23,7 @@ pub struct Extensions {
   pub styled_jsx: Option<bool>,
 
   pub lodash: Option<PluginLodashConfig>,
-  pub modernjs_ssr_loader_id: Option<bool>,
+  pub ssr_loader_id: Option<SSRLoaderIdConfig>,
   pub loadable_components: Option<bool>,
 }
 

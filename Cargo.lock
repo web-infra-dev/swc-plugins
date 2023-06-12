@@ -1428,22 +1428,23 @@ dependencies = [
 ]
 
 [[package]]
-name = "plugin_modernjs_ssr_loader_id"
-version = "0.1.0"
-dependencies = [
- "md5",
- "swc_core",
- "swc_plugins_utils",
- "test_plugins",
-]
-
-[[package]]
 name = "plugin_remove_es_module_mark"
 version = "0.1.0"
 dependencies = [
  "serde",
  "swc_core",
  "swc_plugins_utils",
+]
+
+[[package]]
+name = "plugin_ssr_loader_id"
+version = "0.1.0"
+dependencies = [
+ "md5",
+ "serde",
+ "swc_core",
+ "swc_plugins_utils",
+ "test_plugins",
 ]
 
 [[package]]
@@ -3047,8 +3048,8 @@ dependencies = [
  "insta",
  "modularize_imports",
  "plugin_lock_corejs_version",
- "plugin_modernjs_ssr_loader_id",
  "plugin_remove_es_module_mark",
+ "plugin_ssr_loader_id",
  "serde",
  "serde_json",
  "styled_components",
