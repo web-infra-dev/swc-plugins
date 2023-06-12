@@ -31,8 +31,8 @@ pub struct PluginSSRLoaderId {
 impl<'a> PluginSSRLoaderId {
   pub fn new(filename: String, cwd: &'a str, config: SSRLoaderIdConfig) -> Self {
     let hash = {
-      let filename = if filename.starts_with(cwd) {
-        &filename[cwd.len()..]
+      let filename = if let Some(name) = filename.strip_prefix(cwd) {
+        name
       } else {
         filename.as_str()
       };
@@ -127,8 +127,8 @@ impl<'a> PluginSSRLoaderId {
       return Some(());
     }
 
-    println!("{0} 中 loaderId 生成失败，请检查 {0}", loader_name);
-    panic!("please check the usage of {:?}", callee);
+    println!("{loader_name} 中 loaderId 生成失败，请检查 {loader_name}");
+    panic!("please check the usage of {callee:?}");
   }
 
   fn modify_create_container_call_expr(
@@ -181,11 +181,11 @@ impl<'a> PluginSSRLoaderId {
             });
             if let Some(name) = name &&
               LOADER_SLICE.contains(&name) &&
-              self.check_is_duplicate_inner_loader(&func_expr).is_none()
+              self.check_is_duplicate_inner_loader(func_expr).is_none()
                     {
                         let key_value_prop = Prop::KeyValue(KeyValueProp {
                             key: method.key.clone(),
-                            value: Box::new(self.create_loader_expression(&func_expr)),
+                            value: Box::new(self.create_loader_expression(func_expr)),
                         });
                         *prop = key_value_prop;
                     }
@@ -215,7 +215,7 @@ impl VisitMut for PluginSSRLoaderId {
     use swc_core::ecma::ast::ModuleExportName;
     let config = &self.config;
     let state = &mut self.state;
-    if &import_decl.src.value != &config.runtime_package_name {
+    if import_decl.src.value != config.runtime_package_name {
       return;
     }
 
@@ -252,7 +252,7 @@ impl VisitMut for PluginSSRLoaderId {
                     ModuleExportName::Ident(id) => Some(id),
                     ModuleExportName::Str(_) => None,
                 })
-                .unwrap_or_else(|| &local_name);
+                .unwrap_or(local_name);
             if let Some(function_use_loader_name) = &config.function_use_loader_name &&
                    import_name.sym.eq(function_use_loader_name) &&
                    state.use_loader.is_none() { state.use_loader = Some(local_name.to_id()); }
