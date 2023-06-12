@@ -1,17 +1,19 @@
 #![feature(let_chains)]
 use std::sync::Arc;
 
+use serde::Deserialize;
 use swc_core::{
   common::DUMMY_SP,
   ecma::{
-    ast::{CallExpr, Expr, Id, Lit, Str, PropName, FnExpr, KeyValueProp, ImportDecl, ImportSpecifier},
+    ast::{
+      CallExpr, Expr, FnExpr, Id, ImportDecl, ImportSpecifier, KeyValueProp, Lit, PropName, Str,
+    },
     atoms::JsWord,
-    visit::{as_folder, Fold, VisitMut, noop_visit_mut_type},
+    visit::{as_folder, noop_visit_mut_type, Fold, VisitMut},
   },
   quote,
 };
 use swc_plugins_utils::PluginContext;
-use serde::Deserialize;
 
 #[derive(Debug, Deserialize, Default, Clone)]
 pub struct SSRLoaderIdConfig {
@@ -129,42 +131,57 @@ impl<'a> PluginSSRLoaderId {
     panic!("please check the usage of {:?}", callee);
   }
 
-  fn modify_create_container_call_expr(&mut self, call_expr: &mut CallExpr, import_func_name: &Option<Id>) -> Option<()> { 
-
+  fn modify_create_container_call_expr(
+    &mut self,
+    call_expr: &mut CallExpr,
+    import_func_name: &Option<Id>,
+  ) -> Option<()> {
     use swc_core::ecma::ast::Prop;
 
     let Some(func_name) = import_func_name else {
         return None;
     };
-    
+
     let callee = call_expr
-        .callee.as_expr()?
-        .as_ident()
-        .map(|ident| ident.to_id())?;
+      .callee
+      .as_expr()?
+      .as_ident()
+      .map(|ident| ident.to_id())?;
     if !callee.eq(func_name) {
-        return None;
+      return None;
     }
-    
-    let arg0_props = call_expr.args.get_mut(0)?.expr.as_mut_object()?.props.as_mut_slice();
-    
+
+    let arg0_props = call_expr
+      .args
+      .get_mut(0)?
+      .expr
+      .as_mut_object()?
+      .props
+      .as_mut_slice();
+
     fn get_name_from_prop_key(prop: &PropName) -> Option<&str> {
-        prop.as_ident().map(|ident| ident.sym.as_ref())
-            .or_else(|| {
-                prop.as_str().map(|str| str.value.as_ref())
-            })
-        }
-        
+      prop
+        .as_ident()
+        .map(|ident| ident.sym.as_ref())
+        .or_else(|| prop.as_str().map(|str| str.value.as_ref()))
+    }
+
     const LOADER_SLICE: [&str; 2] = ["loader", "staticLoader"];
-    arg0_props.iter_mut().filter_map(|prop| prop.as_mut_prop()).for_each(|prop| {
+    arg0_props
+      .iter_mut()
+      .filter_map(|prop| prop.as_mut_prop())
+      .for_each(|prop| {
         let prop = prop.as_mut();
         match prop {
-            Prop::Method(method) => {
-                let name= get_name_from_prop_key(&method.key);
-                let func_expr = &Expr::Fn(FnExpr { ident: None, function: method.function.clone() });
-                if 
-                    let Some(name) = name && 
-                    LOADER_SLICE.contains(&name) && 
-                    self.check_is_duplicate_inner_loader(&func_expr).is_none()
+          Prop::Method(method) => {
+            let name = get_name_from_prop_key(&method.key);
+            let func_expr = &Expr::Fn(FnExpr {
+              ident: None,
+              function: method.function.clone(),
+            });
+            if let Some(name) = name &&
+              LOADER_SLICE.contains(&name) &&
+              self.check_is_duplicate_inner_loader(&func_expr).is_none()
                     {
                         let key_value_prop = Prop::KeyValue(KeyValueProp {
                             key: method.key.clone(),
@@ -172,34 +189,35 @@ impl<'a> PluginSSRLoaderId {
                         });
                         *prop = key_value_prop;
                     }
-            },
-            Prop::KeyValue(key_value) => {
-                let name = get_name_from_prop_key(&key_value.key);
+          }
+          Prop::KeyValue(key_value) => {
+            let name = get_name_from_prop_key(&key_value.key);
 
-                if  let Some(name) = name && 
-                    LOADER_SLICE.contains(&name) && 
-                    self.check_is_duplicate_inner_loader(&key_value.value).is_none() 
-                    { 
+            if  let Some(name) = name &&
+                    LOADER_SLICE.contains(&name) &&
+                    self.check_is_duplicate_inner_loader(&key_value.value).is_none()
+                    {
                         *key_value.value = self.create_loader_expression(&key_value.value);
                     }
-
-            }
-            _ => (),
+          }
+          _ => (),
         }
-    });        
-    
+      });
+
     Some(())
-}
+  }
 }
 
 impl VisitMut for PluginSSRLoaderId {
   noop_visit_mut_type!();
 
-  fn visit_mut_import_decl(&mut self,import_decl: &mut ImportDecl) { 
+  fn visit_mut_import_decl(&mut self, import_decl: &mut ImportDecl) {
     use swc_core::ecma::ast::ModuleExportName;
     let config = &self.config;
     let state = &mut self.state;
-    if &import_decl.src.value != &config.runtime_package_name  { return ; }
+    if &import_decl.src.value != &config.runtime_package_name {
+      return;
+    }
 
     let has_use_loader = if config.function_use_loader_name.is_some() {
       state.use_loader.is_some()
@@ -217,7 +235,9 @@ impl VisitMut for PluginSSRLoaderId {
       true
     };
 
-    if has_use_loader && has_use_static_loader && has_create_container { return; }
+    if has_use_loader && has_use_static_loader && has_create_container {
+      return;
+    }
 
     import_decl.specifiers.iter().for_each(|specifier| {
             let ImportSpecifier::Named(imported_spec) = specifier else {
@@ -233,11 +253,10 @@ impl VisitMut for PluginSSRLoaderId {
                     ModuleExportName::Str(_) => None,
                 })
                 .unwrap_or_else(|| &local_name);
-            
             if let Some(function_use_loader_name) = &config.function_use_loader_name &&
-                   import_name.sym.eq(function_use_loader_name) && 
+                   import_name.sym.eq(function_use_loader_name) &&
                    state.use_loader.is_none() { state.use_loader = Some(local_name.to_id()); }
-            
+
             if let Some(function_use_static_loader_name) = &config.function_use_static_loader_name &&
                    import_name.sym.eq(function_use_static_loader_name) &&
                    state.use_static_loader.is_none() { state.use_static_loader = Some(local_name.to_id()); }
@@ -248,20 +267,19 @@ impl VisitMut for PluginSSRLoaderId {
     })
   }
 
-
   fn visit_mut_call_expr(&mut self, call_expr: &mut CallExpr) {
     // FIXME: clone the Option<Id>, because Rust: cannot borrow `*self` as mutable because it is also borrowed as immutable
     let state = &self.state;
-    let (
-      use_loader, 
-      use_static_loader, 
-      create_container
-    ) = (state.use_loader.clone(), state.use_static_loader.clone(), state.create_container.clone()); 
+    let (use_loader, use_static_loader, create_container) = (
+      state.use_loader.clone(),
+      state.use_static_loader.clone(),
+      state.create_container.clone(),
+    );
 
     self.modify_loader_call_expr(call_expr, &use_loader);
     self.modify_loader_call_expr(call_expr, &use_static_loader);
     self.modify_create_container_call_expr(call_expr, &create_container);
-}
+  }
 }
 
 struct SSRLoaderIdState {
@@ -272,9 +290,10 @@ struct SSRLoaderIdState {
   use_static_loader: Option<Id>,
 }
 
-
-
-pub fn plugin_ssr_loader_id(config: &SSRLoaderIdConfig, plugin_ctx: Arc<PluginContext>) -> impl Fold {
+pub fn plugin_ssr_loader_id(
+  config: &SSRLoaderIdConfig,
+  plugin_ctx: Arc<PluginContext>,
+) -> impl Fold {
   let (filename, cwd) = (
     plugin_ctx.filename.clone(),
     plugin_ctx
@@ -296,6 +315,7 @@ mod test {
     ecma::parser::Syntax,
   };
   use swc_plugins_utils::PluginContext;
+
   use super::plugin_ssr_loader_id;
 
   #[test]
@@ -305,13 +325,13 @@ mod test {
       Syntax::Es(Default::default()),
       |_| {
         plugin_ssr_loader_id(
-            &crate::SSRLoaderIdConfig { 
-              runtime_package_name: "@modern-js/runtime".to_string(), 
-              function_use_loader_name: Some("useLoader".to_string()), 
-              function_use_static_loader_name: None, 
-              function_create_container_name: None 
-            },
-            Arc::new(PluginContext {
+          &crate::SSRLoaderIdConfig {
+            runtime_package_name: "@modern-js/runtime".to_string(),
+            function_use_loader_name: Some("useLoader".to_string()),
+            function_use_static_loader_name: None,
+            function_create_container_name: None,
+          },
+          Arc::new(PluginContext {
             cm: cm.clone(),
             file: cm.new_source_file(FileName::Anon, "".into()),
             top_level_mark: Mark::new(),
@@ -321,8 +341,7 @@ mod test {
             cwd: PathBuf::from("/root"),
             config_hash: None,
             is_source_esm: true,
-          }), 
-          
+          }),
         )
       },
       "import { useLoader } from '@modern-js/runtime';useLoader(foo);useLoader(bar)",
