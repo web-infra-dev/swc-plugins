@@ -8,6 +8,7 @@ use super::plugin_lock_corejs_version::LockCoreJsVersionNapi;
 use super::plugin_lodash::PluginLodashConfigNapi;
 use super::plugin_modularize_imports::PackageConfigNapi;
 use super::plugin_react_utils;
+use super::plugin_ssr_loader_id::SSRLoaderIdConfigNapi;
 use super::plugin_styled_components::StyledComponentsConfigNapi;
 use super::{plugin_import, IntoRawConfig};
 /**
@@ -27,7 +28,7 @@ pub struct ExtensionsNapi {
 
   pub lodash: Option<PluginLodashConfigNapi>,
 
-  pub modernjs_ssr_loader_id: Option<bool>,
+  pub ssr_loader_id: Option<SSRLoaderIdConfigNapi>,
   pub loadable_components: Option<bool>,
 }
 
@@ -42,7 +43,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       styled_components,
       styled_jsx,
       lodash,
-      modernjs_ssr_loader_id,
+      ssr_loader_id,
       loadable_components,
     } = self;
 
@@ -54,8 +55,8 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       emotion: emotion.into_raw_config(env)?,
       styled_components: styled_components.into_raw_config(env)?,
       styled_jsx,
+      ssr_loader_id: ssr_loader_id.into_raw_config(env)?,
       lodash: lodash.into_raw_config(env)?,
-      modernjs_ssr_loader_id,
       loadable_components,
     })
   }

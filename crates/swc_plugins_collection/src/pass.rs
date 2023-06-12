@@ -3,6 +3,7 @@ use std::{path::Path, sync::Arc};
 use modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_remove_es_module_mark::remove_es_module_mark;
+use plugin_ssr_loader_id::plugin_ssr_loader_id;
 use swc_core::{
   base::config::{ModuleConfig, Options},
   common::{chain, comments::Comments, pass::Either, FileName},
@@ -50,10 +51,8 @@ pub fn internal_transform_before_pass<'a>(
     Either::Right(noop())
   };
 
-  let modernjs_ssr_loader_id = if *extensions.modernjs_ssr_loader_id.as_ref().unwrap_or(&false) {
-    Either::Left(
-      plugin_modernjs_ssr_loader_id::plugin_modernjs_ssr_loader_id(plugin_context.clone()),
-    )
+  let ssr_loader_id = if let Some(ref config) = extensions.ssr_loader_id {
+    Either::Left(plugin_ssr_loader_id(config, plugin_context.clone()))
   } else {
     Either::Right(noop())
   };
@@ -94,7 +93,7 @@ pub fn internal_transform_before_pass<'a>(
     plugin_import,
     react_utils,
     lodash,
-    modernjs_ssr_loader_id,
+    ssr_loader_id,
     emotion,
     styled_jsx,
     styled_components,
