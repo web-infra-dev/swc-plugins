@@ -33,6 +33,15 @@ describe("extensions", () => {
       }
     );
   });
+
+  test("plugin-config-routes", async () => {
+    await walkLeafDir(
+      path.resolve(__dirname, "../crates/plugin_config_routes/tests"),
+      async (dir) => {
+        await fsSnapshot(dir, transform);
+      }
+    );
+  })
 });
 
 describe("loadable-components", () => {
@@ -49,3 +58,4 @@ describe("loadable-components", () => {
     expect(output.code).toMatchSnapshot();
   });
 });
+

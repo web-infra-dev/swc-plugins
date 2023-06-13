@@ -1,0 +1,14 @@
+[package]
+name = "plugin_config_routes"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+swc_core = { workspace = true, features = [
+  "common",
+  "ecma_visit",
+  "ecma_ast",
+  "ecma_quote",
+] }
+swc_plugins_utils = { path = "../swc_plugins_utils" }
+serde = { workspace = true}

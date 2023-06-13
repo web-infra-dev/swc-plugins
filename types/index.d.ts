@@ -80,6 +80,9 @@ export interface Extensions {
     cwd?: string;
     ids?: string[];
   };
+  configRoutes?: {
+    lazy?: boolean
+  },
   ssrLoaderId?: {
     runtimePackageName: string;
     functionUseLoaderName?: string;
