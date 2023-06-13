@@ -18,7 +18,7 @@ pub fn plugin_config_routes(config: &ConfigRoutesConfig) -> impl Fold {
 }
 
 fn find_target_prop_from_props<'a>(
-  props: &'a Vec<PropOrSpread>,
+  props: &'a [PropOrSpread],
   target: &'static str,
 ) -> Option<&'a KeyValueProp> {
   props.iter().find_map(|prop_spread| {

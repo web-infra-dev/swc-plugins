@@ -1,10 +1,10 @@
 use std::{path::Path, sync::Arc};
 
 use modularize_imports::{modularize_imports, Config as ModularizedConfig};
+use plugin_config_routes::plugin_config_routes;
 use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_remove_es_module_mark::remove_es_module_mark;
 use plugin_ssr_loader_id::plugin_ssr_loader_id;
-use plugin_config_routes::plugin_config_routes;
 use swc_core::{
   base::config::{ModuleConfig, Options},
   common::{chain, comments::Comments, pass::Either, FileName},
@@ -59,7 +59,7 @@ pub fn internal_transform_before_pass<'a>(
   };
 
   let config_routes = if let Some(ref config) = extensions.config_routes {
-    Either::Left(plugin_config_routes(config)) 
+    Either::Left(plugin_config_routes(config))
   } else {
     Either::Right(noop())
   };

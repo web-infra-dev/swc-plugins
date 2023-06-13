@@ -6,15 +6,13 @@ use super::IntoRawConfig;
 #[derive(Default)]
 #[napi(object)]
 pub struct ConfigRoutesConfigNapi {
-    pub lazy: Option<bool>,
+  pub lazy: Option<bool>,
 }
 
 impl IntoRawConfig<ConfigRoutesConfig> for ConfigRoutesConfigNapi {
-    fn into_raw_config(self, _: napi::Env) -> napi::Result<ConfigRoutesConfig> {
-        let Self {
-            lazy,
-        } = self;
+  fn into_raw_config(self, _: napi::Env) -> napi::Result<ConfigRoutesConfig> {
+    let Self { lazy } = self;
 
-        Ok(ConfigRoutesConfig { lazy })
-    }
+    Ok(ConfigRoutesConfig { lazy })
+  }
 }

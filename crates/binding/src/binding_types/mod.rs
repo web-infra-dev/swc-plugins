@@ -1,5 +1,6 @@
 pub mod config;
 pub mod extensions;
+pub mod plugin_config_routes;
 pub mod plugin_emotion;
 pub mod plugin_import;
 pub mod plugin_lock_corejs_version;
@@ -9,7 +10,6 @@ pub mod plugin_react_utils;
 pub mod plugin_ssr_loader_id;
 pub mod plugin_styled_components;
 pub mod plugin_styled_jsx;
-pub mod plugin_config_routes;
 
 use std::collections::HashMap;
 
