@@ -1,5 +1,12 @@
 # @modern-js/swc-plugins
 
+## 0.4.0
+
+### Minor Changes
+
+- 40a7e83: feat: add ssr-loader-id plugin
+- 1835d9e: feat: add config-routes plugin
+
 ## 0.3.5
 
 ### Patch Changes
