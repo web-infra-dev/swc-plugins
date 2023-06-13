@@ -3,6 +3,7 @@
 pub mod pass;
 pub mod types;
 pub use modularize_imports;
+pub use plugin_config_routes;
 pub use plugin_lock_corejs_version;
 pub use plugin_ssr_loader_id;
 pub use styled_components as plugin_styled_components;

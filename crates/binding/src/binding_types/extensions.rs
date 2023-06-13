@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use napi_derive::napi;
 use swc_plugins_collection::types::Extensions;
 
+use super::plugin_config_routes::ConfigRoutesConfigNapi;
 use super::plugin_emotion::EmotionOptionsNapi;
 use super::plugin_lock_corejs_version::LockCoreJsVersionNapi;
 use super::plugin_lodash::PluginLodashConfigNapi;
@@ -29,6 +30,7 @@ pub struct ExtensionsNapi {
   pub lodash: Option<PluginLodashConfigNapi>,
 
   pub ssr_loader_id: Option<SSRLoaderIdConfigNapi>,
+  pub config_routes: Option<ConfigRoutesConfigNapi>,
   pub loadable_components: Option<bool>,
 }
 
@@ -45,6 +47,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       lodash,
       ssr_loader_id,
       loadable_components,
+      config_routes,
     } = self;
 
     Ok(Extensions {
@@ -54,6 +57,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       lock_corejs_version: lock_corejs_version.into_raw_config(env)?,
       emotion: emotion.into_raw_config(env)?,
       styled_components: styled_components.into_raw_config(env)?,
+      config_routes: config_routes.into_raw_config(env)?,
       styled_jsx,
       ssr_loader_id: ssr_loader_id.into_raw_config(env)?,
       lodash: lodash.into_raw_config(env)?,

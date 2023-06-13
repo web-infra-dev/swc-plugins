@@ -1,6 +1,7 @@
 use std::{path::Path, sync::Arc};
 
 use modularize_imports::{modularize_imports, Config as ModularizedConfig};
+use plugin_config_routes::plugin_config_routes;
 use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_remove_es_module_mark::remove_es_module_mark;
 use plugin_ssr_loader_id::plugin_ssr_loader_id;
@@ -57,6 +58,12 @@ pub fn internal_transform_before_pass<'a>(
     Either::Right(noop())
   };
 
+  let config_routes = if let Some(ref config) = extensions.config_routes {
+    Either::Left(plugin_config_routes(config))
+  } else {
+    Either::Right(noop())
+  };
+
   let emotion = if let Some(emotion_options) = &extensions.emotion {
     Either::Left(swc_emotion::emotion(
       emotion_options.clone(),
@@ -94,6 +101,7 @@ pub fn internal_transform_before_pass<'a>(
     react_utils,
     lodash,
     ssr_loader_id,
+    config_routes,
     emotion,
     styled_jsx,
     styled_components,

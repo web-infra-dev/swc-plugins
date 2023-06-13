@@ -1,5 +1,6 @@
 pub mod config;
 pub mod extensions;
+pub mod plugin_config_routes;
 pub mod plugin_emotion;
 pub mod plugin_import;
 pub mod plugin_lock_corejs_version;
