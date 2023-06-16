@@ -9,7 +9,7 @@ use swc_core::{
       CallExpr, Expr, FnExpr, Id, ImportDecl, ImportSpecifier, KeyValueProp, Lit, PropName, Str,
     },
     atoms::JsWord,
-    visit::{as_folder, noop_visit_mut_type, Fold, VisitMut},
+    visit::{as_folder, noop_visit_mut_type, Fold, VisitMut, VisitMutWith},
   },
   quote,
 };
@@ -279,6 +279,8 @@ impl VisitMut for PluginSSRLoaderId {
     self.modify_loader_call_expr(call_expr, &use_loader);
     self.modify_loader_call_expr(call_expr, &use_static_loader);
     self.modify_create_container_call_expr(call_expr, &create_container);
+
+    call_expr.visit_mut_children_with(self);
   }
 }
 
