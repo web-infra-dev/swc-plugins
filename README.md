@@ -1,4 +1,6 @@
-# SWC executable with some builtin plugins for Node.js users
+# Modern.js SWC Plugins
+
+This repo provides an executable with some built-in SWC plugins for [Modern.js](https://github.com/web-infra-dev/modern.js) and other Node.js users.
 
 ## Quick start
 
@@ -8,40 +10,42 @@ Install the plugin by using:
 
 ```bash
 # npm
-npm install @modern-js/swc-plugins
+npm add @modern-js/swc-plugins
 
 # yarn
 yarn add @modern-js/swc-plugins
 
 # pnpm
-pnpm install @modern-js/swc-plugins
+pnpm add @modern-js/swc-plugins
 ```
 
 ## Contributing
 
 Please read the [Contributing Guide](./CONTRIBUTING.md).
 
-### Usage
+## Usage
 
-#### Transform
+### Transform
 
 ```ts
-import { Compiler } from '@modern-js/swc-plugins';
+import { Compiler } from "@modern-js/swc-plugins";
 
 const compiler = new Compiler({
   extensions: {
-    pluginImport: [{
-      libraryName: 'foo'
-    }]
-  }
+    pluginImport: [
+      {
+        libraryName: "foo",
+      },
+    ],
+  },
 });
 const { code, map } = compiler.transform(
-  '/projects/my-app/index.js',
-  'import { Button } from "foo"\nconsole.log(Button)',
+  "/projects/my-app/index.js",
+  'import { Button } from "foo"\nconsole.log(Button)'
 );
 ```
 
-#### Minify
+### Minify
 
 ```ts
 import { minify } from '@modern-js/swc-plugins';
@@ -117,15 +121,15 @@ Some plugins ported from Babel.
 - type
 
 ```ts
-type pluginImport = {
+type PluginImport = {
   libraryName: string;
   libraryDirectory?: string;
 
   style?: boolean | "css" | string | ((name: string) => string | undefined);
   styleLibraryDirectory?: string;
 
-  camelToDashComponentName?: bool; // default to true
-  transformToDefaultImport?: bool;
+  camelToDashComponentName?: boolean; // default to true
+  transformToDefaultImport?: boolean;
 
   customName?: string | ((name: string) => string | undefined);
   customStyleName?: string | ((name: string) => string | undefined);
@@ -173,8 +177,8 @@ If this field is set, `style` will be ignored.
 This field decides the path of style to import, for example, set this to `'styles'`, `import { Button } from 'foo'` will become:
 
 ```ts
-import Button from 'foo/lib/button';
-import 'foo/styles/button';
+import Button from "foo/lib/button";
+import "foo/styles/button";
 ```
 
 **camelToDashComponentName**
@@ -201,26 +205,26 @@ You can use this to customize the transformation.
 Assume the original code is:
 
 ```ts
-import { Button, Input } from 'foo';
+import { Button, Input } from "foo";
 ```
 
 And set `customName` to:
 
 ```ts
 const customName = (name: string) => {
-  if (name === 'Button') {
-    return undefined
+  if (name === "Button") {
+    return undefined;
   } else {
-    return `foo/es/components/${name.toLowercase()}`
+    return `foo/es/components/${name.toLowercase()}`;
   }
-}
+};
 ```
 
 Result:
 
 ```ts
-import { Button } from 'foo';
-import Input from 'foo/es/components/input';
+import { Button } from "foo";
+import Input from "foo/es/components/input";
 ```
 
 **customStyleName**
@@ -293,13 +297,13 @@ Note there is a small difference that `lodash-compat` is currently deprecated so
 - Type:
 
 ```ts
-{
+type ModularizeImports = {
   [packageName: string]: {
     transform: string;
     preventFullImport: boolean;
     skipDefaultConversion: boolean;
-  }
-}
+  };
+};
 ```
 
 More detail on Next.js [modularize-imports](https://nextjs.org/docs/advanced-features/compiler#modularize-imports)
@@ -309,10 +313,10 @@ More detail on Next.js [modularize-imports](https://nextjs.org/docs/advanced-fea
 - Type:
 
 ```ts
-{
-  corejs?: string,
-  swcHelpers?: string
-}
+type LockCorejsVersion = {
+  corejs?: string;
+  swcHelpers?: string;
+};
 ```
 
 Use this to rewrite `core-js` and `@swc/helpers` import path, this is helpful if you are an author of a library, and that library code contains `@swc/helpers` import, but you don't want your user to specify `@swc/helpers` as dependencies, you can achieve that in the following way.
@@ -320,7 +324,9 @@ Use this to rewrite `core-js` and `@swc/helpers` import path, this is helpful if
 ```ts
 {
   extensions: {
-    swcHelpers: require('path').dirname(require.resolve('@swc/helpers/package.json'))
+    swcHelpers: require("path").dirname(
+      require.resolve("@swc/helpers/package.json")
+    );
   }
 }
 ```
@@ -328,13 +334,13 @@ Use this to rewrite `core-js` and `@swc/helpers` import path, this is helpful if
 By doing so, the following code:
 
 ```ts
-import { foo } from '@swc/helpers';
+import { foo } from "@swc/helpers";
 ```
 
 will become something like this:
 
 ```ts
-import { foo } from '/project/node_modules/your-lib/node_modules/@swc/helpers';
+import { foo } from "/project/node_modules/your-lib/node_modules/@swc/helpers";
 ```
 
 #### extensions.styledComponents
@@ -342,27 +348,29 @@ import { foo } from '/project/node_modules/your-lib/node_modules/@swc/helpers';
 - Type:
 
 ```ts
-boolean | {
-  displayName?: boolean;
-  // Enabled by default.
-  ssr?: boolean;
-  // Enabled by default.
-  fileName?: boolean;
-  // Empty by default.
-  topLevelImportPaths?: string[];
-  // Defaults to ["index"].
-  meaninglessFileNames?: string[];
-  // Enabled by default.
-  cssProp?: boolean;
-  // Empty by default.
-  namespace?: string;
-  // Not supported yet.
-  minify?: boolean;
-  // Not supported yet.
-  transpileTemplateLiterals?: boolean;
-  // Not supported yet.
-  pure?: boolean;
-};
+type StyledComponents =
+  | boolean
+  | {
+      displayName?: boolean;
+      // Enabled by default.
+      ssr?: boolean;
+      // Enabled by default.
+      fileName?: boolean;
+      // Empty by default.
+      topLevelImportPaths?: string[];
+      // Defaults to ["index"].
+      meaninglessFileNames?: string[];
+      // Enabled by default.
+      cssProp?: boolean;
+      // Empty by default.
+      namespace?: string;
+      // Not supported yet.
+      minify?: boolean;
+      // Not supported yet.
+      transpileTemplateLiterals?: boolean;
+      // Not supported yet.
+      pure?: boolean;
+    };
 ```
 
 More detail at https://nextjs.org/docs/advanced-features/compiler#styled-components
@@ -372,7 +380,7 @@ More detail at https://nextjs.org/docs/advanced-features/compiler#styled-compone
 - Type:
 
 ```ts
-boolean | {
+type Emotion = boolean | {
   // default is true. It will be disabled when build type is production.
   sourceMap?: boolean,
   // default is 'dev-only'.
