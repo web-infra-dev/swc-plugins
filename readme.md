@@ -17,6 +17,10 @@ yarn add @modern-js/swc-plugins
 pnpm install @modern-js/swc-plugins
 ```
 
+## Contributing
+
+Please read the [Contributing Guide](./CONTRIBUTING.md).
+
 ### Usage
 
 #### Transform
