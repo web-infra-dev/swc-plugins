@@ -128,8 +128,8 @@ type PluginImport = {
   style?: boolean | "css" | string | ((name: string) => string | undefined);
   styleLibraryDirectory?: string;
 
-  camelToDashComponentName?: bool; // default to true
-  transformToDefaultImport?: bool;
+  camelToDashComponentName?: boolean; // default to true
+  transformToDefaultImport?: boolean;
 
   customName?: string | ((name: string) => string | undefined);
   customStyleName?: string | ((name: string) => string | undefined);
