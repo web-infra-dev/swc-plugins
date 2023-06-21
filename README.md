@@ -121,7 +121,7 @@ Some plugins ported from Babel.
 - type
 
 ```ts
-type pluginImport = {
+type PluginImport = {
   libraryName: string;
   libraryDirectory?: string;
 
@@ -297,13 +297,13 @@ Note there is a small difference that `lodash-compat` is currently deprecated so
 - Type:
 
 ```ts
-{
+type ModularizeImports = {
   [packageName: string]: {
     transform: string;
     preventFullImport: boolean;
     skipDefaultConversion: boolean;
-  }
-}
+  };
+};
 ```
 
 More detail on Next.js [modularize-imports](https://nextjs.org/docs/advanced-features/compiler#modularize-imports)
@@ -313,10 +313,10 @@ More detail on Next.js [modularize-imports](https://nextjs.org/docs/advanced-fea
 - Type:
 
 ```ts
-{
-  corejs?: string,
-  swcHelpers?: string
-}
+type LockCorejsVersion = {
+  corejs?: string;
+  swcHelpers?: string;
+};
 ```
 
 Use this to rewrite `core-js` and `@swc/helpers` import path, this is helpful if you are an author of a library, and that library code contains `@swc/helpers` import, but you don't want your user to specify `@swc/helpers` as dependencies, you can achieve that in the following way.
@@ -348,27 +348,29 @@ import { foo } from "/project/node_modules/your-lib/node_modules/@swc/helpers";
 - Type:
 
 ```ts
-boolean | {
-  displayName?: boolean;
-  // Enabled by default.
-  ssr?: boolean;
-  // Enabled by default.
-  fileName?: boolean;
-  // Empty by default.
-  topLevelImportPaths?: string[];
-  // Defaults to ["index"].
-  meaninglessFileNames?: string[];
-  // Enabled by default.
-  cssProp?: boolean;
-  // Empty by default.
-  namespace?: string;
-  // Not supported yet.
-  minify?: boolean;
-  // Not supported yet.
-  transpileTemplateLiterals?: boolean;
-  // Not supported yet.
-  pure?: boolean;
-};
+type StyledComponents =
+  | boolean
+  | {
+      displayName?: boolean;
+      // Enabled by default.
+      ssr?: boolean;
+      // Enabled by default.
+      fileName?: boolean;
+      // Empty by default.
+      topLevelImportPaths?: string[];
+      // Defaults to ["index"].
+      meaninglessFileNames?: string[];
+      // Enabled by default.
+      cssProp?: boolean;
+      // Empty by default.
+      namespace?: string;
+      // Not supported yet.
+      minify?: boolean;
+      // Not supported yet.
+      transpileTemplateLiterals?: boolean;
+      // Not supported yet.
+      pure?: boolean;
+    };
 ```
 
 More detail at https://nextjs.org/docs/advanced-features/compiler#styled-components
@@ -378,7 +380,7 @@ More detail at https://nextjs.org/docs/advanced-features/compiler#styled-compone
 - Type:
 
 ```ts
-boolean | {
+type Emotion = boolean | {
   // default is true. It will be disabled when build type is production.
   sourceMap?: boolean,
   // default is 'dev-only'.
