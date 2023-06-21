@@ -25,8 +25,10 @@
     "@swc/helpers": "0.5.1"
   },
   "engines": {
-    "node": ">=14.12"
+    "node": ">=14.17.6",
+    "pnpm": ">=8.0.0 <=8.6.1"
   },
+  "packageManager": "pnpm@8.6.1",
   "scripts": {
     "artifacts": "napi artifacts",
     "build": "napi build --cargo-cwd crates/binding --platform --js index.js --dts unused.d.ts --release",
