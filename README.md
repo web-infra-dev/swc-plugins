@@ -10,13 +10,13 @@ Install the plugin by using:
 
 ```bash
 # npm
-npm install @modern-js/swc-plugins
+npm add @modern-js/swc-plugins
 
 # yarn
 yarn add @modern-js/swc-plugins
 
 # pnpm
-pnpm install @modern-js/swc-plugins
+pnpm add @modern-js/swc-plugins
 ```
 
 ## Contributing
