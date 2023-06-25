@@ -36,7 +36,7 @@ jobs:
 
       - name: Setup node dependencies
         run: |
-          npm install -g pnpm@7
+          corepack enable
           pnpm install
 
       - name: Install toolchain
