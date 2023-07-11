@@ -3,10 +3,9 @@ use std::{path::Path, sync::Arc};
 use modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use plugin_config_routes::plugin_config_routes;
 use plugin_lock_corejs_version::lock_corejs_version;
-use plugin_remove_es_module_mark::remove_es_module_mark;
 use plugin_ssr_loader_id::plugin_ssr_loader_id;
 use swc_core::{
-  base::config::{ModuleConfig, Options},
+  base::config::Options,
   common::{chain, comments::Comments, pass::Either, FileName},
   ecma::visit::Fold,
   ecma::{transforms::base::pass::noop, visit::as_folder},
@@ -110,7 +109,7 @@ pub fn internal_transform_before_pass<'a>(
 
 pub fn internal_transform_after_pass<'a>(
   extensions: &Extensions,
-  swc_config: &Options,
+  _swc_config: &Options,
   plugin_context: Arc<PluginContext>,
 ) -> impl Fold + 'a {
   let lock_core_js = if let Some(config) = &extensions.lock_corejs_version {
@@ -128,13 +127,7 @@ pub fn internal_transform_after_pass<'a>(
     Either::Right(noop())
   };
 
-  let remove_es_module_mark = if let Some(ModuleConfig::CommonJs(_)) = swc_config.config.module && !plugin_context.is_source_esm {
-    Either::Left(remove_es_module_mark())
-  } else {
-    Either::Right(noop())
-  };
-
-  chain!(lock_core_js, remove_es_module_mark, loadable_components)
+  chain!(lock_core_js, loadable_components)
 }
 
 fn plugin_loadable_components<C: Comments>(comments: C) -> impl Fold {

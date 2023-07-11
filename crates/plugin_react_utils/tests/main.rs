@@ -33,7 +33,8 @@ fn main() {
       };
 
       let swc: Options = serde_json::from_str(r#"{
-        "jsc": { "target": "es2020", "externalHelpers": true, "parser": { "syntax": "ecmascript", "jsx": true } }
+        "jsc": { "target": "es2020", "externalHelpers": true, "parser": { "syntax": "ecmascript", "jsx": true } },
+        "isModule": true
       }"#).unwrap();
       let react_utils = ReactUtilsConfig {
         remove_prop_types: Some(remove_prop_types.clone()),
@@ -64,7 +65,7 @@ fn main() {
 
         let expected_code = read(expected_remove_path);
         tests.push(ExpectedInfo::new(
-          expected_path.to_string_lossy().to_string(),
+          expected_remove_path.to_string_lossy().to_string(),
           expected_code,
           Some(TransformConfig {
             swc: swc.clone(),

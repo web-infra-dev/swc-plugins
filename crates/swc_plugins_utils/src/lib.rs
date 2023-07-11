@@ -642,10 +642,6 @@ pub struct PluginContext {
   pub cwd: PathBuf,
 
   pub config_hash: Option<String>, // This can be used by plugins to do caching
-
-  // Use this to determine if we should remove __esModule mark in pure commonjs module
-  // Remove this when SWC fix https://github.com/swc-project/swc/issues/6500
-  pub is_source_esm: bool,
 }
 
 impl std::fmt::Debug for PluginContext {
@@ -658,7 +654,6 @@ impl std::fmt::Debug for PluginContext {
       .field("filename", &self.filename)
       .field("cwd", &self.cwd)
       .field("config_hash", &self.config_hash)
-      .field("is_source_esm", &self.is_source_esm)
       .finish()
   }
 }
