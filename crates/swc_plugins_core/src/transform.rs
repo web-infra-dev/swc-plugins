@@ -3,7 +3,7 @@ use std::{path::PathBuf, sync::Arc};
 use anyhow::Result;
 use swc_core::{
   base::{
-    config::{self, ModuleConfig, Options},
+    config::{self, Options},
     try_with_handler, Compiler, HandlerOpts, TransformOutput,
   },
   common::{comments::SingleThreadedComments, errors::ColorConfig, FileName, Mark, GLOBALS},
@@ -15,7 +15,7 @@ use swc_core::{
     // transforms::module::common_js::Config
   },
 };
-use swc_plugins_utils::{is_esm, PluginContext};
+use swc_plugins_utils::PluginContext;
 
 use crate::TransformFn;
 
@@ -75,8 +75,11 @@ where
 
           swc_config.top_level_mark = Some(top_level_mark);
           let comments = SingleThreadedComments::default();
+          let is_module = swc_config
+            .config
+            .is_module
+            .unwrap_or(config::IsModule::Unknown);
 
-          // Need auto detect esm
           let program = compiler.parse_js(
             fm.clone(),
             handler,
@@ -88,27 +91,9 @@ where
                 ..Default::default()
               })
             }),
-            config::IsModule::Bool(true),
+            is_module,
             Some(&comments),
           )?;
-
-          let is_source_esm = is_esm(&program);
-          // Automatic set module config by it's original format
-          if swc_config.config.module.is_none() {
-            swc_config.config.module = Some(if is_source_esm {
-              ModuleConfig::Es6
-            } else {
-              ModuleConfig::CommonJs(
-                // Remove this when `swc_core` public module config API
-                serde_json::from_str(
-                  r#"{
-                    "ignoreDynamic": true
-                  }"#,
-                )
-                .unwrap(),
-              )
-            });
-          }
 
           // TODO comments can be pass to `process_js_with_custom_pass` in next swc version
           let plugin_context = Arc::new(PluginContext {
@@ -118,7 +103,6 @@ where
             unresolved_mark,
             comments: comments.clone(),
             config_hash,
-            is_source_esm,
             filename,
             cwd: swc_config.cwd.clone(),
           });

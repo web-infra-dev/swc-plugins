@@ -342,7 +342,6 @@ mod test {
             filename: "/root/a.js".into(),
             cwd: PathBuf::from("/root"),
             config_hash: None,
-            is_source_esm: true,
           }),
         )
       },

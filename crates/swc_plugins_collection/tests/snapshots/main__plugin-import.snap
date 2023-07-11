@@ -2,7 +2,6 @@
 source: crates/swc_plugins_collection/tests/main.rs
 expression: res.code
 ---
-"use strict";
 var _object_spread = require("@swc/helpers/_/_object_spread");
 var a = {};
 var b = _object_spread._({}, a);

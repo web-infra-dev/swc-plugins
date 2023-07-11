@@ -1,4 +1,3 @@
-"use strict";
 class Foo1 extends React.Component {
   render() {}
 
