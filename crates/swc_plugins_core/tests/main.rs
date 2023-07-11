@@ -1,5 +1,10 @@
-use std::{env::current_dir, fs, path::Path};
+use std::{env::current_dir, fs, path::PathBuf, process::Command, sync::Arc};
 
+use swc_core::base::Compiler;
+use swc_plugins_collection::{
+  pass::{internal_transform_after_pass, internal_transform_before_pass},
+  types::Extensions,
+};
 use swc_plugins_core::{minify, minify_css, CssMinifyOptions};
 
 #[test]
@@ -16,11 +21,12 @@ fn test() {
   minify(
     &config,
     "large_file.js",
-    &read_to_string(
-      &current_dir()
+    &fs::read_to_string(
+      current_dir()
         .unwrap()
         .join("benches/fixtures/minify/large_file.js"),
-    ),
+    )
+    .unwrap(),
   )
   .unwrap();
 
@@ -34,10 +40,4 @@ fn test() {
     "body { color: red; }",
   )
   .unwrap();
-}
-
-fn read_to_string(s: &Path) -> String {
-  let file = fs::read(s).unwrap();
-
-  String::from_utf8(file).unwrap()
 }

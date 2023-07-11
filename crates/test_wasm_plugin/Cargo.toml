@@ -1,6 +1,6 @@
 [package]
 edition = "2021"
-name = "swc_plugin_import"
+name = "plugin"
 version = "0.1.8"
 license = "MIT"
 description = "babel-plugin-import rewritten in Rust"
@@ -15,9 +15,13 @@ crate-type = ["cdylib", "lib"]
 handlebars = "4.3.3"
 regex = "1.6.0"
 serde = { workspace = true }
-serde_json = { workspace = true, optional = true }
+serde_json = { workspace = true }
 rustc-hash = { workspace = true }
-swc_core = { workspace = true, features = ["common", "ecma_ast", "ecma_visit"] }
-
-[dev-dependencies]
-test_plugins = { path = "../test_plugins" }
+getrandom = { version = "*", features = ["js"] }
+swc_core = { workspace = true, default-features = false, features = [
+  "common",
+  "ecma_ast",
+  "ecma_visit",
+  "ecma_plugin_transform",
+] }
+swc_plugin_import = { path = "../plugin_import" }

@@ -3,7 +3,7 @@ use std::fmt::Debug;
 
 use handlebars::{Context, Helper, HelperResult, Output, RenderContext, Template};
 use rustc_hash::{FxHashMap as HashMap, FxHashSet as HashSet};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use swc_core::{
   common::{util::take::Take, BytePos, Span, SyntaxContext, DUMMY_SP},
   ecma::{
@@ -15,10 +15,16 @@ use swc_core::{
     visit::{as_folder, Fold, VisitMut, VisitWith},
   },
 };
+#[cfg(feature = "plugin")]
+use swc_core::{
+  ecma::{ast::Program, visit::FoldWith},
+  plugin::{plugin_transform, proxies::TransformPluginProgramMetadata},
+};
 
 use crate::visit::IdentComponent;
 
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub enum StyleConfig {
   StyleLibraryDirectory(String),
   #[serde(skip)]
@@ -53,7 +59,8 @@ impl Debug for CustomTransform {
   }
 }
 
-#[derive(Debug, Deserialize, Default, Clone)]
+#[derive(Debug, Deserialize, Serialize, Default, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct PluginImportConfig {
   pub library_name: String,
   pub library_directory: Option<String>, // default to `lib`

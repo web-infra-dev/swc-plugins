@@ -3,6 +3,15 @@ name = "swc_plugins_collection"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+default = ["plugin"]
+plugin = [
+    "dep:modularize_imports",
+    "dep:styled_components",
+    "dep:styled_jsx",
+    "dep:swc_emotion",
+    "dep:swc_plugin_loadable_components",
+]
 
 [dependencies]
 
@@ -21,18 +30,20 @@ swc_plugins_utils = { path = "../swc_plugins_utils" }
 swc_plugins_core = { path = "../swc_plugins_core" }
 
 # plugins list 
-modularize_imports = "0.32.0"
 swc_plugin_import = { path = "../plugin_import" }
 plugin_lock_corejs_version = { path = "../plugin_lock_corejs_version" }
 swc_plugin_lodash = { path = "../plugin_lodash" }
 swc_plugin_react_utils = { path = "../plugin_react_utils" }
 plugin_remove_es_module_mark = { path = "../plugin_remove_es_module_mark" }
 plugin_ssr_loader_id = { path = "../plugin_ssr_loader_id" }
-plugin_config_routes = { path = "../plugin_config_routes"  }
-styled_components = "0.59.0"
-styled_jsx = "0.36.0"
-swc_emotion = "0.35.0"
-swc_plugin_loadable_components = { git = "https://github.com/swc-project/plugins", rev = "a6e943c" }
+plugin_config_routes = { path = "../plugin_config_routes" }
+
+# swc plugins
+modularize_imports = { version = "0.32.0", optional = true }
+styled_components = { version = "0.59.0", optional = true }
+styled_jsx = { version = "0.36.0", optional = true }
+swc_emotion = { version = "0.35.0", optional = true }
+swc_plugin_loadable_components = { git = "https://github.com/swc-project/plugins", rev = "a6e943c", optional = true }
 
 [dev-dependencies]
 insta = "1.18.2"

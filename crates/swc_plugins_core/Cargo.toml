@@ -2,8 +2,13 @@
 edition = "2021"
 name = "swc_plugins_core"
 version = "0.1.0"
+resolver = "2"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+plugin = [
+  "swc_core/plugin_transform_host_native",
+  "swc_core/plugin_transform_host_native_filesystem_cache",
+]
 
 [dependencies]
 anyhow = { workspace = true }
@@ -25,3 +30,5 @@ serde = { workspace = true }
 
 [dev-dependencies]
 insta = "1.18.2"
+cargo_metadata = "0.15.4"
+swc_plugins_collection = { path = "../swc_plugins_collection" }
