@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class RouteNode extends Component {
   render() {
-    const { previousRoute , route  } = this.state;
+    const { previousRoute, route } = this.state;
     return /*#__PURE__*/ createElement(RouteSegment, Object.assign({}, this.props, route, previousRoute));
   }
 

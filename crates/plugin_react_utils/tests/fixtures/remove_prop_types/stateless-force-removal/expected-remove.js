@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-var Message = ({ isFetching , isSuccess , isFailure , errorMsg  })=>{
+var Message = ({ isFetching, isSuccess, isFailure, errorMsg })=>{
   let messageType;
   let messageTxt;
   if (isFetching) {

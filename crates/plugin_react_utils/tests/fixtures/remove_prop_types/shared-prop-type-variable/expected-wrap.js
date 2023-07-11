@@ -1,7 +1,7 @@
 import React from 'react';
 import { omit } from 'underscore';
 import Bar from './bar';
-const { PropTypes  } = React;
+const { PropTypes } = React;
 const propTypes = {
     foo: PropTypes.any
 };
