@@ -1,5 +1,18 @@
 # @modern-js/swc-plugins
 
+## 0.5.0
+
+### Minor Changes
+
+- fb5dfd3: refactor: remove auto detect esmodule
+
+### Patch Changes
+
+- 668e31e: chore: bump dependencies
+- 668e31e: chore: upgrade swc_core
+- 3810c93: fix: plugin ssr-loader-id should appy `modify_loader_call` for it's children
+- d2dfd89: fix(CI): enable corepack in docker
+
 ## 0.4.0
 
 ### Minor Changes
