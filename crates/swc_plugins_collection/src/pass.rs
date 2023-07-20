@@ -6,12 +6,12 @@ use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_ssr_loader_id::plugin_ssr_loader_id;
 use swc_core::{
   base::config::Options,
-  common::{chain, comments::Comments, pass::Either, FileName},
-  ecma::{visit::Fold, ast::Program},
-  ecma::{transforms::base::pass::noop, visit::as_folder},
+  common::{chain, pass::Either, FileName},
+  ecma::transforms::base::pass::noop,
+  ecma::{ast::Program, visit::Fold},
 };
 use swc_plugin_import::plugin_import;
-use swc_plugin_loadable_components::loadable_transform;
+// use swc_plugin_loadable_components::loadable_transform;
 use swc_plugin_lodash::plugin_lodash;
 use swc_plugin_react_utils::react_utils;
 use swc_plugins_utils::PluginContext;
@@ -22,9 +22,8 @@ pub fn internal_transform_before_pass<'a>(
   extensions: &'a Extensions,
   swc_config: &Options,
   plugin_context: Arc<PluginContext>,
-  _program: &Program
+  _program: &Program,
 ) -> impl Fold + 'a {
-  #[cfg(feature = "plugin")]
   let modularize_imports = extensions
     .modularize_imports
     .as_ref()
@@ -65,7 +64,6 @@ pub fn internal_transform_before_pass<'a>(
     Either::Right(noop())
   };
 
-  #[cfg(feature = "plugin")]
   let emotion = if let Some(emotion_options) = &extensions.emotion {
     Either::Left(swc_emotion::emotion(
       emotion_options.clone(),
@@ -78,7 +76,6 @@ pub fn internal_transform_before_pass<'a>(
     Either::Right(noop())
   };
 
-  #[cfg(feature = "plugin")]
   let styled_jsx = if *extensions.styled_jsx.as_ref().unwrap_or(&false) {
     Either::Left(styled_jsx::visitor::styled_jsx(
       plugin_context.cm.clone(),
@@ -88,7 +85,6 @@ pub fn internal_transform_before_pass<'a>(
     Either::Right(noop())
   };
 
-  #[cfg(feature = "plugin")]
   let styled_components = if let Some(config) = &extensions.styled_components {
     Either::Left(styled_components::styled_components(
       plugin_context.file.name.clone(),
@@ -99,8 +95,7 @@ pub fn internal_transform_before_pass<'a>(
     Either::Right(noop())
   };
 
-  #[cfg(feature = "plugin")]
-  return chain!(
+  chain!(
     modularize_imports,
     plugin_import,
     react_utils,
@@ -110,48 +105,21 @@ pub fn internal_transform_before_pass<'a>(
     emotion,
     styled_jsx,
     styled_components,
-  );
-
-  #[cfg(not(feature = "plugin"))]
-  return chain!(
-    plugin_import,
-    react_utils,
-    lodash,
-    ssr_loader_id,
-    config_routes,
-  );
+  )
 }
 
 pub fn internal_transform_after_pass<'a>(
   extensions: &Extensions,
   _swc_config: &Options,
-  plugin_context: Arc<PluginContext>,
-  _program: &Program
+  _plugin_context: Arc<PluginContext>,
+  _program: &Program,
 ) -> impl Fold + 'a {
-  let lock_core_js = if let Some(config) = &extensions.lock_corejs_version {
+  if let Some(config) = &extensions.lock_corejs_version {
     Either::Left(lock_corejs_version(
       config.corejs.clone(),
       config.swc_helpers.clone(),
     ))
   } else {
     Either::Right(noop())
-  };
-
-  #[cfg(feature = "plugin")]
-  let loadable_components = if extensions.loadable_components.unwrap_or(false) {
-    Either::Left(plugin_loadable_components(plugin_context.comments.clone()))
-  } else {
-    Either::Right(noop())
-  };
-
-  #[cfg(feature = "plugin")]
-  return chain!(lock_core_js, loadable_components);
-
-  #[cfg(not(feature = "plugin"))]
-  return chain!(lock_core_js);
-}
-
-#[cfg(feature = "plugin")]
-fn plugin_loadable_components<C: Comments>(comments: C) -> impl Fold {
-  as_folder(loadable_transform(comments))
+  }
 }

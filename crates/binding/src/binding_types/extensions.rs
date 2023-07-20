@@ -31,7 +31,7 @@ pub struct ExtensionsNapi {
 
   pub ssr_loader_id: Option<SSRLoaderIdConfigNapi>,
   pub config_routes: Option<ConfigRoutesConfigNapi>,
-  pub loadable_components: Option<bool>,
+  // pub loadable_components: Option<bool>,
 }
 
 impl IntoRawConfig<Extensions> for ExtensionsNapi {
@@ -46,7 +46,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       styled_jsx,
       lodash,
       ssr_loader_id,
-      loadable_components,
+      // loadable_components,
       config_routes,
     } = self;
 
@@ -61,7 +61,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       styled_jsx,
       ssr_loader_id: ssr_loader_id.into_raw_config(env)?,
       lodash: lodash.into_raw_config(env)?,
-      loadable_components,
+      // loadable_components,
     })
   }
 }

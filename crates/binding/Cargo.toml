@@ -25,7 +25,7 @@ swc_core = { workspace = true, features = [
   "css_codegen",
   "css_minifier",
 ] }
-swc_plugins_core = { path = "../swc_plugins_core" }
+swc_plugins_core = { path = "../swc_plugins_core", features = ["plugin"]}
 swc_plugins_collection = { path = "../swc_plugins_collection" }
 serde_json = { workspace = true }
 serde = { workspace = true }

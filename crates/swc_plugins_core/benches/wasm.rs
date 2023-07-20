@@ -15,10 +15,20 @@ use swc_plugins_collection::{
 };
 extern crate test;
 
-#[cfg(feature = "plugin")]
+// #[cfg(feature = "plugin")]
 #[bench]
 fn wasm(bencher: &mut test::Bencher) -> impl Termination {
+  let mut cmd = Command::new("cargo");
+
+  cmd
+    .current_dir(current_dir().unwrap().join("../test_wasm_plugin"))
+    .arg("build")
+    .arg("--release")
+    .arg("--target")
+    .arg("wasm32-wasi");
+
   let mut handle = cmd.spawn().unwrap();
+
   let status = handle.wait().unwrap();
   if !status.success() {
     panic!("wasm build failed")
@@ -35,11 +45,43 @@ fn wasm(bencher: &mut test::Bencher) -> impl Termination {
 
   assert!(wasm_path.exists());
 
+  let cm = Arc::new(Default::default());
+  let compiler = Arc::new(Compiler::new(cm));
+  let output = swc_plugins_core::transform(
+    compiler.clone(),
+    &serde_json::from_str(&format!(
+      "{{
+        \"jsc\": {{
+          \"experimental\": {{
+            \"plugins\": [
+              [\"{}\", [
+                {{
+                  \"libraryName\": \"foo\",
+                  \"libraryDirectory\": \"lib\"
+                }}
+              ]]
+            ]
+          }}
+        }}
+      }}",
+      wasm_path.display()
+    ))
+    .unwrap(),
+    &Extensions::default(),
+    "",
+    "import { CamelCase } from 'foo';\nconsole.log(CamelCase)",
+    None,
+    None,
+    internal_transform_before_pass,
+    internal_transform_after_pass,
+  )
+  .unwrap();
+  assert!(output.code.contains("foo/lib"));
+
+
   bencher.iter(|| {
-    let cm = Arc::new(Default::default());
-    let compiler = Arc::new(Compiler::new(cm));
     let output = swc_plugins_core::transform(
-      compiler,
+      compiler.clone(),
       &serde_json::from_str(&format!(
         "{{
           \"jsc\": {{
@@ -73,38 +115,11 @@ fn wasm(bencher: &mut test::Bencher) -> impl Termination {
 
 #[bench]
 fn native(bencher: &mut test::Bencher) -> impl Termination {
-  let mut cmd = Command::new("cargo");
-  dbg!(current_dir().unwrap());
-  cmd
-    .current_dir(current_dir().unwrap().join("tests/plugin"))
-    .arg("build")
-    .arg("--target")
-    .arg("wasm32-wasi")
-    .arg("--quiet")
-    .arg("--release");
-
-  let mut handle = cmd.spawn().unwrap();
-  let status = handle.wait().unwrap();
-  if !status.success() {
-    panic!("wasm build failed")
-  }
-
-  let target_dir: PathBuf = cargo_metadata::MetadataCommand::new()
-    .no_deps()
-    .exec()
-    .unwrap()
-    .target_directory
-    .into();
-
-  let wasm_path = target_dir.join("wasm32-wasi/release/plugin.wasm");
-
-  assert!(wasm_path.exists());
-
+  let cm = Arc::new(Default::default());
+  let compiler = Arc::new(Compiler::new(cm));
   bencher.iter(|| {
-    let cm = Arc::new(Default::default());
-    let compiler = Arc::new(Compiler::new(cm));
     let output = swc_plugins_core::transform(
-      compiler,
+      compiler.clone(),
       &serde_json::from_str(
         r#"{
         "jsc": {}

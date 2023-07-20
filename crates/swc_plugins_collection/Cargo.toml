@@ -3,16 +3,6 @@ name = "swc_plugins_collection"
 version = "0.1.0"
 edition = "2021"
 
-[features]
-default = ["plugin"]
-plugin = [
-    "dep:modularize_imports",
-    "dep:styled_components",
-    "dep:styled_jsx",
-    "dep:swc_emotion",
-    "dep:swc_plugin_loadable_components",
-]
-
 [dependencies]
 
 serde_json = { workspace = true }
@@ -24,7 +14,6 @@ swc_core = { workspace = true, features = [
     "ecma_visit",
     "ecma_transforms",
     "ecma_parser",
-    "common_plugin_transform",
 ] }
 swc_plugins_utils = { path = "../swc_plugins_utils" }
 swc_plugins_core = { path = "../swc_plugins_core" }
@@ -39,11 +28,13 @@ plugin_ssr_loader_id = { path = "../plugin_ssr_loader_id" }
 plugin_config_routes = { path = "../plugin_config_routes" }
 
 # swc plugins
-modularize_imports = { version = "0.32.0", optional = true }
-styled_components = { version = "0.59.0", optional = true }
-styled_jsx = { version = "0.36.0", optional = true }
-swc_emotion = { version = "0.35.0", optional = true }
-swc_plugin_loadable_components = { git = "https://github.com/swc-project/plugins", rev = "a6e943c", optional = true }
+modularize_imports = { version = "0.32.0" }
+styled_components = { version = "0.59.0" }
+styled_jsx = { version = "0.36.0" }
+swc_emotion = { version = "0.35.0" }
+# Remove loadable_components as it enable plugin-mode feature,
+# which is forbidden if enabling plugin-rt.
+# swc_plugin_loadable_components = { git = "https://github.com/swc-project/plugins", rev = "a6e943c", optional = true }
 
 [dev-dependencies]
 insta = "1.18.2"

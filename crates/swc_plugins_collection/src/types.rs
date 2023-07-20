@@ -13,24 +13,21 @@ use swc_plugin_react_utils::ReactUtilsConfig;
 #[derive(Default, Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Extensions {
-  #[cfg(feature = "plugin")]
   pub modularize_imports: Option<HashMap<String, PackageConfig>>,
   pub plugin_import: Option<Vec<PluginImportConfig>>,
   pub react_utils: Option<ReactUtilsConfig>,
 
   pub lock_corejs_version: Option<LockCoreJsVersion>,
-  #[cfg(feature = "plugin")]
   pub emotion: Option<swc_emotion::EmotionOptions>,
-  #[cfg(feature = "plugin")]
   pub styled_components: Option<styled_components::Config>,
-  #[cfg(feature = "plugin")]
   pub styled_jsx: Option<bool>,
 
   pub lodash: Option<PluginLodashConfig>,
   pub ssr_loader_id: Option<SSRLoaderIdConfig>,
   pub config_routes: Option<ConfigRoutesConfig>,
-  #[cfg(feature = "plugin")]
-  pub loadable_components: Option<bool>,
+
+  // Use wasm loadable_components
+  // pub loadable_components: Option<bool>,
 }
 
 #[derive(Debug, Default, Deserialize)]
