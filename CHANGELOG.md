@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.5.1
+
+### Patch Changes
+
+- c22c44b: chore: upgrade swc_core
+
 ## 0.5.0
 
 ### Minor Changes
