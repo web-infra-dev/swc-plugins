@@ -3020,6 +3020,17 @@ dependencies = [
 [[package]]
 name = "swc_plugin_loadable_components"
 version = "0.12.3"
+dependencies = [
+ "once_cell",
+ "regex",
+ "serde_json",
+ "swc_core",
+ "tracing",
+]
+
+[[package]]
+name = "swc_plugin_loadable_components"
+version = "0.12.3"
 source = "git+https://github.com/swc-project/plugins?rev=a6e943c#a6e943c0d36ac8f4ed9448d48658a8c4ca018e18"
 dependencies = [
  "once_cell",
@@ -3100,7 +3111,7 @@ dependencies = [
  "swc_core",
  "swc_emotion",
  "swc_plugin_import",
- "swc_plugin_loadable_components",
+ "swc_plugin_loadable_components 0.12.3 (git+https://github.com/swc-project/plugins?rev=a6e943c)",
  "swc_plugin_lodash",
  "swc_plugin_react_utils",
  "swc_plugins_core",
