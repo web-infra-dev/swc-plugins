@@ -15,7 +15,6 @@ swc_core = { workspace = true, features = [
     "ecma_visit",
     "ecma_transforms",
     "ecma_parser",
-    "common_plugin_transform",
 ] }
 swc_plugins_utils = { path = "../swc_plugins_utils" }
 swc_plugins_core = { path = "../swc_plugins_core" }
@@ -32,7 +31,7 @@ plugin_config_routes = { path = "../plugin_config_routes"  }
 styled_components = "0.59.0"
 styled_jsx = "0.36.0"
 swc_emotion = "0.35.0"
-swc_plugin_loadable_components = { git = "https://github.com/swc-project/plugins", rev = "a6e943c" }
+swc_plugin_loadable_components = { path = "../plugin_loadable_components" }
 
 [dev-dependencies]
 insta = "1.18.2"
