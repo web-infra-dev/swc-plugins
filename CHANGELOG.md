@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.5.3
+
+### Patch Changes
+
+- 494272d: feat: enable wasm feature
+
 ## 0.5.2
 
 ### Patch Changes
