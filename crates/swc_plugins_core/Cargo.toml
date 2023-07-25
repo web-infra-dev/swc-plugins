@@ -3,7 +3,11 @@ edition = "2021"
 name = "swc_plugins_core"
 version = "0.1.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+plugin = [
+  "swc_core/plugin_transform_host_native_filesystem_cache",
+  "swc_core/plugin_transform_host_native",
+]
 
 [dependencies]
 anyhow = { workspace = true }
@@ -18,8 +22,6 @@ swc_core = { workspace = true, features = [
   "ecma_visit",
   "ecma_transforms",
   "ecma_parser",
-  "plugin_transform_host_native_filesystem_cache",
-  "plugin_transform_host_native",
 ] }
 swc_plugins_utils = { path = "../swc_plugins_utils" }
 serde_json = { workspace = true }

@@ -7,7 +7,7 @@ version = "0.1.0"
 crate-type = ["cdylib", "lib"]
 
 [features]
-dev = []
+plugin = ["swc_plugins_core/plugin"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -29,4 +29,3 @@ swc_plugins_core = { path = "../swc_plugins_core" }
 swc_plugins_collection = { path = "../swc_plugins_collection" }
 serde_json = { workspace = true }
 serde = { workspace = true }
-
