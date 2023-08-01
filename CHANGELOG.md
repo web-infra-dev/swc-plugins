@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.5.5
+
+### Patch Changes
+
+- 691ad81: fix: remove pnpm engine limitation
+
 ## 0.5.4
 
 ### Patch Changes
