@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.5.4
+
+### Patch Changes
+
+- 699354f: feat: enable concurrent minifier
+
 ## 0.5.3
 
 ### Patch Changes
