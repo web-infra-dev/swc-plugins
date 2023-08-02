@@ -5,7 +5,7 @@ exclude = ["crates/plugin_modernjs_ssr_loader_id/wasm"]
 members = ["crates/*"]
 
 [profile.release]
-lto = false
+# lto = false
 strip = "symbols"
 
 [workspace.dependencies]

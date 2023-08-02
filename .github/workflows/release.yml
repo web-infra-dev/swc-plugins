@@ -3,6 +3,7 @@ env:
   DEBUG: napi:*
   APP_NAME: swc-plugins
   MACOSX_DEPLOYMENT_TARGET: "10.13"
+  CARGO_PROFILE_RELEASE_LTO: "fat"
 "on":
   workflow_dispatch: null
 

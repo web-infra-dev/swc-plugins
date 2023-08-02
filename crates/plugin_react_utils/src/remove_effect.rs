@@ -4,7 +4,7 @@ use swc_core::{
   common::util::take::Take,
   ecma::{
     ast::{BlockStmt, Expr, Id, ImportSpecifier, Module, ModuleDecl, ModuleExportName, ModuleItem},
-    visit::{as_folder, Fold, VisitMut, VisitMutWith},
+    visit::{as_folder, Fold, VisitMut, VisitMutWith, noop_visit_mut_type},
   },
 };
 use swc_plugins_utils::ClearMark;
@@ -17,6 +17,8 @@ struct RmUseEffect {
 const USE_EFFECT_STR: &str = "useEffect";
 
 impl VisitMut for RmUseEffect {
+  noop_visit_mut_type!();
+
   fn visit_mut_block_stmt(&mut self, n: &mut BlockStmt) {
     let mut rm_idx_set = HashSet::new();
     for (idx, stmt) in n.stmts.iter().enumerate() {

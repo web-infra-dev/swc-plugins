@@ -295,7 +295,7 @@ struct SSRLoaderIdState {
 pub fn plugin_ssr_loader_id(
   config: &SSRLoaderIdConfig,
   plugin_ctx: Arc<PluginContext>,
-) -> impl Fold {
+) -> impl Fold + VisitMut {
   let (filename, cwd) = (
     plugin_ctx.filename.clone(),
     plugin_ctx

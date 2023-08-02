@@ -13,7 +13,7 @@ use swc_core::{
       Ident, ImportDecl, ImportSpecifier, Module, ModuleDecl, ModuleItem, PropName, Stmt, VarDecl,
     },
     atoms::JsWord,
-    visit::{as_folder, Fold, Visit, VisitMut, VisitMutWith, VisitWith},
+    visit::{as_folder, Fold, Visit, VisitMut, VisitMutWith, VisitWith, noop_visit_mut_type, noop_visit_type},
   },
   quote,
 };
@@ -26,7 +26,7 @@ use swc_plugins_utils::{
 pub fn react_remove_prop_types(
   config: &ReactRemovePropTypeConfig,
   plugin_context: Arc<PluginContext>,
-) -> impl Fold + '_ {
+) -> impl Fold + VisitMut + '_ {
   if config.remove_import && !matches!(config.mode, Mode::Removal) {
     panic!(
       r#"react-remove-prop-type: removeImport = true and mode != "remove" can not be used at the same time."#
@@ -305,6 +305,8 @@ impl<'a, C> VisitMut for ReactRemovePropTypes<'a, C>
 where
   C: Comments,
 {
+  noop_visit_mut_type!();
+
   fn visit_mut_module(&mut self, module: &mut Module) {
     self.bindings = collect_bindings(module);
 
@@ -468,6 +470,8 @@ impl<'a> CollectReactComponent<'a> {
 }
 
 impl<'a> Visit for CollectReactComponent<'a> {
+  noop_visit_type!();
+
   fn visit_import_decl(&mut self, import_decl: &ImportDecl) {
     if !self.config.is_match_library(&import_decl.src.value) {
       return;
@@ -629,6 +633,8 @@ struct RemoveImports<'a> {
 }
 
 impl<'a> VisitMut for RemoveImports<'a> {
+  noop_visit_mut_type!();
+
   fn visit_mut_module(&mut self, module: &mut Module) {
     module.visit_mut_children_with(self);
 

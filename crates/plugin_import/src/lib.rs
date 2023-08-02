@@ -12,7 +12,7 @@ use swc_core::{
       ModuleDecl, ModuleExportName, ModuleItem, Str,
     },
     atoms::JsWord,
-    visit::{as_folder, Fold, VisitMut, VisitWith},
+    visit::{as_folder, noop_visit_mut_type, Fold, VisitMut, VisitWith},
   },
 };
 
@@ -74,7 +74,7 @@ const CUSTOM_JS: &str = "CUSTOM_JS_NAME";
 const CUSTOM_STYLE: &str = "CUSTOM_STYLE";
 const CUSTOM_STYLE_NAME: &str = "CUSTOM_STYLE_NAME";
 
-pub fn plugin_import(config: &Vec<PluginImportConfig>) -> impl Fold + '_ {
+pub fn plugin_import(config: &Vec<PluginImportConfig>) -> impl Fold + VisitMut + '_ {
   let mut renderer = handlebars::Handlebars::new();
 
   renderer.register_helper(
@@ -374,7 +374,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
       }
     }
 
-    module.body = module
+    let other_imports: Vec<_> = module
       .body
       .take()
       .into_iter()
@@ -382,9 +382,24 @@ impl<'a> VisitMut for ImportPlugin<'a> {
       .filter_map(|(idx, stmt)| (!specifiers_rm_es.contains(&idx)).then_some(stmt))
       .collect();
 
-    let body = &mut module.body;
+    let mut imports = vec![];
 
-    for js_source in specifiers_es {
+    for css_source in specifiers_css.iter().rev() {
+      let dec = ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {
+        span: DUMMY_SP,
+        specifiers: vec![],
+        src: Box::new(Str {
+          span: DUMMY_SP,
+          value: JsWord::from(css_source.as_str()),
+          raw: None,
+        }),
+        type_only: false,
+        asserts: None,
+      }));
+      imports.push(dec);
+    }
+
+    for js_source in specifiers_es.iter().rev() {
       let js_source_ref = js_source.source.as_str();
       let dec = ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {
         span: DUMMY_SP,
@@ -397,7 +412,13 @@ impl<'a> VisitMut for ImportPlugin<'a> {
                 BytePos::DUMMY,
                 SyntaxContext::from_u32(js_source.mark),
               ),
-              sym: JsWord::from(js_source.as_name.unwrap_or(js_source.default_spec).as_str()),
+              sym: JsWord::from(
+                js_source
+                  .as_name
+                  .clone()
+                  .unwrap_or(js_source.default_spec.clone())
+                  .as_str(),
+              ),
               optional: false,
             },
           })]
@@ -419,7 +440,13 @@ impl<'a> VisitMut for ImportPlugin<'a> {
                 BytePos::DUMMY,
                 SyntaxContext::from_u32(js_source.mark),
               ),
-              sym: JsWord::from(js_source.as_name.unwrap_or(js_source.default_spec).as_str()),
+              sym: JsWord::from(
+                js_source
+                  .as_name
+                  .clone()
+                  .unwrap_or(js_source.default_spec.clone())
+                  .as_str(),
+              ),
               optional: false,
             },
             is_type_only: false,
@@ -433,23 +460,11 @@ impl<'a> VisitMut for ImportPlugin<'a> {
         type_only: false,
         asserts: None,
       }));
-      body.insert(0, dec);
+      imports.push(dec);
     }
 
-    for css_source in specifiers_css {
-      let dec = ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {
-        span: DUMMY_SP,
-        specifiers: vec![],
-        src: Box::new(Str {
-          span: DUMMY_SP,
-          value: JsWord::from(css_source),
-          raw: None,
-        }),
-        type_only: false,
-        asserts: None,
-      }));
-      body.insert(0, dec);
-    }
+    imports.extend(other_imports.into_iter());
+    module.body = imports;
   }
 }
 
