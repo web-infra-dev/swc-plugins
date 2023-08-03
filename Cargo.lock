@@ -1294,6 +1294,7 @@ checksum = "bd070e393353796e801d209ad339e89596eb4c8d430d18ede6a1cced8fafbd99"
 dependencies = [
  "autocfg",
  "hashbrown 0.12.3",
+ "rayon",
  "serde",
 ]
 
@@ -3446,6 +3447,7 @@ dependencies = [
  "once_cell",
  "parking_lot",
  "radix_fmt",
+ "rayon",
  "regex",
  "rustc-hash",
  "ryu-js",
@@ -3574,6 +3576,7 @@ dependencies = [
  "indexmap 1.9.3",
  "once_cell",
  "phf",
+ "rayon",
  "rustc-hash",
  "serde",
  "smallvec",
@@ -3678,6 +3681,7 @@ dependencies = [
  "indexmap 1.9.3",
  "once_cell",
  "petgraph",
+ "rayon",
  "rustc-hash",
  "serde_json",
  "swc_atoms",
@@ -3806,6 +3810,7 @@ dependencies = [
  "indexmap 1.9.3",
  "num_cpus",
  "once_cell",
+ "rayon",
  "rustc-hash",
  "swc_atoms",
  "swc_common",

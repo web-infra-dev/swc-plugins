@@ -1,5 +1,24 @@
 # @modern-js/swc-plugins
 
+## 0.5.5
+
+### Patch Changes
+
+- 691ad81: fix: remove pnpm engine limitation
+
+## 0.5.4
+
+### Patch Changes
+
+- 699354f: feat: enable concurrent minifier
+
+## 0.5.3
+
+### Patch Changes
+
+- 9e68e36: fix(ci): disable wasm support for aarch64-windows, fix the unexpected git tag in ci
+- 494272d: feat: enable wasm feature
+
 ## 0.5.2
 
 ### Patch Changes

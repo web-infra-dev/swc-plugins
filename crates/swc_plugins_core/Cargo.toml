@@ -13,7 +13,7 @@ plugin = [
 anyhow = { workspace = true }
 swc_core = { workspace = true, features = [
   "base",
-  "common",
+  "common_concurrent",
   "css_ast",
   "css_codegen",
   "css_minifier",
@@ -22,6 +22,7 @@ swc_core = { workspace = true, features = [
   "ecma_visit",
   "ecma_transforms",
   "ecma_parser",
+  "ecma_minifier_concurrent",
 ] }
 swc_plugins_utils = { path = "../swc_plugins_utils" }
 serde_json = { workspace = true }
