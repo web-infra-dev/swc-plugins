@@ -4,7 +4,7 @@ use swc_core::{
   common::util::take::Take,
   ecma::{
     ast::{BlockStmt, Expr, Id, ImportSpecifier, Module, ModuleDecl, ModuleExportName, ModuleItem},
-    visit::{as_folder, Fold, VisitMut, VisitMutWith, noop_visit_mut_type},
+    visit::{as_folder, noop_visit_mut_type, Fold, VisitMut, VisitMutWith},
   },
 };
 use swc_plugins_utils::ClearMark;

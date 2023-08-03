@@ -13,7 +13,10 @@ use swc_core::{
       Ident, ImportDecl, ImportSpecifier, Module, ModuleDecl, ModuleItem, PropName, Stmt, VarDecl,
     },
     atoms::JsWord,
-    visit::{as_folder, Fold, Visit, VisitMut, VisitMutWith, VisitWith, noop_visit_mut_type, noop_visit_type},
+    visit::{
+      as_folder, noop_visit_mut_type, noop_visit_type, Fold, Visit, VisitMut, VisitMutWith,
+      VisitWith,
+    },
   },
   quote,
 };

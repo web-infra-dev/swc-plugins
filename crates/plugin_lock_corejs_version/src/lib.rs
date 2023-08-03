@@ -4,7 +4,7 @@ use swc_core::{
   ecma::{
     ast::{CallExpr, Callee, ImportDecl, Lit, Str},
     atoms::JsWord,
-    visit::{as_folder, Fold, VisitMut, noop_visit_mut_type},
+    visit::{as_folder, noop_visit_mut_type, Fold, VisitMut},
   },
 };
 

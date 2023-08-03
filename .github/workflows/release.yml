@@ -4,6 +4,8 @@ env:
   APP_NAME: swc-plugins
   MACOSX_DEPLOYMENT_TARGET: "10.13"
   CARGO_PROFILE_RELEASE_LTO: "fat"
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
+
 "on":
   workflow_dispatch: null
 

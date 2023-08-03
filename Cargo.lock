@@ -1189,6 +1189,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "heck"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
+
+[[package]]
 name = "hermit-abi"
 version = "0.1.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3907,6 +3913,7 @@ name = "swc_plugin_import"
 version = "0.1.8"
 dependencies = [
  "handlebars",
+ "heck 0.4.1",
  "regex",
  "rustc-hash",
  "serde",
@@ -4691,7 +4698,7 @@ version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "19bc05e8380515c4337c40ef03b2ff233e391315b178a320de8640703d522efe"
 dependencies = [
- "heck",
+ "heck 0.3.3",
  "wai-bindgen-gen-core",
 ]
 
@@ -4701,7 +4708,7 @@ version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d6f35ce5e74086fac87f3a7bd50f643f00fe3559adb75c88521ecaa01c8a6199"
 dependencies = [
- "heck",
+ "heck 0.3.3",
  "wai-bindgen-gen-core",
  "wai-bindgen-gen-rust",
 ]
@@ -4712,7 +4719,7 @@ version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0f61484185d8c520a86d5a7f7f8265f446617c2f9774b2e20a52de19b6e53432"
 dependencies = [
- "heck",
+ "heck 0.3.3",
  "wai-bindgen-gen-core",
  "wai-bindgen-gen-rust",
 ]

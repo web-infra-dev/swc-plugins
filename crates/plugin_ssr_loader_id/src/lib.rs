@@ -1,4 +1,5 @@
 #![feature(let_chains)]
+#![allow(clippy::arc_with_non_send_sync)]
 use std::sync::Arc;
 
 use serde::Deserialize;
@@ -100,7 +101,7 @@ impl<'a> PluginSSRLoaderId {
     import_func_name: &Option<Id>,
   ) -> Option<()> {
     let Some(func_name) = import_func_name else {
-        return None;
+      return None;
     };
     let loader_name = func_name.0.to_lowercase();
 
@@ -139,7 +140,7 @@ impl<'a> PluginSSRLoaderId {
     use swc_core::ecma::ast::Prop;
 
     let Some(func_name) = import_func_name else {
-        return None;
+      return None;
     };
 
     let callee = call_expr
