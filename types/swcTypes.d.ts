@@ -203,10 +203,10 @@ export interface TerserCompressOptions {
 }
 export interface TerserMangleOptions {
   props?: TerserManglePropertiesOptions;
-  top_level?: boolean;
-  keep_class_names?: boolean;
-  keep_fn_names?: boolean;
-  keep_private_props?: boolean;
+  topLevel?: boolean;
+  keepClassNames?: boolean;
+  keepFnNames?: boolean;
+  keepPrivateProps?: boolean;
   ie8?: boolean;
   safari10?: boolean;
   reserved?: string[];
