@@ -4,7 +4,7 @@ use swc_core::{
   ecma::{
     ast::{CallExpr, Callee, ImportDecl, Lit, Str},
     atoms::JsWord,
-    visit::{as_folder, Fold, VisitMut},
+    visit::{as_folder, noop_visit_mut_type, Fold, VisitMut},
   },
 };
 
@@ -31,6 +31,8 @@ impl LockCoreJsVersion {
 }
 
 impl VisitMut for LockCoreJsVersion {
+  noop_visit_mut_type!();
+
   fn visit_mut_import_decl(&mut self, decl: &mut ImportDecl) {
     if let Some(value) = self.need_replace(&decl.src.value) {
       decl.src = Box::new(Str {
@@ -76,7 +78,7 @@ impl VisitMut for LockCoreJsVersion {
   }
 }
 
-pub fn lock_corejs_version(corejs: String, swc_helpers: String) -> impl Fold {
+pub fn lock_corejs_version(corejs: String, swc_helpers: String) -> impl Fold + VisitMut {
   as_folder(LockCoreJsVersion {
     corejs,
     swc_helpers,

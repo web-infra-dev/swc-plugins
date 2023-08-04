@@ -1,3 +1,5 @@
+#![allow(clippy::arc_with_non_send_sync)]
+
 use std::{path::PathBuf, sync::Arc};
 
 use anyhow::Result;

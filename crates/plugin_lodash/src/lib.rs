@@ -15,7 +15,7 @@ use swc_core::{
     },
     atoms::JsWord,
     utils::undefined,
-    visit::{as_folder, Fold, VisitMut, VisitMutWith},
+    visit::{as_folder, noop_visit_mut_type, Fold, VisitMut, VisitMutWith},
   },
   quote,
 };
@@ -39,7 +39,7 @@ pub struct PluginLodashConfig {
 pub fn plugin_lodash(
   config: &PluginLodashConfig,
   plugin_context: Arc<PluginContext>,
-) -> impl Fold + '_ {
+) -> impl Fold + VisitMut + '_ {
   let mut ids = vec!["lodash".into(), "lodash-es".into()];
   config.ids.iter().for_each(|id| {
     if !ids.contains(id) {
@@ -142,6 +142,8 @@ impl PluginLodash {
 }
 
 impl VisitMut for PluginLodash {
+  noop_visit_mut_type!();
+
   // Clear states
   fn visit_mut_module(&mut self, module: &mut Module) {
     // First check all import decl, this can collect namespaces identifier,
@@ -332,6 +334,8 @@ impl<'a> PostProcess<'a> {
 }
 
 impl<'a> VisitMut for PostProcess<'a> {
+  noop_visit_mut_type!();
+
   fn visit_mut_module(&mut self, module: &mut Module) {
     let mut removed = vec![];
 

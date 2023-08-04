@@ -104,7 +104,7 @@ pub fn build_mappings<'a>(
     }
 
     let pkg_root = get_pkg_root(module_root.unwrap());
-    if matches!(pkg_root, None) {
+    if pkg_root.is_none() {
       println!("Module {id} not found. Skipped");
       continue;
     }
