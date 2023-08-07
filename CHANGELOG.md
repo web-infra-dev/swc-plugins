@@ -1,5 +1,13 @@
 # @modern-js/swc-plugins
 
+## 0.5.6
+
+### Patch Changes
+
+- 2b75e9a: chore: upgrade rust, optimize binary size
+- b2d9a83: feat: bump swc_core automatically
+- f9f49be: fix: fix mangle options type def
+
 ## 0.5.5
 
 ### Patch Changes
