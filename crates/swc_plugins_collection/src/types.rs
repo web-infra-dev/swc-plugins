@@ -27,6 +27,8 @@ pub struct Extensions {
   pub ssr_loader_id: Option<SSRLoaderIdConfig>,
   pub config_routes: Option<ConfigRoutesConfig>,
   pub loadable_components: Option<bool>,
+
+  pub react_const_elements: Option<bool>
 }
 
 #[derive(Debug, Default, Deserialize)]

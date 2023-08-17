@@ -6,7 +6,12 @@ use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_ssr_loader_id::plugin_ssr_loader_id;
 use swc_core::{
   base::config::Options,
-  common::{chain, comments::Comments, pass::Either, FileName},
+  common::{
+    chain,
+    comments::Comments,
+    pass::{Either, Optional},
+    FileName,
+  },
   ecma::visit::Fold,
   ecma::{transforms::base::pass::noop, visit::as_folder},
 };
@@ -23,6 +28,11 @@ pub fn internal_transform_before_pass<'a>(
   swc_config: &Options,
   plugin_context: Arc<PluginContext>,
 ) -> impl Fold + 'a {
+  let plugin_const_elements = Optional::new(
+    plugin_react_const_elements::react_const_elements(),
+    extensions.react_const_elements.unwrap_or(false),
+  );
+
   let modularize_imports = extensions
     .modularize_imports
     .as_ref()
@@ -95,6 +105,7 @@ pub fn internal_transform_before_pass<'a>(
   };
 
   chain!(
+    plugin_const_elements,
     modularize_imports,
     plugin_import,
     react_utils,

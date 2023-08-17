@@ -2095,6 +2095,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "plugin_react_const_elements"
+version = "0.1.0"
+dependencies = [
+ "rustc-hash",
+ "serde_json",
+ "swc_core",
+ "swc_plugins_collection",
+ "test_plugins",
+]
+
+[[package]]
 name = "plugin_remove_es_module_mark"
 version = "0.1.0"
 dependencies = [
@@ -3992,6 +4003,7 @@ dependencies = [
  "modularize_imports",
  "plugin_config_routes",
  "plugin_lock_corejs_version",
+ "plugin_react_const_elements",
  "plugin_remove_es_module_mark",
  "plugin_ssr_loader_id",
  "serde",
