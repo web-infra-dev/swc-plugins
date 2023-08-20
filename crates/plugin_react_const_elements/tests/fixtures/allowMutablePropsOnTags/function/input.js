@@ -1,3 +1,3 @@
 function Component() {
-  return () => <Counter onClick={value => value + 1} />;
+  return () => <Counter onClick={value => value + 1}/>;
 }

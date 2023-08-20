@@ -13,7 +13,7 @@ var Foo = React.createClass({
         values={{
           someValue: "A value."
         }}
-      />
+     />
     );
   }
 });

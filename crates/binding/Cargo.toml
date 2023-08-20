@@ -29,3 +29,4 @@ swc_plugins_core = { path = "../swc_plugins_core" }
 swc_plugins_collection = { path = "../swc_plugins_collection" }
 serde_json = { workspace = true }
 serde = { workspace = true }
+rustc-hash = { workspace = true }

@@ -1,6 +1,6 @@
 class A {
     render() {
-        return <B />
+        return <B/>
     }
 }
 

@@ -12,8 +12,8 @@ async function transform(
   return await compiler.transformSync(filename, code);
 }
 
-describe("extensions", () => {
-  test("plugin-import", async () => {
+describe("extensions", ()=>{
+  test("plugin-import", async ()=>{
     await walkLeafDir(
       path.resolve(
         __dirname,
@@ -25,7 +25,7 @@ describe("extensions", () => {
     );
   });
 
-  test("plugin-ssr-loader-id", async () => {
+  test("plugin-ssr-loader-id", async ()=>{
     await walkLeafDir(
       path.resolve(__dirname, "../crates/plugin_ssr_loader_id/tests"),
       async (dir) => {
@@ -34,7 +34,7 @@ describe("extensions", () => {
     );
   });
 
-  test("plugin-config-routes", async () => {
+  test("plugin-config-routes", async ()=>{
     await walkLeafDir(
       path.resolve(__dirname, "../crates/plugin_config_routes/tests"),
       async (dir) => {
@@ -44,8 +44,8 @@ describe("extensions", () => {
   })
 });
 
-describe("loadable-components", () => {
-  it("should transform correctly", async () => {
+describe("loadable-components", ()=>{
+  it("should transform correctly", async ()=>{
     const output = await transform(
       {
         extensions: {

@@ -7,6 +7,6 @@ const namespace = {
 const buildTest = (name) => {
   const { MyComponent } = namespace;
   return () => (
-    <MyComponent name={name} />
+    <MyComponent name={name}/>
   );
 }

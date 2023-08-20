@@ -1,3 +1,3 @@
 import { Alert } from "react-bootstrap";
 
-<Alert />
+<Alert/>

@@ -36,7 +36,9 @@ impl FixtureTesterHook for BabelPortedTest {
           "target": "es2022"
         }
       },
-      "extensions": { "reactConstElements": true }
+      "extensions": { "reactConstElements": {
+        "immutable_globals": ["Component"]
+      } }
     }"#,
     )
     .unwrap();
@@ -65,17 +67,18 @@ fn basic() {
   //       "target": "es2022"
   //     }
   //   },
-  //   "extensions": { "reactConstElements": true }
+  //   "extensions": { "reactConstElements":  {
+  //     "immutable_globals": ["Component"]
+  //   }
+  // }
   // }"#,
   //   )
   //   .unwrap(),
-  //   "class Component extends React.Component {
-  //     subComponent = () => <span>Sub Component</span>
-    
-  //     render = () => <this.subComponent />
+  //   "import Component from 'foo';
+  //   function render({ text, className, id, ...props }) {
+  //     return () => (<Component {...props}/>);
   //   }
-    
   //   ",
-  //   Some("()"),
+  //   Some(""),
   // )
 }

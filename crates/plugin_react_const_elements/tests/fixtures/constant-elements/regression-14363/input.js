@@ -4,7 +4,7 @@ function RoutesComponent() {
       {(c) => {
         {
           const Component = c;
-          return <Component />;
+          return <Component/>;
         }
       }}
     </Routes>

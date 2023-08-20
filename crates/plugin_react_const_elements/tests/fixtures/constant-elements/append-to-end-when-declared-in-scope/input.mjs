@@ -3,12 +3,12 @@ export default class App extends React.Component {
     return (
       <div>
         <p>Parent</p>
-        <AppItem />
+        <AppItem/>
       </div>
     );
   }
 }
 
-const AppItem = () => {
+const AppItem = ()=>{
   return <div>child</div>;
 };

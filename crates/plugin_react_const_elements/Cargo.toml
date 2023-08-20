@@ -4,10 +4,12 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+serde = { workspace = true }
 swc_core = { workspace = true, features = [
   "ecma_utils",
   "ecma_visit",
   "ecma_ast",
+  "ecma_usage_analyzer",
   "common",
 ] }
 rustc-hash = { workspace = true }

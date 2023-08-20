@@ -28,10 +28,13 @@ pub fn internal_transform_before_pass<'a>(
   swc_config: &Options,
   plugin_context: Arc<PluginContext>,
 ) -> impl Fold + 'a {
-  let plugin_const_elements = Optional::new(
-    plugin_react_const_elements::react_const_elements(),
-    extensions.react_const_elements.unwrap_or(false),
-  );
+  let plugin_const_elements = if let Some(config) = &extensions.react_const_elements {
+    Either::Left(plugin_react_const_elements::react_const_elements(
+      config.clone(),
+    ))
+  } else {
+    Either::Right(noop())
+  };
 
   let modularize_imports = extensions
     .modularize_imports

@@ -3,7 +3,7 @@ import map from 'lodash/map';
 
 var Message = ({mapList}) => {
   return map(mapList, (index) => {
-    return <div />
+    return <div/>
   });
 };
 

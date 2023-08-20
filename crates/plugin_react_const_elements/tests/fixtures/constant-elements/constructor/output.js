@@ -1,5 +1,5 @@
-var _Foo;
+let _Foo;
 var Foo = require("Foo");
 function render() {
-  return _Foo || (_Foo = <Foo />);
+  return _Foo || (_Foo = <Foo/>);
 }

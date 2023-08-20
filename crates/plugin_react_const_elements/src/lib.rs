@@ -6,19 +6,26 @@ use swc_core::{
   ecma::{
     ast::{
       ArrowExpr, BindingIdent, BlockStmt, BlockStmtOrExpr, Class, ClassMember, Decl, Expr,
-      Function, Id, Ident, ImportDecl, ModuleDecl, ModuleItem, Pat, ReturnStmt, Stmt, VarDecl,
+      Function, Id, Ident, Module, ModuleItem, Pat, Program, ReturnStmt, Script, Stmt, VarDecl,
       VarDeclKind, VarDeclarator,
     },
     utils::find_pat_ids,
     visit::{as_folder, noop_visit_mut_type, Fold, VisitMut, VisitMutWith},
   },
 };
-use utils::StmtLike;
+use serde::Deserialize;
+use utils::{get_immutable_ids, StmtLike};
 
 mod const_decls;
 mod immutable;
 mod utils;
-pub fn react_const_elements() -> impl Fold + VisitMut {
+
+#[derive(Debug, Default, Deserialize, Clone)]
+pub struct ReactConstElementsOptions {
+  pub immutable_globals: rustc_hash::FxHashSet<String>
+}
+
+pub fn react_const_elements(config: ReactConstElementsOptions) -> impl Fold + VisitMut {
   let pass = ReactConstElements {
     state: State::new(),
   };
@@ -32,7 +39,9 @@ struct ReactConstElements {
 impl ReactConstElements {
   fn declare_scope_vars(&mut self, ids: Vec<Id>) {
     for id in ids {
-      self.state.vars.insert(id);
+      if self.state.immutable_ids.contains(&id) {
+        self.state.vars.insert(id);
+      }
     }
   }
 
@@ -103,6 +112,20 @@ impl ReactConstElements {
 impl VisitMut for ReactConstElements {
   noop_visit_mut_type!();
 
+  fn visit_mut_module(&mut self, module: &mut Module) {
+    self.visit_mut_stmt_likes(&mut module.body)
+  }
+
+  fn visit_mut_script(&mut self, script: &mut Script) {
+    self.visit_mut_stmt_likes(&mut script.body)
+  }
+
+  fn visit_mut_program(&mut self, program: &mut Program) {
+    self.state.immutable_ids = get_immutable_ids(program);
+    dbg!(&self.state.immutable_ids);
+    program.visit_mut_children_with(self);
+  }
+
   fn visit_mut_arrow_expr(&mut self, n: &mut ArrowExpr) {
     self.declare_scope_vars(find_pat_ids(&n.params));
 
@@ -125,23 +148,23 @@ impl VisitMut for ReactConstElements {
     n.visit_mut_children_with(self);
   }
 
-  fn visit_mut_module_items(&mut self, stmts: &mut Vec<ModuleItem>) {
-    self.visit_mut_stmt_likes(stmts)
-  }
-
-  fn visit_mut_stmts(&mut self, stmts: &mut Vec<Stmt>) {
-    self.visit_mut_stmt_likes(stmts)
+  fn visit_mut_stmts(&mut self, n: &mut Vec<Stmt>) {
+    self.visit_mut_stmt_likes(n);
   }
 }
 
 #[derive(Debug, Default)]
 pub struct State {
+  config: ReactConstElementsOptions,
   vars: rustc_hash::FxHashSet<Id>,
   candidates: Vec<Ident>,
   ctxt: SyntaxContext,
 
   next_id: u32,
   used_names: rustc_hash::FxHashSet<String>,
+
+  // all immutable ids in module/script node
+  immutable_ids: rustc_hash::FxHashSet<Id>,
 }
 
 impl State {
@@ -152,6 +175,8 @@ impl State {
       ctxt: DUMMY_SP.apply_mark(Mark::new()).ctxt,
       next_id: 0,
       used_names: Default::default(),
+      immutable_ids: Default::default(),
+      config: Default::default()
     }
   }
 
@@ -187,7 +212,7 @@ impl<'a> VisitMut for FnReturnsJsx<'a> {
 
   fn visit_mut_arrow_expr(&mut self, arrow: &mut ArrowExpr) {
     match arrow.body.as_mut() {
-      // foo = () => { return <div></div> }
+      // foo = ()=>{ return <div></div> }
       BlockStmtOrExpr::BlockStmt(block) => {
         block
           .stmts
@@ -256,7 +281,6 @@ impl<'a> VisitMut for JSXHoister<'a> {
   // stop looking if visit these, as these will introduce new scopes
   fn visit_mut_function(&mut self, _: &mut Function) {}
   fn visit_mut_arrow_expr(&mut self, _: &mut ArrowExpr) {}
-  fn visit_mut_stmts(&mut self, _: &mut Vec<Stmt>) {}
 
   fn visit_mut_expr(&mut self, expr: &mut Expr) {
     if let Expr::JSXElement(jsx_ele) = expr {

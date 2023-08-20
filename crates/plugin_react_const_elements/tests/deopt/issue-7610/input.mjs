@@ -3,7 +3,7 @@ import Child from './Child';
 
 function MyComponent({closeFn}) {
   return (
-    <Parent render={() => <Child closeFn={closeFn} /> } />
+    <Parent render={() => <Child closeFn={closeFn}/> }/>
   );
 }
 

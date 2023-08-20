@@ -15,7 +15,7 @@ class Foo2 extends React.Component {
 }
 
 const Foo3 = () => (
-  <div />
+  <div/>
 );
 
 Foo3.propTypes = {

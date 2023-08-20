@@ -4,6 +4,6 @@ export default {
 
         // awaits depending on uppercasedName go here
 
-        return (<Foo name={uppercasedName} />);
+        return (<Foo name={uppercasedName}/>);
     }
 };

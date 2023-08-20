@@ -1,3 +1,3 @@
 import { noop } from "lodash";
 
-<div onClick={ noop } />;
+<div onClick={ noop }/>;

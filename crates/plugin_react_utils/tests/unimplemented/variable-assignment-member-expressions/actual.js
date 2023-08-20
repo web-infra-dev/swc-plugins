@@ -2,7 +2,7 @@ const shapePropType = PropTypes.shape({
   foo: PropTypes.string,
 });
 
-const ComponentA = () => <div />;
+const ComponentA = () => <div/>;
 ComponentA.propTypes = {
   foo: shapePropType.isRequired,
 };
@@ -12,7 +12,7 @@ const somePropTypes = {
   bar: PropTypes.number,
 };
 
-const ComponentB = () => <div />;
+const ComponentB = () => <div/>;
 ComponentB.propTypes = {
   foo: somePropTypes.foo.isRequired,
 };
@@ -22,7 +22,7 @@ const somePropTypesC = {
   bar: PropTypes.number,
 };
 
-const ComponentC = () => <div />;
+const ComponentC = () => <div/>;
 ComponentC.propTypes = {
   foo: somePropTypesC['foo'].isRequired,
 };
@@ -32,7 +32,7 @@ const somePropTypesD = {
   bar: PropTypes.number,
 };
 
-const ComponentD = () => <div />;
+const ComponentD = () => <div/>;
 const foo = { bar: 'foo' };
 ComponentD.propTypes = {
   [foo.bar]: somePropTypesD['foo'].isRequired,

@@ -733,7 +733,7 @@ mod test {
       ReactComponentType::FC,
       is_react_component(
         &quote!(
-          "() => {
+          "()=>{
       return React.createElement()
     }" as Expr
         ),
@@ -745,7 +745,7 @@ mod test {
       ReactComponentType::FC,
       is_react_component(
         &quote!(
-          "() => {
+          "()=>{
       return (React.createElement())
     }" as Expr
         ),
@@ -757,7 +757,7 @@ mod test {
       ReactComponentType::FC,
       is_react_component(
         &quote!(
-          "() => {
+          "()=>{
       return (a ? React.createElement() : React.cloneElement())
     }" as Expr
         ),

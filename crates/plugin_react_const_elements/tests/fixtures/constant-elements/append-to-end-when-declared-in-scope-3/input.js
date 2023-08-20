@@ -4,13 +4,13 @@
       return (
         <div>
           <p>Parent</p>
-          <AppItem />
+          <AppItem/>
         </div>
       );
     }
   }
 
-  const AppItem = () => {
+  const AppItem = ()=>{
     return <div>child</div>;
   };
 });

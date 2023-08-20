@@ -1,5 +1,5 @@
 (function () {
-  const AppItem = () => {
+  const AppItem = ()=>{
     return <div>child</div>;
   };
 
@@ -8,7 +8,7 @@
       return (
         <div>
           <p>Parent</p>
-          <AppItem />
+          <AppItem/>
         </div>
       );
     }

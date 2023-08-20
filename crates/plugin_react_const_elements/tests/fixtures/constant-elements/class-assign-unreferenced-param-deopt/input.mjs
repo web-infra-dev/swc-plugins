@@ -11,6 +11,6 @@ class BugReport extends React.Component {
     };
 
     render() {
-        return <div />
+        return <div/>
     }
 }

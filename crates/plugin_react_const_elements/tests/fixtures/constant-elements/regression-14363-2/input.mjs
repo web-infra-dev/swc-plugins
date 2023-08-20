@@ -12,7 +12,7 @@ function RoutesComponent() {
           element: Component
         } = route;
         // Component should not be hoisted
-        return <Route key={routerKey} path={path} element={<Component />} />;
+        return <Route key={routerKey} path={path} element={<Component/>}/>;
       } else {
         return null;
       }

@@ -1,7 +1,8 @@
-var _B;
+let _B;
 class A {
   render() {
-    return _B || (_B = /*#__PURE__*/React.createElement(B, null));
+    return _B || (_B = <B/>);
   }
 }
-export default class B {}
+export default class B {
+}

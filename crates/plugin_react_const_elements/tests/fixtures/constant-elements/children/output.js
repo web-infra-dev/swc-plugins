@@ -1,8 +1,8 @@
-var _span;
+let _span;
 var Foo = React.createClass({
-  render: function () {
+  render: function() {
     return <div className={this.props.className}>
-      {_span || (_span = <span />)}
+      {_span || (_span = <span/>)}
     </div>;
   }
 });

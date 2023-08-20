@@ -1,7 +1,7 @@
 function render() {
-  return <foo />;
+  return <foo/>;
 }
 
 function render() {
-  return <div className="foo"><input type="checkbox" checked={true} /></div>;
+  return <div className="foo"><input type="checkbox" checked={true}/></div>;
 }

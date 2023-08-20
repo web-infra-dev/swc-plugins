@@ -1,6 +1,6 @@
-var _div;
+let _div;
 var Foo = React.createClass({
-  render: function () {
+  render: function() {
     return _div || (_div = <div className="class-name">
       Text
     </div>);

@@ -1,8 +1,8 @@
 let foo = 'hello';
-const mutate = () => {
+const mutate = ()=>{
   foo = 'goodbye';
 };
-export const Component = () => {
+export const Component = ()=>{
   if (Math.random() > 0.5) mutate();
   return <span>{foo}</span>;
 };

@@ -1,5 +1,5 @@
 function render(offset) {
   return function () {
-    return <div tabIndex={offset + 1} />;
+    return <div tabIndex={offset + 1}/>;
   };
 }

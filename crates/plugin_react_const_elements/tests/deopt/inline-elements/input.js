@@ -1,10 +1,10 @@
 function render() {
-  return <foo />;
+  return <foo/>;
 }
 
 function render({text}) {
 
-  setTimeout(() => {
+  setTimeout(()=>{
     text = 1;
   })
 
@@ -16,7 +16,7 @@ function render({text}) {
 const ret = render();
 ret()
 
-setTimeout(() => {
+setTimeout(()=>{
   ret()
 }, 200)
 

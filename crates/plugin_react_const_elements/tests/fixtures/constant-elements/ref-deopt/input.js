@@ -1,3 +1,3 @@
 function render() {
-  return <foo ref="foobar" />;
+  return <foo ref="foobar"/>;
 }

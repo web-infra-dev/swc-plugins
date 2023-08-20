@@ -17,7 +17,7 @@
 // limitations under the License.
 
 use swc_core::ecma::ast::{
-  Decl, DefaultDecl, Id, ImportSpecifier, ModuleDecl, ModuleItem, Pat, Stmt, VarDeclKind,
+  Decl, DefaultDecl, Id, ImportSpecifier, ModuleDecl, Pat, Stmt, VarDeclKind,
 };
 
 use crate::utils::StmtLike;
@@ -44,29 +44,24 @@ impl ConstDecls for Decl {
       Decl::Fn(s) => {
         vec![s.ident.to_id()]
       }
-      Decl::Var(s) => {
-        if matches!(s.kind, VarDeclKind::Const) {
-          s.decls
+      Decl::Var(s) => s
+        .decls
+        .iter()
+        .flat_map(|decl| match &decl.name {
+          Pat::Ident(id) => vec![id.id.to_id()],
+          Pat::Array(array_pat) => array_pat
+            .elems
             .iter()
-            .flat_map(|decl| match &decl.name {
-              Pat::Ident(id) => vec![id.id.to_id()],
-              Pat::Array(array_pat) => array_pat
-                .elems
-                .iter()
-                .filter_map(|ele| {
-                  ele.as_ref().and_then(|ele| match ele {
-                    Pat::Ident(id) => Some(id.id.to_id()),
-                    _ => None,
-                  })
-                })
-                .collect(),
-              _ => vec![],
+            .filter_map(|ele| {
+              ele.as_ref().and_then(|ele| match ele {
+                Pat::Ident(id) => Some(id.id.to_id()),
+                _ => None,
+              })
             })
-            .collect()
-        } else {
-          Default::default()
-        }
-      }
+            .collect(),
+          _ => vec![],
+        })
+        .collect(),
 
       _ => Default::default(),
     }

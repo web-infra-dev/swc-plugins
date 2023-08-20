@@ -1,4 +1,4 @@
-const AppItem = () => {
+const AppItem = ()=>{
   return <div>child</div>;
 };
 

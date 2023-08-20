@@ -4,7 +4,7 @@ var Foo = React.createClass({
       <div data-text={
         "Some text, " +
         "and some more too."
-      } />
+      }/>
     );
   }
 });

@@ -596,7 +596,7 @@ export interface ReactConfig {
   pragmaFrag?: string;
   /**
    * Toggles whether or not to throw an error if a XML namespaced tag name is used. For example:
-   * `<f:image />`
+   * `<f:image/>`
    *
    * Though the JSX spec allows this, it is disabled by default since React's
    * JSX does not currently have support for it.

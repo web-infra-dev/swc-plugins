@@ -1,4 +1,4 @@
-var _b, _span;
+let _b, _span;
 function render() {
   var children = _b || (_b = <b></b>);
   if (someCondition) {

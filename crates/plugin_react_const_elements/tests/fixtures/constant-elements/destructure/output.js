@@ -1,10 +1,9 @@
+let _a;
 class AnchorLink extends Component {
   render() {
-    const _this$props = this.props,
-      isExternal = _this$props.isExternal,
-      children = _this$props.children;
+    const { isExternal, children } = this.props;
     if (isExternal) {
-      return <a>{children}</a>;
+      return _a || (_a = <a>immutable</a>);
     }
     return <Link>{children}</Link>;
   }

@@ -63,7 +63,7 @@ function Foo8() {
 
 const Foo9 = () => React.createElement("div", null);
 
-const Foo10 = () => {
+const Foo10 = ()=>{
   return React.createElement("div", null);
 };
 
