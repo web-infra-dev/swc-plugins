@@ -6,7 +6,3 @@ version = "0.1.0"
 [dependencies]
 serde = { workspace = true }
 swc_core = { workspace = true, features = ["common", "ecma_visit", "ecma_ast"] }
-
-[dev-dependencies]
-test_plugins = { path = "../test_plugins" }
-serde_json = { workspace = true }

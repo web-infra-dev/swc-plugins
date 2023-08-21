@@ -1,4 +1,4 @@
-use std::{path::Path, sync::Arc};
+use std::path::Path;
 
 use modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use plugin_config_routes::plugin_config_routes;
@@ -21,7 +21,7 @@ use crate::types::Extensions;
 pub fn internal_transform_before_pass<'a>(
   extensions: &'a Extensions,
   swc_config: &Options,
-  plugin_context: Arc<PluginContext>,
+  plugin_context: &PluginContext,
 ) -> impl Fold + 'a {
   let plugin_const_elements = if let Some(config) = &extensions.react_const_elements {
     Either::Left(plugin_react_const_elements::react_const_elements(
@@ -48,19 +48,19 @@ pub fn internal_transform_before_pass<'a>(
     .unwrap_or_else(|| Either::Right(noop()));
 
   let react_utils = if let Some(c) = &extensions.react_utils {
-    Either::Left(react_utils(c, plugin_context.clone()))
+    Either::Left(react_utils(c, plugin_context))
   } else {
     Either::Right(noop())
   };
 
   let lodash = if let Some(ref config) = extensions.lodash {
-    Either::Left(plugin_lodash(config, plugin_context.clone()))
+    Either::Left(plugin_lodash(config, plugin_context))
   } else {
     Either::Right(noop())
   };
 
   let ssr_loader_id = if let Some(ref config) = extensions.ssr_loader_id {
-    Either::Left(plugin_ssr_loader_id(config, plugin_context.clone()))
+    Either::Left(plugin_ssr_loader_id(config, plugin_context))
   } else {
     Either::Right(noop())
   };
@@ -119,7 +119,7 @@ pub fn internal_transform_before_pass<'a>(
 pub fn internal_transform_after_pass<'a>(
   extensions: &Extensions,
   _swc_config: &Options,
-  plugin_context: Arc<PluginContext>,
+  plugin_context: &PluginContext,
 ) -> impl Fold + 'a {
   let lock_core_js = if let Some(config) = &extensions.lock_corejs_version {
     Either::Left(lock_corejs_version(

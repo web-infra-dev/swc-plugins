@@ -1,6 +1,6 @@
 [package]
 edition = "2021"
-name = "test_plugins"
+name = "integration_tests"
 version = "0.1.0"
 
 [dependencies]
@@ -17,3 +17,4 @@ swc_core = { workspace = true, features = [
 ] }
 swc_plugins_core = { path = "../swc_plugins_core" }
 swc_plugins_collection = { path = "../swc_plugins_collection" }
+swc_plugins_utils = { path = "../swc_plugins_utils" }

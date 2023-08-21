@@ -16,8 +16,3 @@ swc_core = { workspace = true, features = [
 swc_plugins_utils = { path = "../swc_plugins_utils" }
 serde = { workspace = true }
 rustc-hash = { workspace = true }
-
-[dev-dependencies]
-glob = "0.3.0"
-serde_json = { workspace = true }
-test_plugins = { path = "../test_plugins" }

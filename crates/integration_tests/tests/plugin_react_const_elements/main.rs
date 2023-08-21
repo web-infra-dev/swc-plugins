@@ -1,6 +1,6 @@
 use std::{env::current_dir, fs, path::Path};
 
-use test_plugins::fixture::{ExpectedInfo, FixtureTesterHook};
+use integration_tests::fixture::{ExpectedInfo, FixtureTesterHook};
 
 struct BabelPortedTest;
 
@@ -51,10 +51,21 @@ impl FixtureTesterHook for BabelPortedTest {
   }
 }
 
+// the tests in `/deopt` are sceneries that this plugin doesn't optimize, but babel does. For example
+// this plugin treats all global components as potential mutable, unlike babel, <Foo />
+// is not permitted to hoist as it may change at some time.
 #[test]
 fn basic() {
-  let mut tester =
-    test_plugins::fixture::FixtureTester::new(Default::default(), BabelPortedTest, vec![], None);
+  let mut tester = integration_tests::fixture::FixtureTester::new(
+    Default::default(),
+    BabelPortedTest,
+    vec![],
+    None,
+  );
 
-  tester.fixtures(&current_dir().unwrap().join(Path::new("tests/fixtures")));
+  tester.fixtures(
+    &current_dir()
+      .unwrap()
+      .join(Path::new("tests/plugin_react_const_elements/fixtures")),
+  );
 }

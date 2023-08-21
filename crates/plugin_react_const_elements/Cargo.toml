@@ -13,15 +13,3 @@ swc_core = { workspace = true, features = [
   "common",
 ] }
 rustc-hash = { workspace = true }
-
-[dev-dependencies]
-serde_json = { workspace = true }
-swc_core = { workspace = true, features = [
-  "ecma_utils",
-  "ecma_visit",
-  "ecma_ast",
-  "ecma_parser",
-  "common",
-] }
-test_plugins = { path = "../test_plugins" }
-swc_plugins_collection = { path = "../swc_plugins_collection" }

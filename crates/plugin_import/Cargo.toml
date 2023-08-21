@@ -12,6 +12,3 @@ serde = { workspace = true }
 rustc-hash = { workspace = true }
 swc_core = { workspace = true, features = ["common", "ecma_ast", "ecma_visit"] }
 heck = "0.4.1"
-
-[dev-dependencies]
-test_plugins = { path = "../test_plugins" }

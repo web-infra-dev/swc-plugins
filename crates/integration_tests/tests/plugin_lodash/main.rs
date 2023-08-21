@@ -1,12 +1,12 @@
-use swc_core::cached::regex::CachedRegex;
-use swc_plugin_lodash::PluginLodashConfig;
-use test_plugins::{
+use integration_tests::{
   fixture::{BaseFixtureHook, FixtureTester},
   swc_plugins_collection::types::{Extensions, TransformConfig},
 };
+use swc_core::cached::regex::CachedRegex;
+use swc_plugins_collection::swc_plugin_lodash::PluginLodashConfig;
 
 #[test]
-fn test_fixtures() {
+fn lodash() {
   let cwd = std::env::current_dir().unwrap();
 
   let mut tester = FixtureTester::new(
@@ -46,5 +46,5 @@ fn test_fixtures() {
     Some("".into()),
   );
 
-  tester.fixtures(&cwd.join("tests/fixtures"));
+  tester.fixtures(&cwd.join("tests/plugin_lodash/fixtures"));
 }

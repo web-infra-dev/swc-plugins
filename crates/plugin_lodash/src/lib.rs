@@ -36,10 +36,10 @@ pub struct PluginLodashConfig {
   pub ids: Vec<String>,
 }
 
-pub fn plugin_lodash(
-  config: &PluginLodashConfig,
-  plugin_context: Arc<PluginContext>,
-) -> impl Fold + VisitMut + '_ {
+pub fn plugin_lodash<'a>(
+  config: &'a PluginLodashConfig,
+  plugin_context: &PluginContext,
+) -> impl Fold + VisitMut + 'a {
   let mut ids = vec!["lodash".into(), "lodash-es".into()];
   config.ids.iter().for_each(|id| {
     if !ids.contains(id) {

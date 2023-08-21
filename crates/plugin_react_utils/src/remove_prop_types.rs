@@ -1,4 +1,4 @@
-use std::{borrow::BorrowMut, ops::DerefMut, sync::Arc};
+use std::{borrow::BorrowMut, ops::DerefMut};
 
 use rustc_hash::{FxHashMap as HashMap, FxHashSet as HashSet};
 use serde::Deserialize;
@@ -26,10 +26,10 @@ use swc_plugins_utils::{
   is_return_jsx, remove_invalid_expr, BindingInfo, ReactComponentType,
 };
 
-pub fn react_remove_prop_types(
-  config: &ReactRemovePropTypeConfig,
-  plugin_context: Arc<PluginContext>,
-) -> impl Fold + VisitMut + '_ {
+pub fn react_remove_prop_types<'a>(
+  config: &'a ReactRemovePropTypeConfig,
+  plugin_context: &PluginContext,
+) -> impl Fold + VisitMut + 'a {
   if config.remove_import && !matches!(config.mode, Mode::Removal) {
     panic!(
       r#"react-remove-prop-type: removeImport = true and mode != "remove" can not be used at the same time."#

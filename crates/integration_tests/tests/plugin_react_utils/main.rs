@@ -1,18 +1,20 @@
 use std::{fs, path::Path};
 
-use swc_core::base::config::Options;
-use swc_plugin_react_utils::{
-  remove_prop_types::{Mode, ReactRemovePropTypeConfig},
-  ReactUtilsConfig,
-};
-use test_plugins::{
+use integration_tests::{
   fixture::{ExpectedInfo, FixtureTester, FixtureTesterHook},
   swc_plugins_collection::types::{Extensions, TransformConfig},
 };
+use swc_core::base::config::Options;
+use swc_plugins_collection::swc_plugin_react_utils::{
+  remove_prop_types::{Mode, ReactRemovePropTypeConfig},
+  ReactUtilsConfig,
+};
 
 #[test]
-fn main() {
-  let fixture_dir = std::env::current_dir().unwrap().join("tests/fixtures");
+fn react_utils() {
+  let fixture_dir = std::env::current_dir()
+    .unwrap()
+    .join("tests/plugin_react_utils/fixtures");
   // let fixture_dir = std::env::current_dir()
   //   .unwrap()
   //   .join("crates/plugin_react_utils/tests/fixtures/remove_prop_types");

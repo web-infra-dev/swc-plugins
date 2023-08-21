@@ -21,6 +21,3 @@ swc_plugins_utils = { path = "../swc_plugins_utils" }
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-
-[dev_dependencies]
-test_plugins = { path = "../test_plugins" }
