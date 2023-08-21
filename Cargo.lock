@@ -1325,6 +1325,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "integration_tests"
+version = "0.1.0"
+dependencies = [
+ "colored",
+ "serde",
+ "serde_json",
+ "similar",
+ "swc_core",
+ "swc_plugins_collection",
+ "swc_plugins_core",
+ "swc_plugins_utils",
+]
+
+[[package]]
 name = "is-macro"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2090,9 +2104,7 @@ name = "plugin_lock_corejs_version"
 version = "0.1.0"
 dependencies = [
  "serde",
- "serde_json",
  "swc_core",
- "test_plugins",
 ]
 
 [[package]]
@@ -2101,10 +2113,7 @@ version = "0.1.0"
 dependencies = [
  "rustc-hash",
  "serde",
- "serde_json",
  "swc_core",
- "swc_plugins_collection",
- "test_plugins",
 ]
 
 [[package]]
@@ -2124,7 +2133,6 @@ dependencies = [
  "serde",
  "swc_core",
  "swc_plugins_utils",
- "test_plugins",
 ]
 
 [[package]]
@@ -3908,7 +3916,6 @@ dependencies = [
  "rustc-hash",
  "serde",
  "swc_core",
- "test_plugins",
 ]
 
 [[package]]
@@ -3934,7 +3941,6 @@ dependencies = [
  "serde_json",
  "swc_core",
  "swc_plugins_utils",
- "test_plugins",
 ]
 
 [[package]]
@@ -3955,13 +3961,10 @@ dependencies = [
 name = "swc_plugin_react_utils"
 version = "0.1.0"
 dependencies = [
- "glob",
  "rustc-hash",
  "serde",
- "serde_json",
  "swc_core",
  "swc_plugins_utils",
- "test_plugins",
 ]
 
 [[package]]
@@ -4170,19 +4173,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "411c5bf740737c7918b8b1fe232dca4dc9f8e754b8ad5e20966814001ed0ac6b"
 dependencies = [
  "libc",
-]
-
-[[package]]
-name = "test_plugins"
-version = "0.1.0"
-dependencies = [
- "colored",
- "serde",
- "serde_json",
- "similar",
- "swc_core",
- "swc_plugins_collection",
- "swc_plugins_core",
 ]
 
 [[package]]

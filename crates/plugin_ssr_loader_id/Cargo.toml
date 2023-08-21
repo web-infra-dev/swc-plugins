@@ -13,6 +13,3 @@ swc_core = { workspace = true, features = [
   "ecma_visit",
   "ecma_quote",
 ] }
-
-[dev_dependencies]
-test_plugins = { path = "../test_plugins" }

@@ -1,6 +1,6 @@
 #![allow(clippy::arc_with_non_send_sync)]
 
-use std::{path::PathBuf, sync::Arc};
+use std::{path::PathBuf, rc::Rc, sync::Arc};
 
 use anyhow::Result;
 use swc_core::{
@@ -98,7 +98,7 @@ where
           )?;
 
           // TODO comments can be pass to `process_js_with_custom_pass` in next swc version
-          let plugin_context = Arc::new(PluginContext {
+          let plugin_context = Rc::new(PluginContext {
             cm,
             file: fm.clone(),
             top_level_mark,
@@ -116,8 +116,8 @@ where
             &swc_config,
             comments,
             // TODO pass comments to internal pass in next swc versions
-            |_| transform_before_pass(extensions_config, &swc_config, plugin_context.clone()),
-            |_| transform_after_pass(extensions_config, &swc_config, plugin_context.clone()),
+            |_| transform_before_pass(extensions_config, &swc_config, &plugin_context),
+            |_| transform_after_pass(extensions_config, &swc_config, &plugin_context),
           )
         })
       },

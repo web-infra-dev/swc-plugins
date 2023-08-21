@@ -1,7 +1,4 @@
 #![feature(let_chains)]
-#![allow(clippy::arc_with_non_send_sync)]
-use std::sync::Arc;
-
 use serde::Deserialize;
 use swc_core::{
   common::DUMMY_SP,
@@ -295,7 +292,7 @@ struct SSRLoaderIdState {
 
 pub fn plugin_ssr_loader_id(
   config: &SSRLoaderIdConfig,
-  plugin_ctx: Arc<PluginContext>,
+  plugin_ctx: &PluginContext,
 ) -> impl Fold + VisitMut {
   let (filename, cwd) = (
     plugin_ctx.filename.clone(),
@@ -307,58 +304,4 @@ pub fn plugin_ssr_loader_id(
   );
 
   as_folder(PluginSSRLoaderId::new(filename, cwd, config.clone()))
-}
-
-#[cfg(test)]
-mod test {
-  use std::{path::PathBuf, sync::Arc};
-
-  use swc_core::{
-    common::{comments::SingleThreadedComments, FileName, Mark, SourceMap},
-    ecma::parser::Syntax,
-  };
-  use swc_plugins_utils::PluginContext;
-
-  use super::plugin_ssr_loader_id;
-
-  #[test]
-  fn test_plugin() {
-    let cm = Arc::new(SourceMap::default());
-    test_plugins::testing::test_transform(
-      Syntax::Es(Default::default()),
-      |_| {
-        plugin_ssr_loader_id(
-          &crate::SSRLoaderIdConfig {
-            runtime_package_name: "@modern-js/runtime".to_string(),
-            function_use_loader_name: Some("useLoader".to_string()),
-            function_use_static_loader_name: None,
-            function_create_container_name: None,
-          },
-          Arc::new(PluginContext {
-            cm: cm.clone(),
-            file: cm.new_source_file(FileName::Anon, "".into()),
-            top_level_mark: Mark::new(),
-            unresolved_mark: Mark::new(),
-            comments: SingleThreadedComments::default(),
-            filename: "/root/a.js".into(),
-            cwd: PathBuf::from("/root"),
-            config_hash: None,
-          }),
-        )
-      },
-      "import { useLoader } from '@modern-js/runtime';useLoader(foo);useLoader(bar)",
-      "import { useLoader } from '@modern-js/runtime';
-      useLoader(function(){
-        var innerLoader = foo;
-        innerLoader.id = \"29e70e1822232ad34a331c74d9588977_0\";
-        return innerLoader;
-      }());
-      useLoader(function() {
-        var innerLoader = bar;
-        innerLoader.id = \"29e70e1822232ad34a331c74d9588977_1\";
-        return innerLoader;
-    }());",
-      true,
-    );
-  }
 }

@@ -1,8 +1,8 @@
 use swc_core::ecma::parser::Syntax;
-use swc_plugin_import::{plugin_import, PluginImportConfig};
+use swc_plugins_collection::swc_plugin_import::{plugin_import, PluginImportConfig};
 
 #[test]
-fn plugin_import_test() {
+fn import_test() {
   let config = vec![PluginImportConfig {
     library_name: "foo".into(),
     library_directory: None,
@@ -15,7 +15,7 @@ fn plugin_import_test() {
     ignore_style_component: None,
   }];
 
-  test_plugins::testing::test_transform(
+  integration_tests::testing::test_transform(
     Syntax::Es(Default::default()),
     |_| plugin_import(&config),
     "import {Button} from 'foo';console.log(Button)",

@@ -1,6 +1,4 @@
 #![feature(let_chains)]
-use std::sync::Arc;
-
 pub mod remove_prop_types;
 use serde::Deserialize;
 use swc_core::{
@@ -28,10 +26,10 @@ pub struct ReactUtilsConfig {
   pub remove_prop_types: Option<remove_prop_types::ReactRemovePropTypeConfig>,
 }
 
-pub fn react_utils(
-  config: &ReactUtilsConfig,
-  plugin_context: Arc<PluginContext>,
-) -> impl Fold + '_ {
+pub fn react_utils<'a>(
+  config: &'a ReactUtilsConfig,
+  plugin_context: &PluginContext,
+) -> impl Fold + 'a {
   chain!(
     if config.auto_import_react {
       Either::Left(auto_import_react(plugin_context.top_level_mark))
