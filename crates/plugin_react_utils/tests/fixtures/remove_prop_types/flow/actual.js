@@ -19,5 +19,5 @@ type Props3 = {
 }
 
 function Foo3(props: Props3) {
-  return <div />;
+  return <div/>;
 }

@@ -7,7 +7,7 @@ var App = {
   },
 };
 
-const FormattedPlural = () => <div />;
+const FormattedPlural = () => <div/>;
 
 process.env.NODE_ENV !== 'production' ? FormattedPlural.propTypes = {
   value: PropTypes.any.isRequired,

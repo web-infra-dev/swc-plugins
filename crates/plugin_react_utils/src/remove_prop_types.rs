@@ -555,7 +555,7 @@ impl<'a> Visit for CollectReactComponent<'a> {
     }
   }
 
-  // var App = () => { ... }
+  // var App = ()=>{ ... }
   // var App = function () { ... }
   fn visit_var_decl(&mut self, var_decl: &VarDecl) {
     for decl in &var_decl.decls {
@@ -580,7 +580,7 @@ impl<'a> Visit for CollectReactComponent<'a> {
     }
   }
 
-  // App = () => { ... }
+  // App = ()=>{ ... }
   // App = function() { ... }
   fn visit_assign_expr(&mut self, assign_expr: &AssignExpr) {
     if assign_expr.left.as_ident().is_none() {

@@ -3,7 +3,7 @@ const propTypesBasic = {
 };
 
 const FooBasic = () => (
-  <div />
+  <div/>
 );
 
 FooBasic.propTypes = propTypesBasic;
@@ -17,7 +17,7 @@ const propTypesWithExtraReference = Object.assign({}, extraReference, {
 });
 
 const FooExtraReference = () => (
-  <div />
+  <div/>
 );
 
 FooExtraReference.propTypes = propTypesWithExtraReference;
@@ -29,7 +29,7 @@ const propTypesWithExtraReferenceSpread = {
 };
 
 const FooExtraReferenceSpread = () => (
-  <div />
+  <div/>
 );
 
 FooExtraReferenceSpread.propTypes = propTypesWithExtraReferenceSpread;
@@ -39,7 +39,7 @@ const propTypesWrapped = {
 };
 
 const FooWrapped = () => (
-  <div />
+  <div/>
 );
 
 FooWrapped.propTypes = someWrappingFunction(propTypesWrapped);
@@ -49,7 +49,7 @@ const propTypesReferenced = {
 };
 
 const FooReferenced = () => (
-  <div bar={propTypesReferenced} />
+  <div bar={propTypesReferenced}/>
 );
 
 FooReferenced.propTypes = propTypesReferenced;
@@ -59,7 +59,7 @@ export const propTypesExported = {
 };
 
 const FooExported = () => (
-  <div />
+  <div/>
 );
 
 FooExported.propTypes = propTypesExported;

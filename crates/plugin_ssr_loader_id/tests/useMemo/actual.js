@@ -2,7 +2,7 @@ import { useLoader } from '@modern-js/runtime';
 import { memo } from 'react';
 
 const Wrap = memo((props) => {
-  useLoader(() => {
+  useLoader(()=>{
     console.log('wrap');
     return Promise.resolve({});
   }, {});

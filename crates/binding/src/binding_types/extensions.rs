@@ -8,6 +8,7 @@ use super::plugin_emotion::EmotionOptionsNapi;
 use super::plugin_lock_corejs_version::LockCoreJsVersionNapi;
 use super::plugin_lodash::PluginLodashConfigNapi;
 use super::plugin_modularize_imports::PackageConfigNapi;
+use super::plugin_react_const_elements::ReactConstElementsOptionsNapi;
 use super::plugin_react_utils;
 use super::plugin_ssr_loader_id::SSRLoaderIdConfigNapi;
 use super::plugin_styled_components::StyledComponentsConfigNapi;
@@ -32,6 +33,8 @@ pub struct ExtensionsNapi {
   pub ssr_loader_id: Option<SSRLoaderIdConfigNapi>,
   pub config_routes: Option<ConfigRoutesConfigNapi>,
   pub loadable_components: Option<bool>,
+
+  pub react_const_elements: Option<ReactConstElementsOptionsNapi>,
 }
 
 impl IntoRawConfig<Extensions> for ExtensionsNapi {
@@ -48,6 +51,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       ssr_loader_id,
       loadable_components,
       config_routes,
+      react_const_elements,
     } = self;
 
     Ok(Extensions {
@@ -62,6 +66,7 @@ impl IntoRawConfig<Extensions> for ExtensionsNapi {
       ssr_loader_id: ssr_loader_id.into_raw_config(env)?,
       lodash: lodash.into_raw_config(env)?,
       loadable_components,
+      react_const_elements: react_const_elements.into_raw_config(env)?,
     })
   }
 }

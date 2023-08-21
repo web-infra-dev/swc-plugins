@@ -140,6 +140,10 @@ export interface Extensions {
           };
         };
       };
+  reactConstElements?: {
+    immutable_globals?: string[],
+    allow_mutable_props_on_tags?: string[]
+  }
 }
 
 export interface Output {

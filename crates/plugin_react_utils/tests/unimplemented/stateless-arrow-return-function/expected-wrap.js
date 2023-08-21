@@ -5,7 +5,7 @@ var Message = ({
   mapList
 }) => {
   return map(mapList, index => {
-    return <div />;
+    return <div/>;
   });
 };
 

@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 
-const Component = () => <div />;
+const Component = () => <div/>;
 
 const referencedPropTypes = process.env.NODE_ENV !== "production" ? {
-  variant3: () => {
+  variant3: ()=>{
     const willBeWrapped = 1;
     return null;
   }
