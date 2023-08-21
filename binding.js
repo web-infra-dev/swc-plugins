@@ -28,6 +28,14 @@ class Compiler extends RawCompiler {
 
     delete config.extensions;
 
+    // SWC will crash if use jsc.target and env.targets together after bump
+    if (config.jsc?.target && config.env?.targets) {
+      console.warn(
+        "[SWC] Do not use jsc.target and env.targets together, when used together only env.targets works"
+      );
+      delete config.jsc.target;
+    }
+
     try {
       super({
         swc: JSON.stringify(config),
