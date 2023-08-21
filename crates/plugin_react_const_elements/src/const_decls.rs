@@ -16,9 +16,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use swc_core::ecma::ast::{
-  Decl, DefaultDecl, Id, ImportSpecifier, ModuleDecl, Pat, Stmt, VarDeclKind,
-};
+use swc_core::ecma::ast::{Decl, DefaultDecl, Id, ImportSpecifier, ModuleDecl, Pat, Stmt};
 
 use crate::utils::StmtLike;
 

@@ -1,4 +1,9 @@
-var _Counter;
+import Counter from 'foo';
 function Component() {
-  return () => _Counter || (_Counter = <Counter onClick={value => value + prompt("Increment:")}/>);
+  let _Counter;
+  return ()=>{
+    return _Counter || (_Counter = <Counter onClick={(value)=>{
+      return value + prompt("Increment:");
+    }}/>);
+  };
 }

@@ -1,3 +1,6 @@
+import Counter from 'foo';
 function Component() {
-  return () => <Counter onClick={value => value + prompt("Increment:")}/>;
+  return () => {
+    return <Counter onClick={value => value + prompt("Increment:")}/>;
+  };
 }

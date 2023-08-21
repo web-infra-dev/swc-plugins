@@ -2,8 +2,8 @@ function RoutesComponent() {
   return <Routes>
       {(c)=>{
       {
-        const Component = c;
-        return <Component/>;
+        const Comp = c;
+        return <Comp/>;
       }
     }}
     </Routes>;

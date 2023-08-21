@@ -1,4 +1,3 @@
-import Component from 'xx';
 function render(title = '') {
   let _Component;
   return ()=>{

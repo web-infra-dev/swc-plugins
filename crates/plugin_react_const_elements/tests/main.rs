@@ -1,7 +1,6 @@
 use std::{env::current_dir, fs, path::Path};
 
-use swc_plugins_collection::types::{Extensions, TransformConfig};
-use test_plugins::fixture::{BaseFixtureHook, ExpectedInfo, FixtureTesterHook};
+use test_plugins::fixture::{ExpectedInfo, FixtureTesterHook};
 
 struct BabelPortedTest;
 
@@ -37,7 +36,8 @@ impl FixtureTesterHook for BabelPortedTest {
         }
       },
       "extensions": { "reactConstElements": {
-        "immutable_globals": ["Component"]
+        "immutable_globals": ["Component", "Counter"],
+        "allow_mutable_props_on_tags": ["Counter", "FormattedMessage"]
       } }
     }"#,
     )
@@ -57,28 +57,4 @@ fn basic() {
     test_plugins::fixture::FixtureTester::new(Default::default(), BabelPortedTest, vec![], None);
 
   tester.fixtures(&current_dir().unwrap().join(Path::new("tests/fixtures")));
-
-  // tester.run_test(
-  //   "test_name",
-  //   &serde_json::from_str(
-  //     r#"{
-  //   "swc": {
-  //     "jsc": {
-  //       "target": "es2022"
-  //     }
-  //   },
-  //   "extensions": { "reactConstElements":  {
-  //     "immutable_globals": ["Component"]
-  //   }
-  // }
-  // }"#,
-  //   )
-  //   .unwrap(),
-  //   "import Component from 'foo';
-  //   function render({ text, className, id, ...props }) {
-  //     return () => (<Component {...props}/>);
-  //   }
-  //   ",
-  //   Some(""),
-  // )
 }

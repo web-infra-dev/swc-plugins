@@ -1,3 +1,4 @@
+import FormattedMessage from 'foo'
 var Foo = React.createClass({
   render: function () {
     return (

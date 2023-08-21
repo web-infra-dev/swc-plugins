@@ -1,6 +1,9 @@
-function Component({
-  increment
-}) {
-  var _Counter;
-  return () => _Counter || (_Counter = <Counter onClick={value => value + increment}/>);
+import Counter from 'foo';
+function Component({ increment }) {
+  let _Counter;
+  return ()=>{
+    return _Counter || (_Counter = <Counter onClick={(value)=>{
+      return value + increment;
+    }}/>);
+  };
 }

@@ -1,19 +1,19 @@
 #![feature(let_chains)]
 use const_decls::ConstDecls;
 use immutable::{are_children_immutable, hoist_jsx, modify_jsx_if_immutable};
+use serde::Deserialize;
 use swc_core::{
   common::{Mark, SyntaxContext, DUMMY_SP},
   ecma::{
     ast::{
       ArrowExpr, BindingIdent, BlockStmt, BlockStmtOrExpr, Class, ClassMember, Decl, Expr,
-      Function, Id, Ident, Module, ModuleItem, Pat, Program, ReturnStmt, Script, Stmt, VarDecl,
-      VarDeclKind, VarDeclarator,
+      Function, Id, Ident, Module, Pat, Program, ReturnStmt, Script, Stmt, VarDecl, VarDeclKind,
+      VarDeclarator,
     },
     utils::find_pat_ids,
     visit::{as_folder, noop_visit_mut_type, Fold, VisitMut, VisitMutWith},
   },
 };
-use serde::Deserialize;
 use utils::{get_immutable_ids, StmtLike};
 
 mod const_decls;
@@ -22,12 +22,13 @@ mod utils;
 
 #[derive(Debug, Default, Deserialize, Clone)]
 pub struct ReactConstElementsOptions {
-  pub immutable_globals: rustc_hash::FxHashSet<String>
+  pub immutable_globals: rustc_hash::FxHashSet<String>,
+  pub allow_mutable_props_on_tags: rustc_hash::FxHashSet<String>,
 }
 
 pub fn react_const_elements(config: ReactConstElementsOptions) -> impl Fold + VisitMut {
   let pass = ReactConstElements {
-    state: State::new(),
+    state: State::new(config),
   };
   as_folder(pass)
 }
@@ -122,7 +123,6 @@ impl VisitMut for ReactConstElements {
 
   fn visit_mut_program(&mut self, program: &mut Program) {
     self.state.immutable_ids = get_immutable_ids(program);
-    dbg!(&self.state.immutable_ids);
     program.visit_mut_children_with(self);
   }
 
@@ -168,7 +168,7 @@ pub struct State {
 }
 
 impl State {
-  fn new() -> Self {
+  fn new(config: ReactConstElementsOptions) -> Self {
     Self {
       vars: Default::default(),
       candidates: Default::default(),
@@ -176,7 +176,7 @@ impl State {
       next_id: 0,
       used_names: Default::default(),
       immutable_ids: Default::default(),
-      config: Default::default()
+      config,
     }
   }
 

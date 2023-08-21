@@ -6,12 +6,7 @@ use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_ssr_loader_id::plugin_ssr_loader_id;
 use swc_core::{
   base::config::Options,
-  common::{
-    chain,
-    comments::Comments,
-    pass::{Either, Optional},
-    FileName,
-  },
+  common::{chain, comments::Comments, pass::Either, FileName},
   ecma::visit::Fold,
   ecma::{transforms::base::pass::noop, visit::as_folder},
 };

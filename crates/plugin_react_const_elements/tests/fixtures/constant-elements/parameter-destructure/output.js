@@ -1,4 +1,3 @@
-import Component from 'foo';
 function render({ text }) {
   let _Component;
   return ()=>{
