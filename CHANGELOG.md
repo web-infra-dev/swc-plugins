@@ -1,5 +1,19 @@
 # @modern-js/swc-plugins
 
+## 0.6.0
+
+### Minor Changes
+
+- 962d82a: feat: add plugin-react-const-elements
+
+### Patch Changes
+
+- bc6ac50: fix: dont modify original config
+- 77ebf43: chore: bump swc
+- c26ff21: chore: bump swc
+- 2bb898e: chore: bump swc
+- 88c3a0d: refactor: move tests to integration_tests crate
+
 ## 0.5.7
 
 ### Patch Changes
