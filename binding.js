@@ -14,8 +14,10 @@ exports.minifyCssSync = binding.minifyCssSync;
 const { minify, minifySync, Compiler: RawCompiler } = binding;
 
 class Compiler extends RawCompiler {
-  constructor(config) {
-    const extensions = config.extensions || {};
+  // Do not mutate on rawConfig
+  constructor(rawConfig) {
+    const config = { ...rawConfig };
+    const extensions = { ...config.extensions } || {};
 
     if (extensions.pluginImport) {
       extensions.pluginImport = transformPluginImport(extensions.pluginImport);
