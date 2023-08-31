@@ -38,7 +38,8 @@
     "vitest": "vitest run",
     "version": "napi version",
     "release": "changeset publish --no-git-checks",
-    "changeset": "changeset"
+    "changeset": "changeset",
+    "build:wasm": "pnpm --filter \"./packages/**\" wasm"
   },
   "napi": {
     "name": "swc-plugins",

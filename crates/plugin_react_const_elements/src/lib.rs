@@ -26,9 +26,34 @@ pub struct ReactConstElementsOptions {
   pub allow_mutable_props_on_tags: rustc_hash::FxHashSet<String>,
 }
 
-pub fn react_const_elements(config: ReactConstElementsOptions) -> impl Fold + VisitMut {
+#[derive(Debug, Default, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Options {
+  pub immutable_globals: Option<Vec<String>>,
+  pub allow_mutable_props_on_tags: Option<Vec<String>>,
+}
+
+impl From<Options> for ReactConstElementsOptions {
+  fn from(value: Options) -> Self {
+    Self {
+      immutable_globals: value
+        .immutable_globals
+        .unwrap_or_default()
+        .into_iter()
+        .collect(),
+
+      allow_mutable_props_on_tags: value
+        .allow_mutable_props_on_tags
+        .unwrap_or_default()
+        .into_iter()
+        .collect(),
+    }
+  }
+}
+
+pub fn react_const_elements(config: Options) -> impl Fold + VisitMut {
   let pass = ReactConstElements {
-    state: State::new(config),
+    state: State::new(config.into()),
   };
   as_folder(pass)
 }

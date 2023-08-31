@@ -1,0 +1,17 @@
+[package]
+name = "swc_plugin_import_wasm"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ['cdylib']
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+swc_core = { workspace = true, features = [
+  "ecma_plugin_transform",
+  "common",
+  "ecma_ast",
+] }
+swc_plugin_import = { path = "../../crates/plugin_import" }

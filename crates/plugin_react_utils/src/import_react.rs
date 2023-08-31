@@ -59,7 +59,7 @@ impl VisitMut for ImportReact {
           raw: None,
         }),
         type_only: false,
-        asserts: None,
+        with: None,
       }));
       body.insert(0, dec);
     }

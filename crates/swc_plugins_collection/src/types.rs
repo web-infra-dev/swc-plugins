@@ -3,7 +3,6 @@ use std::collections::HashMap;
 use modularize_imports::PackageConfig;
 use plugin_config_routes::ConfigRoutesConfig;
 use plugin_lock_corejs_version::LockCoreJsVersion;
-use plugin_react_const_elements::ReactConstElementsOptions;
 use plugin_ssr_loader_id::SSRLoaderIdConfig;
 use serde::Deserialize;
 use swc_core::base::config::Options;
@@ -28,8 +27,6 @@ pub struct Extensions {
   pub ssr_loader_id: Option<SSRLoaderIdConfig>,
   pub config_routes: Option<ConfigRoutesConfig>,
   pub loadable_components: Option<bool>,
-
-  pub react_const_elements: Option<ReactConstElementsOptions>,
 }
 
 #[derive(Debug, Default, Deserialize)]

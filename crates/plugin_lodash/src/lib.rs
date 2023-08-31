@@ -133,7 +133,7 @@ impl PluginLodash {
         raw: None,
       }),
       type_only: false,
-      asserts: None,
+      with: None,
     });
 
     self.lodash_vars.insert(local.clone());
@@ -194,7 +194,7 @@ impl VisitMut for PluginLodash {
             })],
             src: None,
             type_only: false,
-            asserts: None,
+            with: None,
           },
         )))
     }
