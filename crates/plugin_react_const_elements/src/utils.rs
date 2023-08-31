@@ -181,7 +181,12 @@ impl Storage for ImmutableVar {
   }
 
   fn get_initialized_cnt(&self) -> usize {
-    0
+    self
+      .vars
+      .values()
+      .map(|var| var.initialized)
+      .filter(|it| *it)
+      .count()
   }
 
   fn truncate_initialized_cnt(&mut self, _len: usize) {}
@@ -232,7 +237,9 @@ impl VarDataLike for VarInfo {
 
   fn mark_as_exported(&mut self) {}
 
-  fn mark_initialized_with_safe_value(&mut self) {}
+  fn mark_initialized_with_safe_value(&mut self) {
+    self.initialized = true;
+  }
 
   fn mark_as_pure_fn(&mut self) {}
 

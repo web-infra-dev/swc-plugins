@@ -67,5 +67,6 @@ jobs:
 
       - name: Run test
         run: |
+          pnpm run build:wasm
           node -e "console.log(process.arch)"
           cargo test --workspace
