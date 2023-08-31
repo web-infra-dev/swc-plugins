@@ -8,9 +8,7 @@ fn transform(mut program: Program, meta: TransformPluginProgramMetadata) -> Prog
   let config = meta.get_transform_plugin_config();
 
   let config = config
-    .map(|raw| {
-      serde_json::from_str(&raw).expect("Failed to parse config of react-const-elements")
-    })
+    .map(|raw| serde_json::from_str(&raw).expect("Failed to parse config of react-const-elements"))
     .unwrap_or_default();
 
   let mut v = plugin_react_const_elements::react_const_elements(config);

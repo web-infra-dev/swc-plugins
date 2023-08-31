@@ -118,7 +118,7 @@ impl Debug for CustomTransform {
 }
 
 #[derive(Debug, Deserialize, Default, Clone)]
-#[serde(rename_all="camelCase")]
+#[serde(rename_all = "camelCase")]
 pub struct PluginImportConfig {
   pub library_name: String,
   pub library_directory: Option<String>, // default to `lib`
@@ -402,7 +402,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
           raw: None,
         }),
         type_only: false,
-        with: None
+        with: None,
       }));
       imports.push(dec);
     }

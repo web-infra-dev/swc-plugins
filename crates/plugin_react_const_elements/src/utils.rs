@@ -186,7 +186,11 @@ impl Storage for ImmutableVar {
 
   fn truncate_initialized_cnt(&mut self, _len: usize) {}
 
-  fn mark_property_mutation(&mut self, _id: Id, _ctx: swc_core::ecma::usage_analyzer::analyzer::Ctx) {
+  fn mark_property_mutation(
+    &mut self,
+    _id: Id,
+    _ctx: swc_core::ecma::usage_analyzer::analyzer::Ctx,
+  ) {
   }
 }
 
