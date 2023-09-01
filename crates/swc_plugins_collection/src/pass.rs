@@ -23,14 +23,6 @@ pub fn internal_transform_before_pass<'a>(
   swc_config: &Options,
   plugin_context: &PluginContext,
 ) -> impl Fold + 'a {
-  let plugin_const_elements = if let Some(config) = &extensions.react_const_elements {
-    Either::Left(plugin_react_const_elements::react_const_elements(
-      config.clone(),
-    ))
-  } else {
-    Either::Right(noop())
-  };
-
   let modularize_imports = extensions
     .modularize_imports
     .as_ref()
@@ -103,7 +95,6 @@ pub fn internal_transform_before_pass<'a>(
   };
 
   chain!(
-    plugin_const_elements,
     modularize_imports,
     plugin_import,
     react_utils,

@@ -28,21 +28,31 @@ impl FixtureTesterHook for BabelPortedTest {
       .or_else(|_| fs::read(fixture_path.join("output.mjs")))
       .unwrap();
 
-    let config = serde_json::from_str(
-      r#"{
-      "swc": {
-        "jsc": {
-          "target": "es2022"
-        }
-      },
-      "extensions": { "reactConstElements": {
-        "immutable_globals": ["Component", "Counter"],
-        "allow_mutable_props_on_tags": ["Counter", "FormattedMessage"]
-      } }
-    }"#,
-    )
-    .unwrap();
+    let plugin_path = current_dir()
+      .unwrap()
+      .join("../../packages/react-const-elements");
 
+    let config = serde_json::from_str(&format!(
+      r#"{{
+        "extensions": {{}},
+        "swc": {{
+          "jsc": {{
+            "target": "es2022",
+            "experimental": {{
+              "plugins": [
+                ["{}", {{
+                    "immutableGlobals": ["Component", "Counter"],
+                    "allowMutablePropsOnTags": ["Counter", "FormattedMessage"]
+                  }}
+                ]
+              ]
+            }}
+          }}
+        }}
+      }}"#,
+      plugin_path.display()
+    ))
+    .unwrap();
     vec![ExpectedInfo::new(
       expected_path.to_string_lossy().to_string(),
       String::from_utf8(expected).unwrap(),

@@ -1,0 +1,16 @@
+[package]
+name = "swc_plugin_react_const_elements"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ['cdylib']
+
+[dependencies]
+serde_json = { workspace = true }
+swc_core = { workspace = true, features = [
+  "ecma_plugin_transform",
+  "common",
+  "ecma_ast",
+] }
+plugin_react_const_elements = { path = "../../crates/plugin_react_const_elements" }

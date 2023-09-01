@@ -181,14 +181,19 @@ impl Storage for ImmutableVar {
   }
 
   fn get_initialized_cnt(&self) -> usize {
-    0
+    self
+      .vars
+      .values()
+      .map(|var| var.initialized)
+      .filter(|it| *it)
+      .count()
   }
 
   fn truncate_initialized_cnt(&mut self, _len: usize) {}
 
-  fn mark_property_mutattion(
+  fn mark_property_mutation(
     &mut self,
-    _id: swc_core::ecma::ast::Id,
+    _id: Id,
     _ctx: swc_core::ecma::usage_analyzer::analyzer::Ctx,
   ) {
   }
@@ -212,12 +217,6 @@ impl VarDataLike for VarInfo {
 
   fn mark_declared_as_fn_expr(&mut self) {}
 
-  fn mark_mutated(&mut self) {}
-
-  fn mark_reassigned(&mut self) {
-    self.reassigned = true
-  }
-
   fn mark_declared_as_for_init(&mut self) {}
 
   fn mark_has_property_access(&mut self) {}
@@ -238,7 +237,9 @@ impl VarDataLike for VarInfo {
 
   fn mark_as_exported(&mut self) {}
 
-  fn mark_initialized_with_safe_value(&mut self) {}
+  fn mark_initialized_with_safe_value(&mut self) {
+    self.initialized = true;
+  }
 
   fn mark_as_pure_fn(&mut self) {}
 

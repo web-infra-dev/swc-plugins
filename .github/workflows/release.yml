@@ -394,6 +394,9 @@ jobs:
         run: ls -R ./npm
         shell: bash
 
+      - name: Prepare WASM plugins
+        run: pnpm run build:wasm
+
       - name: Release
         uses: web-infra-dev/actions@v2
         with:

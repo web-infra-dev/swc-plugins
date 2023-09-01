@@ -6,7 +6,6 @@ pub mod plugin_import;
 pub mod plugin_lock_corejs_version;
 pub mod plugin_lodash;
 pub mod plugin_modularize_imports;
-pub mod plugin_react_const_elements;
 pub mod plugin_react_utils;
 pub mod plugin_ssr_loader_id;
 pub mod plugin_styled_components;
