@@ -1,4 +1,4 @@
-name: rs-test
+name: plugin-test
 
 on:
   push:
@@ -8,9 +8,7 @@ on:
       - "**"
   pull_request:
     paths: # Only run when changes are made to rust code or root Cargo
-      - "crates/**"
-      - "Cargo.toml"
-      - "Cargo.lock"
+      - "./packages/**"
       - "rust-toolchain"
       - "rustfmt.toml"
       - "clippy.toml"
@@ -50,22 +48,19 @@ jobs:
         with:
           shared-key: check
 
-      - name: Run rustfmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+      - name: Run fmt and clippy
+        run: |
+          cd packages
+          cargo fmt --all -- --check
+          cargo clippy --workspace --all-targets -- -D warnings
 
-      - name: Run Cargo Check
-        run: cargo check --workspace --all-targets --release --locked
-
-      - name: Run Clippy
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: --workspace --all-targets -- -D warnings
+      - name: Run check
+        run: |
+          cd packages
+          cargo check --workspace --all-targets --release --locked
 
       - name: Run test
         run: |
+          cd packages
           node -e "console.log(process.arch)"
           cargo test --workspace

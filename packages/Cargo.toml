@@ -1,7 +1,11 @@
+# We use different scopes is because that swc_core has 2 mutual features
+# that plugin-rt and plugin-mode cannot enable at the same time
+# If we make plugins and core at the same workspace, cargo check --workspace will fail
+
 cargo-features = ["strip"]
 
 [workspace]
-members = ["crates/*"]
+members = ["plugin-import", "react-const-elements"]
 resolver = "2"
 
 [profile.release]
