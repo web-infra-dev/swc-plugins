@@ -39,7 +39,9 @@
     "version": "napi version",
     "release": "changeset publish --no-git-checks",
     "changeset": "changeset",
-    "build:wasm": "pnpm --filter \"./packages/**\" wasm"
+    "build:wasm:import": "cd packages/plugin-import && npm run wasm",
+    "build:wasm:react-const-elements": "cd packages/plugin-import && npm run wasm",
+    "build:wasm": "npm run build:wasm:import && npm run build:wasm:react-const-elements"
   },
   "napi": {
     "name": "swc-plugins",
