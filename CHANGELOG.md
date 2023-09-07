@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.6.1
+
+### Patch Changes
+
+- a3e1f6b: feat: add wasm plugins
+
 ## 0.6.0
 
 ### Minor Changes
