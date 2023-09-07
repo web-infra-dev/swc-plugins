@@ -39,9 +39,9 @@
     "version": "napi version",
     "release": "changeset publish --no-git-checks",
     "changeset": "changeset",
-    "build:wasm:import": "cd packages/plugin-import && rustup target add wasm32-wasi && npm run wasm",
-    "build:wasm:react-const-elements": "cd packages/plugin-import && rustup target add wasm32-wasi && npm run wasm",
-    "build:wasm": "npm run build:wasm:import && npm run build:wasm:react-const-elements"
+    "build:wasm:import": "cd packages/plugin-import && npm run wasm",
+    "build:wasm:react-const-elements": "cd packages/react-const-elements && npm run wasm",
+    "build:wasm": "rustup target add wasm32-wasi && npm run build:wasm:import && npm run build:wasm:react-const-elements"
   },
   "napi": {
     "name": "swc-plugins",
