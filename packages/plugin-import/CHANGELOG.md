@@ -1,5 +1,11 @@
 # @modern-js/swc-plugin-import
 
+## 0.6.2
+
+### Patch Changes
+
+- 4791282: chore: publish
+
 ## 0.6.1
 
 ### Patch Changes
