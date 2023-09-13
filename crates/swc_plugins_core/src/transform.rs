@@ -3,15 +3,18 @@
 use std::{path::PathBuf, rc::Rc, sync::Arc};
 
 use anyhow::Result;
+use regex::Regex;
 use swc_core::{
   base::{
     config::{self, Options},
     try_with_handler, Compiler, HandlerOpts, TransformOutput,
   },
-  common::{comments::SingleThreadedComments, errors::ColorConfig, FileName, Mark, GLOBALS},
+  common::{
+    comments::SingleThreadedComments, errors::ColorConfig, sync::Lazy, FileName, Mark, GLOBALS,
+  },
   ecma::{
     ast::EsVersion,
-    parser::{Syntax, TsConfig},
+    parser::{EsConfig, Syntax, TsConfig},
     visit::Fold,
     // TODO current version too low
     // transforms::module::common_js::Config
@@ -20,6 +23,8 @@ use swc_core::{
 use swc_plugins_utils::PluginContext;
 
 use crate::TransformFn;
+
+static JS_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"\.[mc]?jsx?$").unwrap());
 
 /// As we initialize plugins at each transform,
 /// Some plugins need very heavy work on the first
@@ -71,6 +76,7 @@ where
           let mut swc_config = swc_config.clone();
           swc_config.config.input_source_map = input_source_map.map(config::InputSourceMap::Str);
           swc_config.filename = filename.clone();
+          adapt_syntax(&filename, &mut swc_config);
 
           let top_level_mark = swc_config.top_level_mark.unwrap_or_else(Mark::new);
           let unresolved_mark = Mark::new();
@@ -123,4 +129,64 @@ where
       },
     )
   })
+}
+
+/**
+ * HACK:
+ * binding config is passed only once, but js and ts are processed differently,
+ * for example, decorator is always treated as legacy proposal,
+ * so we change the syntax according to the filename extensions.
+ *
+ * Now this fix only apply to js module, with ts syntax
+ */
+fn adapt_syntax(filename: &str, config: &mut Options) {
+  if !JS_REGEX.is_match(filename) {
+    // not js file
+    return;
+  }
+
+  let syntax = match &config.config.jsc.syntax {
+    Some(syntax) => {
+      if !syntax.typescript() {
+        // already use js syntax
+        Some(*syntax)
+      } else {
+        let ts = if let Syntax::Typescript(ts) = syntax {
+          ts
+        } else {
+          unreachable!()
+        };
+
+        Some(Syntax::Es(EsConfig {
+          jsx: ts.tsx,
+          decorators: ts.decorators,
+          ..Default::default()
+        }))
+      }
+    }
+    None => None,
+  };
+
+  config.config.jsc.syntax = syntax;
+}
+
+#[test]
+fn regex() {
+  assert!(JS_REGEX.is_match("a.js"));
+  assert!(JS_REGEX.is_match("a.mjs"));
+  assert!(JS_REGEX.is_match("a.cjs"));
+  assert!(JS_REGEX.is_match("a.jsx"));
+  assert!(JS_REGEX.is_match("a.mjsx"));
+  assert!(JS_REGEX.is_match("a.cjsx"));
+
+  assert!(!JS_REGEX.is_match("ajs"));
+  assert!(!JS_REGEX.is_match("ats"));
+  assert!(!JS_REGEX.is_match("a.ts"));
+  assert!(!JS_REGEX.is_match("a.mts"));
+  assert!(!JS_REGEX.is_match("a.cts"));
+  assert!(!JS_REGEX.is_match("a.tsx"));
+  assert!(!JS_REGEX.is_match("a.mtsx"));
+  assert!(!JS_REGEX.is_match("a.ctsx"));
+
+  assert!(!JS_REGEX.is_match("a.js.ts"));
 }
