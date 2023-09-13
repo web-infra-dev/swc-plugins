@@ -9,7 +9,9 @@ use swc_core::{
 };
 
 static COREJS: &str = "core-js";
+static COREJS_START: &str = "core-js/";
 static SWC_HELPERS: &str = "@swc/helpers";
+static SWC_HELPERS_START: &str = "@swc/helpers/";
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -20,9 +22,9 @@ pub struct LockCoreJsVersion {
 
 impl LockCoreJsVersion {
   fn need_replace(&self, value: impl AsRef<str>) -> Option<String> {
-    if value.as_ref().starts_with(COREJS) {
+    if value.as_ref().starts_with(COREJS_START) {
       Some(value.as_ref().replace(COREJS, &self.corejs))
-    } else if value.as_ref().starts_with(SWC_HELPERS) {
+    } else if value.as_ref().starts_with(SWC_HELPERS_START) {
       Some(value.as_ref().replace(SWC_HELPERS, &self.swc_helpers))
     } else {
       None
