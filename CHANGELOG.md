@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.6.3
+
+### Patch Changes
+
+- 71b639e: fix: adapte syntax based on filename, do not transform core-js-pure
+
 ## 0.6.2
 
 ### Patch Changes
