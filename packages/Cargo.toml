@@ -21,4 +21,4 @@ anyhow = { version = "1.0.69" }
 dashmap = { version = "5.4.0" }
 serde = "1.0.163"
 serde_json = "1.0.91"
-swc_core = { version = "0.82.7", default-features = false }
+swc_core = { version = "0.83.16", default-features = false }

@@ -4,6 +4,11 @@
   "author": "jserfeng",
   "description": "swc port of babel-plugin-import",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/swc-plugins",
+    "directory": "packages/plugin-import"
+  },
   "main": "./swc_plugin_import_wasm.wasm",
   "scripts": {
     "wasm": "cargo build --target wasm32-wasi --release && cp ../target/wasm32-wasi/release/swc_plugin_import.wasm ."

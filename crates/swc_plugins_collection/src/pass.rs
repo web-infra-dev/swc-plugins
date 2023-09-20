@@ -79,6 +79,9 @@ pub fn internal_transform_before_pass<'a>(
     Either::Left(styled_jsx::visitor::styled_jsx(
       plugin_context.cm.clone(),
       FileName::Real(swc_config.filename.clone().into()),
+      styled_jsx::visitor::Config {
+        use_lightningcss: true,
+      },
     ))
   } else {
     Either::Right(noop())
