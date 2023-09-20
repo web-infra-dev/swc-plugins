@@ -61,5 +61,10 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "files": [
+    "types/",
+    "binding.js",
+    "index.js"
+  ]
 }
