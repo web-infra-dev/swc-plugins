@@ -1,5 +1,12 @@
 # @modern-js/swc-plugins
 
+## 0.6.4
+
+### Patch Changes
+
+- f2c7812: chore: update swc_core
+- 5ff9680: fix: use files instead of npmignore
+
 ## 0.6.3
 
 ### Patch Changes
