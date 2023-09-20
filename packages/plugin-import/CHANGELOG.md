@@ -1,5 +1,11 @@
 # @modern-js/swc-plugin-import
 
+## 0.6.4
+
+### Patch Changes
+
+- f2c7812: chore: update swc_core
+
 ## 0.6.2
 
 ### Patch Changes

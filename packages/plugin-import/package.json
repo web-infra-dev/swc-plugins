@@ -1,6 +1,6 @@
 {
   "name": "@modern-js/swc-plugin-import",
-  "version": "0.6.2",
+  "version": "0.6.4",
   "author": "jserfeng",
   "description": "swc port of babel-plugin-import",
   "license": "MIT",
