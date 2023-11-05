@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.6.5
+
+### Patch Changes
+
+- b3cecf3: chore: bump swc
+
 ## 0.6.4
 
 ### Patch Changes
