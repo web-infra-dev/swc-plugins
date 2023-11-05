@@ -143,23 +143,6 @@ impl Storage for ImmutableVar {
     }
   }
 
-  fn report_usage(
-    &mut self,
-    ctx: swc_core::ecma::usage_analyzer::analyzer::Ctx,
-    i: &swc_core::ecma::ast::Ident,
-    is_assign: bool,
-  ) {
-    let var = self.vars.entry(i.to_id()).or_default();
-
-    if (ctx.in_assign_lhs || is_assign) && var.initialized {
-      var.reassigned = true;
-    }
-
-    if ctx.in_assign_lhs || is_assign {
-      var.assign_count += 1;
-    }
-  }
-
   fn declare_decl(
     &mut self,
     ctx: swc_core::ecma::usage_analyzer::analyzer::Ctx,
@@ -191,12 +174,24 @@ impl Storage for ImmutableVar {
 
   fn truncate_initialized_cnt(&mut self, _len: usize) {}
 
-  fn mark_property_mutation(
+  fn mark_property_mutation(&mut self, _id: Id) {}
+
+  fn report_assign(
     &mut self,
-    _id: Id,
     _ctx: swc_core::ecma::usage_analyzer::analyzer::Ctx,
+    i: Id,
+    _is_op: bool,
   ) {
+    let var = self.vars.entry(i).or_default();
+
+    if var.initialized {
+      var.reassigned = true;
+    }
+
+    var.assign_count += 1;
   }
+
+  fn report_usage(&mut self, _ctx: swc_core::ecma::usage_analyzer::analyzer::Ctx, _i: Id) {}
 }
 
 #[derive(Debug, Default)]
