@@ -220,7 +220,7 @@ impl VisitMut for PluginLodash {
         ImportSpecifier::Named(named_import) => {
           // Check import { default as id } from 'lodash';
           if let Some(ModuleExportName::Ident(id)) = &named_import.imported {
-            if id.sym.to_string() == "default" {
+            if id.sym == "default" {
               self.namespace_map.insert(id.to_id(), source.clone());
               continue;
             }

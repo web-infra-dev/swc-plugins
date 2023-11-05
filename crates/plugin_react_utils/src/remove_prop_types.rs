@@ -213,7 +213,7 @@ where
             continue;
           }
           if let PropName::Ident(property_ident) = &property.key {
-            if &property_ident.sym == PROP_TYPES {
+            if property_ident.sym == PROP_TYPES {
               removal = Some((idx, property.value.clone()));
               break;
             }
@@ -223,7 +223,7 @@ where
           if !property.is_static {
             continue;
           }
-          if &property.key.id.sym == PROP_TYPES {
+          if property.key.id.sym == PROP_TYPES {
             removal = Some((idx, property.value.clone()));
             break;
           }

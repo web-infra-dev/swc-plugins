@@ -34,7 +34,7 @@ impl VisitMut for RmUseEffect {
               if let Some(obj_ident) = member.obj.as_ident() {
                 if self.react_mark.contains(&obj_ident.to_id()) {
                   if let Some(method_ident) = member.prop.as_ident() {
-                    if &method_ident.sym == USE_EFFECT_STR {
+                    if method_ident.sym == USE_EFFECT_STR {
                       rm_idx_set.insert(idx);
                     }
                   }

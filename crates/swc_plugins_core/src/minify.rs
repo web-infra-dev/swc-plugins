@@ -4,8 +4,8 @@ use anyhow::{anyhow, Result};
 use swc_core::{
   base::{config::JsMinifyOptions, try_with_handler, Compiler, HandlerOpts, TransformOutput},
   common::{
-    errors::ColorConfig, source_map::SourceMapGenConfig, sync::Lazy, FileName, Globals, SourceFile,
-    SourceMap, GLOBALS,
+    comments::Comments, errors::ColorConfig, source_map::SourceMapGenConfig, sync::Lazy, FileName,
+    Globals, SourceFile, SourceMap, GLOBALS,
   },
   css::{
     ast::Stylesheet,
@@ -52,16 +52,21 @@ pub fn minify_css(config: &CssMinifyOptions, filename: &str, src: &str) -> Resul
 
     let fm = cm.new_source_file(FileName::Real(filename.into()), src.into());
 
-    let mut ast = parse(filename, fm)?;
+    let mut ast = parse(filename, fm, None)?;
     swc_minify_css(&mut ast, Default::default());
     codegen(&cm, filename, &ast, config)
   })
 }
 
-fn parse(filename: &str, fm: Arc<SourceFile>) -> Result<Stylesheet> {
+fn parse(
+  filename: &str,
+  fm: Arc<SourceFile>,
+  comments: Option<&dyn Comments>,
+) -> Result<Stylesheet> {
   let mut errors = vec![];
   parse_file(
     &fm,
+    comments,
     ParserConfig {
       allow_wrong_line_comments: true,
       css_modules: false,

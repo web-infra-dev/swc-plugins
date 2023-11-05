@@ -9,17 +9,17 @@ function _export(target, all) {
     });
 }
 _export(exports, {
+    bar: function() {
+        return _foo.default;
+    },
+    foo: function() {
+        return _isObject.default;
+    },
     isObject: function() {
         return _isObject.default;
     },
     map: function() {
         return _map.default;
-    },
-    foo: function() {
-        return _isObject.default;
-    },
-    bar: function() {
-        return _foo.default;
     }
 });
 var _interop_require_default = require("@swc/helpers/_/_interop_require_default");

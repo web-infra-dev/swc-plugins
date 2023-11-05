@@ -241,7 +241,7 @@ pub fn is_react_component(
             match_member(super_class, "React.PureComponent")
           },
           Expr::Ident(ident) => {
-            &ident.sym == COMPONENT_NAME || &ident.sym == PURE_COMPONENT_NAME
+            ident.sym == COMPONENT_NAME || ident.sym == PURE_COMPONENT_NAME
           },
           _ => false
         };
@@ -268,7 +268,7 @@ pub fn is_react_component_class(
           || match_member(super_class, "React.PureComponent")
       }
       Expr::Ident(super_class) => {
-        if &super_class.sym == COMPONENT_NAME || &super_class.sym == PURE_COMPONENT_NAME {
+        if super_class.sym == COMPONENT_NAME || super_class.sym == PURE_COMPONENT_NAME {
           return true;
         }
 
@@ -406,17 +406,17 @@ pub fn match_member(expr: &Expr, template: &str) -> bool {
     }
 
     if curr.len() == 1 {
-      return expr.is_ident() && &expr.as_ident().unwrap().sym == *curr.last().unwrap();
+      return expr.is_ident() && expr.as_ident().unwrap().sym == *curr.last().unwrap();
     }
 
     if let Expr::Member(member_expr) = expr {
       match &member_expr.prop {
-        MemberProp::Ident(ident) => &ident.sym == *curr.last().unwrap(),
-        MemberProp::PrivateName(private_name) => &private_name.id.sym == *curr.last().unwrap(),
+        MemberProp::Ident(ident) => ident.sym == *curr.last().unwrap(),
+        MemberProp::PrivateName(private_name) => private_name.id.sym == *curr.last().unwrap(),
         MemberProp::Computed(computed) => {
           if let Expr::Lit(lit) = computed.expr.borrow() {
             match lit {
-              Lit::Str(str) => str.value.to_string() == *curr.last().unwrap(),
+              Lit::Str(str) => str.value == *curr.last().unwrap(),
               Lit::Num(num) => num.value.to_string() == *curr.last().unwrap(),
               _ => false,
             }
