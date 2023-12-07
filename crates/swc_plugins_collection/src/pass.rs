@@ -81,6 +81,7 @@ pub fn internal_transform_before_pass<'a>(
       FileName::Real(swc_config.filename.clone().into()),
       styled_jsx::visitor::Config {
         use_lightningcss: true,
+        browsers: Default::default(),
       },
     ))
   } else {
@@ -92,6 +93,7 @@ pub fn internal_transform_before_pass<'a>(
       plugin_context.file.name.clone(),
       plugin_context.file.src_hash,
       config.clone(),
+      Some(plugin_context.comments.clone()),
     ))
   } else {
     Either::Right(noop())
