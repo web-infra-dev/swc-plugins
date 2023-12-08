@@ -1,6 +1,6 @@
 {
   "name": "@modern-js/swc-react-const-elements-plugin",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "author": "jserfeng",
   "description": "swc port of @babel/plugin-transform-react-constant-elements",
   "license": "MIT",
