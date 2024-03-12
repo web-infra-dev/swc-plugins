@@ -10,7 +10,7 @@ class RouteNode extends Component {
 } 
 
 const storeName = 'storeName';
-RouteNode.wrappedComponent.propTypes /* remove-proptypes */  = process.env.NODE_ENV !== "production" ? {
+RouteNode.wrappedComponent.propTypes = process.env.NODE_ENV !== "production" ? {
   [storeName]: PropTypes.object.isRequired
 } : {};
 

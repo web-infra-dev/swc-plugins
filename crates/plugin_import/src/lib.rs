@@ -9,8 +9,8 @@ use swc_core::{
   common::{sync::Lazy, util::take::Take, BytePos, Span, SyntaxContext, DUMMY_SP},
   ecma::{
     ast::{
-      Ident, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier, ImportSpecifier, Module,
-      ModuleDecl, ModuleExportName, ModuleItem, Str,
+      Ident, ImportDecl, ImportDefaultSpecifier, ImportNamedSpecifier, ImportPhase,
+      ImportSpecifier, Module, ModuleDecl, ModuleExportName, ModuleItem, Str,
     },
     atoms::JsWord,
     visit::{as_folder, Fold, VisitMut, VisitWith},
@@ -403,6 +403,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
         }),
         type_only: false,
         with: None,
+        phase: ImportPhase::Evaluation,
       }));
       imports.push(dec);
     }
@@ -467,6 +468,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
         }),
         type_only: false,
         with: None,
+        phase: ImportPhase::Evaluation,
       }));
       imports.push(dec);
     }

@@ -4,6 +4,7 @@ use modularize_imports::{modularize_imports, Config as ModularizedConfig};
 use plugin_config_routes::plugin_config_routes;
 use plugin_lock_corejs_version::lock_corejs_version;
 use plugin_ssr_loader_id::plugin_ssr_loader_id;
+use styled_jsx::visitor::NativeConfig;
 use swc_core::{
   base::config::Options,
   common::{chain, comments::Comments, pass::Either, FileName},
@@ -83,6 +84,7 @@ pub fn internal_transform_before_pass<'a>(
         use_lightningcss: true,
         browsers: Default::default(),
       },
+      NativeConfig { process_css: None },
     ))
   } else {
     Either::Right(noop())

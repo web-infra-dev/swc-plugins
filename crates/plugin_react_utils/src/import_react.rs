@@ -2,8 +2,8 @@ use swc_core::{
   common::{Mark, Span, DUMMY_SP},
   ecma::{
     ast::{
-      Ident, ImportDecl, ImportDefaultSpecifier, ImportSpecifier, Module, ModuleDecl, ModuleItem,
-      Str,
+      Ident, ImportDecl, ImportDefaultSpecifier, ImportPhase, ImportSpecifier, Module, ModuleDecl,
+      ModuleItem, Str,
     },
     atoms::JsWord,
     visit::{as_folder, Fold, VisitMut, VisitMutWith},
@@ -60,6 +60,7 @@ impl VisitMut for ImportReact {
         }),
         type_only: false,
         with: None,
+        phase: ImportPhase::Evaluation,
       }));
       body.insert(0, dec);
     }

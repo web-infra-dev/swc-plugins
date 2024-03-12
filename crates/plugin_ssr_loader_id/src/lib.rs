@@ -77,8 +77,8 @@ impl<'a> PluginSSRLoaderId {
     let func_body = &loader.as_fn_expr()?.function.body;
     match func_body {
       Some(body) => {
-        let inner_loader_decl = body.stmts.get(0)?.as_decl()?.as_var()?;
-        let decl_ident = &inner_loader_decl.decls.get(0)?.name.as_ident()?.id;
+        let inner_loader_decl = body.stmts.first()?.as_decl()?.as_var()?;
+        let decl_ident = &inner_loader_decl.decls.first()?.name.as_ident()?.id;
 
         let inner_loader_return = body.stmts.get(2)?.as_return_stmt()?;
         let return_ident = inner_loader_return.arg.as_ref()?.as_ident()?;
@@ -177,26 +177,28 @@ impl<'a> PluginSSRLoaderId {
               ident: None,
               function: method.function.clone(),
             });
-            if let Some(name) = name &&
-              LOADER_SLICE.contains(&name) &&
-              self.check_is_duplicate_inner_loader(func_expr).is_none()
-                    {
-                        let key_value_prop = Prop::KeyValue(KeyValueProp {
-                            key: method.key.clone(),
-                            value: Box::new(self.create_loader_expression(func_expr)),
-                        });
-                        *prop = key_value_prop;
-                    }
+            if let Some(name) = name
+              && LOADER_SLICE.contains(&name)
+              && self.check_is_duplicate_inner_loader(func_expr).is_none()
+            {
+              let key_value_prop = Prop::KeyValue(KeyValueProp {
+                key: method.key.clone(),
+                value: Box::new(self.create_loader_expression(func_expr)),
+              });
+              *prop = key_value_prop;
+            }
           }
           Prop::KeyValue(key_value) => {
             let name = get_name_from_prop_key(&key_value.key);
 
-            if  let Some(name) = name &&
-                    LOADER_SLICE.contains(&name) &&
-                    self.check_is_duplicate_inner_loader(&key_value.value).is_none()
-                    {
-                        *key_value.value = self.create_loader_expression(&key_value.value);
-                    }
+            if let Some(name) = name
+              && LOADER_SLICE.contains(&name)
+              && self
+                .check_is_duplicate_inner_loader(&key_value.value)
+                .is_none()
+            {
+              *key_value.value = self.create_loader_expression(&key_value.value);
+            }
           }
           _ => (),
         }
@@ -238,30 +240,39 @@ impl VisitMut for PluginSSRLoaderId {
     }
 
     import_decl.specifiers.iter().for_each(|specifier| {
-            let ImportSpecifier::Named(imported_spec) = specifier else {
-                return;
-            };
+      let ImportSpecifier::Named(imported_spec) = specifier else {
+        return;
+      };
 
-            let local_name = &imported_spec.local;
-            let import_name = imported_spec
-                .imported
-                .as_ref()
-                .and_then(|module_decl| match module_decl {
-                    ModuleExportName::Ident(id) => Some(id),
-                    ModuleExportName::Str(_) => None,
-                })
-                .unwrap_or(local_name);
-            if let Some(function_use_loader_name) = &config.function_use_loader_name &&
-                   import_name.sym.eq(function_use_loader_name) &&
-                   state.use_loader.is_none() { state.use_loader = Some(local_name.to_id()); }
+      let local_name = &imported_spec.local;
+      let import_name = imported_spec
+        .imported
+        .as_ref()
+        .and_then(|module_decl| match module_decl {
+          ModuleExportName::Ident(id) => Some(id),
+          ModuleExportName::Str(_) => None,
+        })
+        .unwrap_or(local_name);
+      if let Some(function_use_loader_name) = &config.function_use_loader_name
+        && import_name.sym.eq(function_use_loader_name)
+        && state.use_loader.is_none()
+      {
+        state.use_loader = Some(local_name.to_id());
+      }
 
-            if let Some(function_use_static_loader_name) = &config.function_use_static_loader_name &&
-                   import_name.sym.eq(function_use_static_loader_name) &&
-                   state.use_static_loader.is_none() { state.use_static_loader = Some(local_name.to_id()); }
+      if let Some(function_use_static_loader_name) = &config.function_use_static_loader_name
+        && import_name.sym.eq(function_use_static_loader_name)
+        && state.use_static_loader.is_none()
+      {
+        state.use_static_loader = Some(local_name.to_id());
+      }
 
-            if let Some(function_create_container_name) = &config.function_create_container_name &&
-                   import_name.sym.eq(function_create_container_name) &&
-                   state.create_container.is_none() { state.create_container = Some(local_name.to_id()); }
+      if let Some(function_create_container_name) = &config.function_create_container_name
+        && import_name.sym.eq(function_create_container_name)
+        && state.create_container.is_none()
+      {
+        state.create_container = Some(local_name.to_id());
+      }
     })
   }
 

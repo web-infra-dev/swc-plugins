@@ -22,14 +22,15 @@ impl VisitMut for RemoveEsModuleMark {
 }
 
 fn is_es_module_mark(item: &ModuleItem) -> bool {
-  if let ModuleItem::Stmt(Stmt::Expr(ExprStmt { expr, .. })) = item &&
-  let Expr::Call(CallExpr { callee, .. }) = &**expr &&
-  let Some(callee) = callee.as_expr() &&
-  let Expr::Member(member_expr) = &**callee &&
-  let Expr::Ident(obj) = &*member_expr.obj &&
-  let MemberProp::Ident(prop) = &member_expr.prop &&
-  &obj.sym == "Object" && 
-  &prop.sym == "defineProperty" {
+  if let ModuleItem::Stmt(Stmt::Expr(ExprStmt { expr, .. })) = item
+    && let Expr::Call(CallExpr { callee, .. }) = &**expr
+    && let Some(callee) = callee.as_expr()
+    && let Expr::Member(member_expr) = &**callee
+    && let Expr::Ident(obj) = &*member_expr.obj
+    && let MemberProp::Ident(prop) = &member_expr.prop
+    && &obj.sym == "Object"
+    && &prop.sym == "defineProperty"
+  {
     true
   } else {
     false

@@ -6,9 +6,10 @@ use swc_core::{
   common::{SyntaxContext, DUMMY_SP},
   ecma::{
     ast::{
-      AssignExpr, BlockStmt, BlockStmtOrExpr, Callee, Class, ClassDecl, Decl, DefaultDecl, Expr,
-      ExprStmt, FnDecl, Function, Id, Ident, Lit, MemberProp, Module, ModuleDecl, ModuleItem, Pat,
-      PatOrExpr, Program, ReturnStmt, Stmt, VarDecl, VarDeclKind,
+      AssignExpr, AssignTarget, AssignTargetPat, BindingIdent, BlockStmt, BlockStmtOrExpr, Callee,
+      Class, ClassDecl, Decl, DefaultDecl, Expr, ExprStmt, FnDecl, Function, Id, Ident, Lit,
+      MemberProp, Module, ModuleDecl, ModuleItem, Pat, Program, ReturnStmt, SimpleAssignTarget,
+      Stmt, VarDecl, VarDeclKind,
     },
     atoms::JsWord,
     visit::{Fold, Visit, VisitMut, VisitMutWith, VisitWith},
@@ -149,7 +150,9 @@ impl RmInvalid {
   fn rm_stmts(&mut self, stmts: &mut Vec<Stmt>) {
     let mut rm = vec![];
     for (idx, stmt) in stmts.iter_mut().enumerate().rev() {
-      if let Stmt::Expr(ExprStmt{ expr , ..}) = stmt && expr.is_invalid() {
+      if let Stmt::Expr(ExprStmt { expr, .. }) = stmt
+        && expr.is_invalid()
+      {
         rm.push(idx)
       } else {
         stmt.visit_mut_children_with(self);
@@ -166,7 +169,9 @@ impl VisitMut for RmInvalid {
   fn visit_mut_module(&mut self, module: &mut Module) {
     let mut rm = vec![];
     for (idx, stmt) in module.body.iter_mut().enumerate().rev() {
-      if let ModuleItem::Stmt(Stmt::Expr(ExprStmt{ expr , ..})) = stmt && expr.is_invalid() {
+      if let ModuleItem::Stmt(Stmt::Expr(ExprStmt { expr, .. })) = stmt
+        && expr.is_invalid()
+      {
         rm.push(idx)
       } else {
         stmt.visit_mut_children_with(self);
@@ -205,25 +210,25 @@ pub fn is_react_component(
 ) -> ReactComponentType {
   match expr {
     Expr::Fn(function) => {
-      if let Some(body) = &function.function.body && is_return_jsx(body.stmts.iter(), bindings) {
+      if let Some(body) = &function.function.body
+        && is_return_jsx(body.stmts.iter(), bindings)
+      {
         ReactComponentType::FC
       } else {
         ReactComponentType::None
       }
-    },
+    }
     Expr::Arrow(array) => {
       let is_return_jsx = match &*array.body {
-        BlockStmtOrExpr::BlockStmt(block) => {
-          is_return_jsx(block.stmts.iter(), bindings)
-        },
-        BlockStmtOrExpr::Expr(expr) => {
-          is_return_jsx([
-            Stmt::Return(ReturnStmt {
-                span: DUMMY_SP,
-                arg: Some(expr.clone()),
-            })
-          ].iter(), bindings)
-        },
+        BlockStmtOrExpr::BlockStmt(block) => is_return_jsx(block.stmts.iter(), bindings),
+        BlockStmtOrExpr::Expr(expr) => is_return_jsx(
+          [Stmt::Return(ReturnStmt {
+            span: DUMMY_SP,
+            arg: Some(expr.clone()),
+          })]
+          .iter(),
+          bindings,
+        ),
       };
 
       if is_return_jsx {
@@ -231,19 +236,17 @@ pub fn is_react_component(
       } else {
         ReactComponentType::None
       }
-    },
+    }
     Expr::Class(class_expr) => {
       let class = &class_expr.class;
       if let Some(super_class) = class.super_class.as_deref() {
         let is = match super_class {
           Expr::Member(_) => {
-            match_member(super_class, "React.Component") ||
-            match_member(super_class, "React.PureComponent")
-          },
-          Expr::Ident(ident) => {
-            ident.sym == COMPONENT_NAME || ident.sym == PURE_COMPONENT_NAME
-          },
-          _ => false
+            match_member(super_class, "React.Component")
+              || match_member(super_class, "React.PureComponent")
+          }
+          Expr::Ident(ident) => ident.sym == COMPONENT_NAME || ident.sym == PURE_COMPONENT_NAME,
+          _ => false,
         };
 
         if is {
@@ -252,8 +255,8 @@ pub fn is_react_component(
       }
 
       ReactComponentType::None
-    },
-    _ => ReactComponentType::None
+    }
+    _ => ReactComponentType::None,
   }
 }
 
@@ -272,13 +275,17 @@ pub fn is_react_component_class(
           return true;
         }
 
-        if let Some(bindings) = bindings && bindings.contains_key(&super_class.to_id()) {
+        if let Some(bindings) = bindings
+          && bindings.contains_key(&super_class.to_id())
+        {
           let maybe_class = bindings.get(&super_class.to_id()).unwrap();
           if !maybe_class.re_assigned && maybe_class.init.is_some() {
             let is_react_class = match maybe_class.init.as_ref().unwrap() {
-                BindingInitKind::Expr(expr) => is_react_component(expr, Some(bindings)) == ReactComponentType::Class,
-                BindingInitKind::Class(class) => is_react_component_class(class, Some(bindings)),
-                BindingInitKind::Fn(_) => { false },
+              BindingInitKind::Expr(expr) => {
+                is_react_component(expr, Some(bindings)) == ReactComponentType::Class
+              }
+              BindingInitKind::Class(class) => is_react_component_class(class, Some(bindings)),
+              BindingInitKind::Fn(_) => false,
             };
 
             if is_react_class {
@@ -357,8 +364,13 @@ pub fn is_jsx(expr: &Expr, bindings: Option<&HashMap<Id, BindingInfo>>) -> bool 
     Expr::Call(call_expr) => match &call_expr.callee {
       Callee::Expr(callee) => {
         let callee = get_real_expr(callee);
-        if let Some(ident) = callee.as_ident() && bindings.is_some() && bindings.unwrap().contains_key(&ident.to_id()) {
-          if let Some(BindingInitKind::Fn(function)) = &bindings.unwrap().get(&ident.to_id()).unwrap().init {
+        if let Some(ident) = callee.as_ident()
+          && bindings.is_some()
+          && bindings.unwrap().contains_key(&ident.to_id())
+        {
+          if let Some(BindingInitKind::Fn(function)) =
+            &bindings.unwrap().get(&ident.to_id()).unwrap().init
+          {
             if let Some(body) = &function.body {
               return is_return_jsx(body.stmts.iter(), bindings);
             }
@@ -370,7 +382,9 @@ pub fn is_jsx(expr: &Expr, bindings: Option<&HashMap<Id, BindingInfo>>) -> bool 
       _ => false,
     },
     Expr::Ident(ident) => {
-      if let Some(bindings) = bindings && bindings.contains_key(&ident.to_id()) {
+      if let Some(bindings) = bindings
+        && bindings.contains_key(&ident.to_id())
+      {
         let binding_info = bindings.get(&ident.to_id()).unwrap();
 
         if let Some(BindingInitKind::Expr(expr)) = &binding_info.init {
@@ -382,12 +396,14 @@ pub fn is_jsx(expr: &Expr, bindings: Option<&HashMap<Id, BindingInfo>>) -> bool 
     }
     Expr::Assign(assign) => match &*assign.right {
       Expr::Ident(right) => {
-        if let Some(bindings) = bindings && bindings.contains_key(&right.to_id()) {
-            let val = bindings.get(&right.to_id()).unwrap();
-            if let Some(BindingInitKind::Expr(expr)) = &val.init {
-              return is_jsx(expr, Some(bindings))
-            }
+        if let Some(bindings) = bindings
+          && bindings.contains_key(&right.to_id())
+        {
+          let val = bindings.get(&right.to_id()).unwrap();
+          if let Some(BindingInitKind::Expr(expr)) = &val.init {
+            return is_jsx(expr, Some(bindings));
           }
+        }
 
         false
       }
@@ -594,29 +610,53 @@ impl<'a> DetectReAssigned<'a> {
       binding_info.re_assigned = true;
     }
   }
+
+  fn handle_pat(&mut self, pat: &Pat) {
+    match pat {
+      Pat::Ident(ident) => {
+        self.reassign_ident(ident);
+      }
+      Pat::Expr(expr) => {
+        if let Expr::Ident(ident) = expr.borrow() {
+          self.reassign_ident(ident);
+        }
+      }
+      // TODO handle complex assign
+      _ => {}
+    }
+  }
 }
 
 impl<'a> Visit for DetectReAssigned<'a> {
   fn visit_assign_expr(&mut self, assign_expr: &AssignExpr) {
     match &assign_expr.left {
-      PatOrExpr::Expr(expr) => {
-        if let Expr::Ident(ident) = expr.borrow() {
-          self.reassign_ident(ident);
+      AssignTarget::Simple(simple) => {
+        if let SimpleAssignTarget::Ident(BindingIdent { id, .. }) = simple {
+          self.reassign_ident(id)
         }
       }
-      PatOrExpr::Pat(pat) => {
-        match pat.borrow() {
-          Pat::Ident(ident) => {
-            self.reassign_ident(ident);
-          }
-          Pat::Expr(expr) => {
-            if let Expr::Ident(ident) = expr.borrow() {
-              self.reassign_ident(ident);
+      AssignTarget::Pat(assign_target) => {
+        match assign_target {
+          AssignTargetPat::Array(array_pat) => {
+            for ele in &array_pat.elems {
+              if let Some(ele) = &ele {
+                self.handle_pat(ele);
+              }
             }
           }
-          // TODO handle complex assign
-          _ => {}
-        }
+          AssignTargetPat::Object(object_pat) => {
+            for prop in &object_pat.props {
+              if let swc_core::ecma::ast::ObjectPatProp::KeyValue(key_value_prop) = prop {
+                if let Some(computed) = key_value_prop.key.as_computed()
+                  && let Some(ident) = computed.expr.as_ident()
+                {
+                  self.reassign_ident(ident);
+                }
+              }
+            }
+          }
+          AssignTargetPat::Invalid(_) => {}
+        };
       }
     }
   }
