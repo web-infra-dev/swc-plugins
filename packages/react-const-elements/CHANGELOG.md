@@ -1,5 +1,11 @@
 # @modern-js/swc-react-const-elements-plugin
 
+## 0.6.7
+
+### Patch Changes
+
+- 0947e67: chore: bump swc_core
+
 ## 0.6.6
 
 ### Patch Changes
