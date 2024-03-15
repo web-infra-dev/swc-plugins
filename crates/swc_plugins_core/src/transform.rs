@@ -78,7 +78,7 @@ where
           swc_config.filename = filename.clone();
           adapt_syntax(&filename, &mut swc_config);
 
-          let top_level_mark = swc_config.top_level_mark.unwrap_or_else(Mark::new);
+          let top_level_mark = swc_config.top_level_mark.unwrap_or_default();
           let unresolved_mark = Mark::new();
 
           swc_config.top_level_mark = Some(top_level_mark);

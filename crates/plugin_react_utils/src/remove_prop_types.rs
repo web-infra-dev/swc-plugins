@@ -10,7 +10,8 @@ use swc_core::{
     ast::{
       AssignExpr, BlockStmt, Class, ClassDecl, ClassExpr, ClassMember, ClassProp, Decl,
       DefaultDecl, ExportDecl, ExportDefaultDecl, ExportDefaultExpr, Expr, ExprStmt, FnDecl, Id,
-      Ident, ImportDecl, ImportSpecifier, Module, ModuleDecl, ModuleItem, PropName, Stmt, VarDecl,
+      Ident, ImportDecl, ImportSpecifier, Module, ModuleDecl, ModuleItem, PropName,
+      SimpleAssignTarget, Stmt, VarDecl,
     },
     atoms::JsWord,
     visit::{
@@ -136,7 +137,7 @@ where
             let left = &assign_expr.left;
 
             // App.propTypes = {...}
-            if let Some(Expr::Member(member_decl)) = left.as_expr() {
+            if let Some(SimpleAssignTarget::Member(member_decl)) = left.as_simple() {
               if let Expr::Ident(obj) = &*member_decl.obj {
                 if self.is_react_class(&obj.to_id())
                   && (member_decl.prop.is_ident()
@@ -438,8 +439,10 @@ where
   // a.b.c /* remove-proptypes */ = PropTypes.number
   fn visit_mut_expr(&mut self, expr: &mut Expr) {
     if let Expr::Assign(assign) = expr {
-      if let Some(comments) = self.comments.get_trailing(assign.left.span().hi) &&
-      comments.iter().all(|comment| {comment.text.trim() == "remove-proptypes"})
+      if let Some(comments) = self.comments.get_trailing(assign.left.span().hi)
+        && comments
+          .iter()
+          .all(|comment| comment.text.trim() == "remove-proptypes")
       {
         self.remove_expr(expr);
       }
@@ -465,7 +468,13 @@ impl<'a> CollectReactComponent<'a> {
   fn check_custom_class(&mut self, ident: &Ident, class: &Class) {
     let key = ident.to_id();
     if let Some(super_class) = class.super_class.as_deref() {
-      if let Expr::Ident(super_class) = super_class && self.config.class_name_matchers.iter().any(|it| it.is_match(&super_class.sym)) {
+      if let Expr::Ident(super_class) = super_class
+        && self
+          .config
+          .class_name_matchers
+          .iter()
+          .any(|it| it.is_match(&super_class.sym))
+      {
         self.ids.insert(key);
       }
     }
@@ -600,7 +609,9 @@ impl<'a> Visit for CollectReactComponent<'a> {
   fn visit_fn_decl(&mut self, fn_decl: &FnDecl) {
     let id = &fn_decl.ident;
 
-    if let Some(block_stmt) = &fn_decl.function.body && is_return_jsx(block_stmt.stmts.iter(), Some(self.bindings)) {
+    if let Some(block_stmt) = &fn_decl.function.body
+      && is_return_jsx(block_stmt.stmts.iter(), Some(self.bindings))
+    {
       self.ids.insert(id.to_id());
     }
   }

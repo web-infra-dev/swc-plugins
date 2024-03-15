@@ -2,8 +2,9 @@ use swc_core::{
   common::DUMMY_SP,
   ecma::{
     ast::{
-      AssignExpr, AssignOp, BinExpr, BinaryOp, Expr, Ident, JSXAttr, JSXAttrName, JSXElement,
-      JSXElementChild, JSXElementName, JSXExpr, JSXExprContainer, PatOrExpr, SpreadElement,
+      AssignExpr, AssignOp, AssignTarget, BinExpr, BinaryOp, BindingIdent, Expr, Ident, JSXAttr,
+      JSXAttrName, JSXElement, JSXElementChild, JSXElementName, JSXExpr, JSXExprContainer,
+      SimpleAssignTarget, SpreadElement,
     },
     visit::{noop_visit_mut_type, VisitMut, VisitMutWith},
   },
@@ -68,17 +69,20 @@ pub fn are_children_immutable(
     let child_immutable = match c {
       // Literal text and fragments are immutable
       JSXElementChild::JSXText(_) => true,
-      JSXElementChild::JSXFragment(jsx_frag) => are_children_immutable(&mut jsx_frag.children, state, false),
+      JSXElementChild::JSXFragment(jsx_frag) => {
+        are_children_immutable(&mut jsx_frag.children, state, false)
+      }
 
       // we can allow raw ident access if is declared as const variable
       JSXElementChild::JSXExprContainer(expr_container) => {
-        if let JSXExpr::Expr(expr) = &expr_container.expr &&
-          let Expr::Ident(ident) = expr.as_ref() {
-            state.vars.contains(&ident.to_id())
+        if let JSXExpr::Expr(expr) = &expr_container.expr
+          && let Expr::Ident(ident) = expr.as_ref()
+        {
+          state.vars.contains(&ident.to_id())
         } else {
           false
         }
-      },
+      }
       JSXElementChild::JSXElement(ele) => modify_jsx_if_immutable(ele, state),
       JSXElementChild::JSXSpreadChild(_) => false,
     };
@@ -94,14 +98,26 @@ pub fn are_children_immutable(
           let id = state.create_id(Some(name));
           state.candidates.push(id.clone());
 
-          *c = JSXElementChild::JSXExprContainer(JSXExprContainer { span: DUMMY_SP, expr: JSXExpr::Expr(Box::new(hoist_result_ast(id, Expr::JSXElement(ele.clone())))) });
+          *c = JSXElementChild::JSXExprContainer(JSXExprContainer {
+            span: DUMMY_SP,
+            expr: JSXExpr::Expr(Box::new(hoist_result_ast(
+              id,
+              Expr::JSXElement(ele.clone()),
+            ))),
+          });
         }
         JSXElementChild::JSXFragment(frag) => {
           let id = state.create_id(None);
           state.candidates.push(id.clone());
 
-          *c = JSXElementChild::JSXExprContainer(JSXExprContainer { span: DUMMY_SP, expr: JSXExpr::Expr(Box::new(hoist_result_ast(id, Expr::JSXFragment(frag.clone())))) });
-        },
+          *c = JSXElementChild::JSXExprContainer(JSXExprContainer {
+            span: DUMMY_SP,
+            expr: JSXExpr::Expr(Box::new(hoist_result_ast(
+              id,
+              Expr::JSXFragment(frag.clone()),
+            ))),
+          });
+        }
         _ => {}
       };
     }
@@ -119,7 +135,10 @@ pub fn hoist_result_ast(id: Ident, ele: Expr) -> Expr {
     right: Box::new(Expr::Assign(AssignExpr {
       span: DUMMY_SP,
       op: AssignOp::Assign,
-      left: PatOrExpr::Expr(Box::new(Expr::Ident(id))),
+      left: AssignTarget::Simple(SimpleAssignTarget::Ident(BindingIdent {
+        id,
+        type_ann: None,
+      })),
       right: Box::new(ele),
     })),
   })
@@ -162,9 +181,11 @@ impl<'a> VisitMut for Immutable<'a> {
   noop_visit_mut_type!();
 
   fn visit_mut_jsx_attr(&mut self, attr: &mut JSXAttr) {
-    if let JSXAttrName::Ident(Ident { sym, .. }) = &attr.name && sym == "ref" {
-        self.immutable = false
-      }
+    if let JSXAttrName::Ident(Ident { sym, .. }) = &attr.name
+      && sym == "ref"
+    {
+      self.immutable = false
+    }
 
     attr.visit_mut_children_with(self);
   }

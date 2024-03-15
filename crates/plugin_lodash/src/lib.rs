@@ -10,8 +10,8 @@ use swc_core::{
   ecma::{
     ast::{
       CallExpr, ExportNamedSpecifier, ExportSpecifier, Expr, Id, Ident, ImportDecl,
-      ImportDefaultSpecifier, ImportSpecifier, MemberProp, Module, ModuleDecl, ModuleExportName,
-      ModuleItem, NamedExport, Str,
+      ImportDefaultSpecifier, ImportPhase, ImportSpecifier, MemberProp, Module, ModuleDecl,
+      ModuleExportName, ModuleItem, NamedExport, Str,
     },
     atoms::JsWord,
     utils::undefined,
@@ -47,20 +47,23 @@ pub fn plugin_lodash<'a>(
     }
   });
 
-  let (mappings, pkg_map) = if let Some(cache_key) = &plugin_context.config_hash && CACHE.contains_key(cache_key) {
+  let (mappings, pkg_map) = if let Some(cache_key) = &plugin_context.config_hash
+    && CACHE.contains_key(cache_key)
+  {
     let cache_item = CACHE.get(cache_key).unwrap();
     (cache_item.mappings.clone(), cache_item.pkg_map.clone())
   } else {
-    let mappings = Arc::new(
-      build_mappings(ids.iter().map(|s| s.as_str()), &config.cwd).unwrap()
-    );
+    let mappings = Arc::new(build_mappings(ids.iter().map(|s| s.as_str()), &config.cwd).unwrap());
     let pkg_map = Arc::new(build_pkg_map(&config.cwd, &mappings));
 
     if let Some(k) = &plugin_context.config_hash {
-      CACHE.insert(k.clone(), CacheItem {
-        mappings: mappings.clone(),
-        pkg_map: pkg_map.clone(),
-      });
+      CACHE.insert(
+        k.clone(),
+        CacheItem {
+          mappings: mappings.clone(),
+          pkg_map: pkg_map.clone(),
+        },
+      );
     }
     (mappings, pkg_map)
   };
@@ -134,6 +137,7 @@ impl PluginLodash {
       }),
       type_only: false,
       with: None,
+      phase: ImportPhase::Evaluation,
     });
 
     self.lodash_vars.insert(local.clone());

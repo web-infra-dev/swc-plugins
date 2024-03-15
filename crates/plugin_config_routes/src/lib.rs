@@ -81,8 +81,11 @@ impl VisitMut for ConfigRoutes {
   }
 
   fn visit_mut_prop(&mut self, prop: &mut Prop) {
-    if !self.lazy && let Some(module) = get_target_prop(prop, "module")  {
-      module.value = Box::new(quote!("require($value)" as Expr, value: Expr = module.value.as_ref().clone()));  
+    if !self.lazy
+      && let Some(module) = get_target_prop(prop, "module")
+    {
+      module.value =
+        Box::new(quote!("require($value)" as Expr, value: Expr = module.value.as_ref().clone()));
     }
 
     if let Some(component) = get_target_prop(prop, "component") {
