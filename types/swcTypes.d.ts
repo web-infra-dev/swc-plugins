@@ -578,6 +578,10 @@ export interface TransformConfig {
    * https://swc.rs/docs/configuring-swc.html#jsctransformdecoratormetadata
    */
   decoratorMetadata?: boolean;
+  /**
+   * https://swc.rs/docs/configuration/compilation#jsctransformdecoratorversion
+   */
+  decoratorVersion?: "2021-12" | "2022-03";
   treatConstEnumAsEnum?: boolean;
   useDefineForClassFields?: boolean;
 }
