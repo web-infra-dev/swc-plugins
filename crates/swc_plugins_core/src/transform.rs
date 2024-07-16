@@ -14,10 +14,8 @@ use swc_core::{
   },
   ecma::{
     ast::EsVersion,
-    parser::{EsConfig, Syntax, TsConfig},
+    parser::{EsSyntax, Syntax, TsSyntax},
     visit::Fold,
-    // TODO current version too low
-    // transforms::module::common_js::Config
   },
 };
 use swc_plugins_utils::PluginContext;
@@ -93,7 +91,7 @@ where
             handler,
             swc_config.config.jsc.target.unwrap_or(EsVersion::Es2022),
             swc_config.config.jsc.syntax.unwrap_or_else(|| {
-              Syntax::Typescript(TsConfig {
+              Syntax::Typescript(TsSyntax {
                 tsx: true,
                 decorators: true,
                 ..Default::default()
@@ -157,7 +155,7 @@ fn adapt_syntax(filename: &str, config: &mut Options) {
           unreachable!()
         };
 
-        Some(Syntax::Es(EsConfig {
+        Some(Syntax::Es(EsSyntax {
           jsx: ts.tsx,
           decorators: ts.decorators,
           ..Default::default()

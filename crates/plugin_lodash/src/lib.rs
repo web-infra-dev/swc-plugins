@@ -14,7 +14,6 @@ use swc_core::{
       ModuleExportName, ModuleItem, NamedExport, Str,
     },
     atoms::JsWord,
-    utils::undefined,
     visit::{as_folder, noop_visit_mut_type, Fold, VisitMut, VisitMutWith},
   },
   quote,
@@ -391,7 +390,7 @@ impl<'a> VisitMut for PostProcess<'a> {
         if let Some(id) = &self.in_lodash_call {
           *expr = quote!("$id.placeholder" as Expr, id: Ident = id.clone().into());
         } else {
-          *expr = *undefined(DUMMY_SP);
+          *expr = quote!("void 0" as Expr);
         }
       }
     }
