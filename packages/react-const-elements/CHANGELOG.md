@@ -1,5 +1,11 @@
 # @modern-js/swc-react-const-elements-plugin
 
+## 0.6.8
+
+### Patch Changes
+
+- 11321d0: chore: bump deps
+
 ## 0.6.7
 
 ### Patch Changes
