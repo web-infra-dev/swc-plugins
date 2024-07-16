@@ -125,6 +125,7 @@ fn codegen(
       src_map.to_writer(&mut output).unwrap();
       String::from_utf8(output).unwrap()
     }),
+    output: None,
   })
 }
 

@@ -18,6 +18,8 @@ impl IntoRawConfig<PackageConfig> for PackageConfigNapi {
       transform: Transform::String(self.transform),
       prevent_full_import: self.prevent_full_import,
       skip_default_conversion: self.skip_default_conversion,
+      handle_default_import: true,
+      handle_namespace_import: true,
     })
   }
 }

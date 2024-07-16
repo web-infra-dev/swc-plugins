@@ -106,7 +106,7 @@ impl JsCompiler {
       }
       .transform()
       .map(|output| {
-        let TransformOutput { code, map } = output;
+        let TransformOutput { code, map, .. } = output;
         Output { code, map }
       })
     })
@@ -139,7 +139,7 @@ pub fn minify_sync(
   Minifier::new(config, filename, code, map)
     .minify()
     .map(|output| {
-      let TransformOutput { code, map } = output;
+      let TransformOutput { code, map, .. } = output;
       Output { code, map }
     })
 }
