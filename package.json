@@ -22,7 +22,7 @@
     "vitest": "^0.24.4"
   },
   "peerDependencies": {
-    "@swc/helpers": "0.5.3"
+    "@swc/helpers": ">=0.5.3"
   },
   "engines": {
     "node": ">=14.17.6"
