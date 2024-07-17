@@ -1,5 +1,12 @@
 # @modern-js/swc-react-const-elements-plugin
 
+## 0.6.9
+
+### Patch Changes
+
+- 8feaad9: chore: bump deps
+- bff785b: refactor: make @swc/helpers an optional peer
+
 ## 0.6.8
 
 ### Patch Changes
