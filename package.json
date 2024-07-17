@@ -24,6 +24,11 @@
   "peerDependencies": {
     "@swc/helpers": ">=0.5.3"
   },
+  "peerDependenciesMeta": {
+    "@swc/helpers": {
+      "optional": true
+    }
+  },
   "engines": {
     "node": ">=14.17.6"
   },
