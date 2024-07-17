@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@swc/helpers':
-        specifier: 0.5.3
+        specifier: '>=0.5.3'
         version: 0.5.3
     devDependencies:
       '@changesets/cli':
