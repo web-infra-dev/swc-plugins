@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.6.10
+
+### Patch Changes
+
+- 5781b1a: chore: fix release ci
+
 ## 0.6.9
 
 ### Patch Changes
