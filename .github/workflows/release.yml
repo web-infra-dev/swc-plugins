@@ -396,3 +396,18 @@ jobs:
 
       - name: Prepare WASM plugins
         run: pnpm run build:wasm
+
+      - name: Release
+        uses: web-infra-dev/actions@v2
+        with:
+          # this expects you to have a script called release which does a build for your packages and calls changeset publish
+          version: latest
+          type: "release"
+          branch: ${{ github.ref_name }}
+          tools: "changeset"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          REF: ${{ github.ref }}
+          ONLY_RELEASE_TAG: true
