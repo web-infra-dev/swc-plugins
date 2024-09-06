@@ -1,5 +1,11 @@
 # @modern-js/swc-plugins
 
+## 0.6.11
+
+### Patch Changes
+
+- 5573d3a: feat: bump swc_core
+
 ## 0.6.10
 
 ### Patch Changes
