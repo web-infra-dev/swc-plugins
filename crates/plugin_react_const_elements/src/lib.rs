@@ -122,7 +122,7 @@ impl ReactConstElements {
               definite: true,
             })
             .collect(),
-            ..Default::default()
+          ..Default::default()
         })))),
       );
     }

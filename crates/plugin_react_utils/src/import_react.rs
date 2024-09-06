@@ -38,10 +38,7 @@ impl VisitMut for ImportReact {
       let local_span = Span::dummy_with_cmt();
       let local_ctxt = SyntaxContext::empty().apply_mark(self.top_level_mark);
 
-      module.visit_mut_children_with(&mut change_ident_syntax_context(
-        local_ctxt,
-        "React".into(),
-      ));
+      module.visit_mut_children_with(&mut change_ident_syntax_context(local_ctxt, "React".into()));
 
       let body = &mut module.body;
       let dec = ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {

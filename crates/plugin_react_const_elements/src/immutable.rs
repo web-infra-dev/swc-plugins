@@ -2,8 +2,8 @@ use swc_core::{
   common::DUMMY_SP,
   ecma::{
     ast::{
-      AssignExpr, AssignOp, AssignTarget, BinExpr, BinaryOp, BindingIdent, Expr, Ident, IdentName, JSXAttr,
-      JSXAttrName, JSXElement, JSXElementChild, JSXElementName, JSXExpr, JSXExprContainer,
+      AssignExpr, AssignOp, AssignTarget, BinExpr, BinaryOp, BindingIdent, Expr, Ident, IdentName,
+      JSXAttr, JSXAttrName, JSXElement, JSXElementChild, JSXElementName, JSXExpr, JSXExprContainer,
       SimpleAssignTarget, SpreadElement,
     },
     visit::{noop_visit_mut_type, VisitMut, VisitMutWith},

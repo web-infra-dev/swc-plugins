@@ -2,7 +2,10 @@ use std::{path::PathBuf, sync::Arc};
 
 use anyhow::{anyhow, Result};
 use swc_core::{
-  base::{config::JsMinifyOptions, try_with_handler, Compiler, HandlerOpts, JsMinifyExtras, TransformOutput},
+  base::{
+    config::JsMinifyOptions, try_with_handler, Compiler, HandlerOpts, JsMinifyExtras,
+    TransformOutput,
+  },
   common::{
     comments::Comments, errors::ColorConfig, source_map::SourceMapGenConfig, sync::Lazy, FileName,
     Globals, SourceFile, SourceMap, GLOBALS,

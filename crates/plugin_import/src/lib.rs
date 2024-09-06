@@ -416,10 +416,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
           vec![ImportSpecifier::Default(ImportDefaultSpecifier {
             span: DUMMY_SP,
             local: Ident {
-              span: Span::new(
-                BytePos::DUMMY,
-                BytePos::DUMMY,
-              ),
+              span: Span::new(BytePos::DUMMY, BytePos::DUMMY),
               ctxt: SyntaxContext::from_u32(js_source.mark),
               sym: JsWord::from(
                 js_source
@@ -446,10 +443,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
               None
             },
             local: Ident {
-              span: Span::new(
-                BytePos::DUMMY,
-                BytePos::DUMMY,
-              ),
+              span: Span::new(BytePos::DUMMY, BytePos::DUMMY),
               ctxt: SyntaxContext::from_u32(js_source.mark),
               sym: JsWord::from(
                 js_source
