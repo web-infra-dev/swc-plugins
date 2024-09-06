@@ -1,5 +1,5 @@
 use swc_core::{
-  common::{Mark, Span, DUMMY_SP},
+  common::{Mark, Span, SyntaxContext, DUMMY_SP},
   ecma::{
     ast::{
       Ident, ImportDecl, ImportDefaultSpecifier, ImportPhase, ImportSpecifier, Module, ModuleDecl,
@@ -35,10 +35,11 @@ impl VisitMut for ImportReact {
     }
 
     if need_import {
-      let local_span = Span::dummy_with_cmt().apply_mark(self.top_level_mark);
+      let local_span = Span::dummy_with_cmt();
+      let local_ctxt = SyntaxContext::empty().apply_mark(self.top_level_mark);
 
       module.visit_mut_children_with(&mut change_ident_syntax_context(
-        local_span.ctxt,
+        local_ctxt,
         "React".into(),
       ));
 
@@ -48,9 +49,11 @@ impl VisitMut for ImportReact {
         specifiers: vec![ImportSpecifier::Default(ImportDefaultSpecifier {
           span: DUMMY_SP,
           local: Ident {
+            ctxt: local_ctxt,
             span: local_span,
             sym: JsWord::from("React"),
             optional: false,
+            ..Default::default()
           },
         })],
         src: Box::new(Str {

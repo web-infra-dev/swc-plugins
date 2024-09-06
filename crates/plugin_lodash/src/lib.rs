@@ -6,7 +6,7 @@ use rustc_hash::{FxHashMap as HashMap, FxHashSet as HashSet};
 use serde::Deserialize;
 use swc_core::{
   self,
-  common::{sync::Lazy, Mark, Span, DUMMY_SP},
+  common::{sync::Lazy, Mark, Span, SyntaxContext, DUMMY_SP},
   ecma::{
     ast::{
       CallExpr, ExportNamedSpecifier, ExportSpecifier, Expr, Id, Ident, ImportDecl,
@@ -262,13 +262,14 @@ impl VisitMut for PluginLodash {
             let local_name = format!("_lodash_{}{}", &prop.sym, self.imported_names.len());
             let local = Ident::new(
               JsWord::from(local_name),
-              Span::dummy_with_cmt().apply_mark(self.top_level_mark),
+              Span::dummy_with_cmt(),
+              SyntaxContext::empty().apply_mark(self.top_level_mark),
             );
 
             let local = self.add_import(
               source.clone(),
               local.to_id(),
-              Some(Ident::new(prop.sym.clone(), DUMMY_SP).to_id()),
+              Some(Ident::new(prop.sym.clone(), DUMMY_SP, Default::default()).to_id()),
             );
             *expr = Expr::Ident(local.into());
           }

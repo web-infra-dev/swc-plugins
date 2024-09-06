@@ -122,6 +122,7 @@ impl ReactConstElements {
               definite: true,
             })
             .collect(),
+            ..Default::default()
         })))),
       );
     }
@@ -161,6 +162,7 @@ impl VisitMut for ReactConstElements {
           span: DUMMY_SP,
           arg: Some(expr.clone()),
         })],
+        ..Default::default()
       });
     }
 
@@ -197,7 +199,7 @@ impl State {
     Self {
       vars: Default::default(),
       candidates: Default::default(),
-      ctxt: DUMMY_SP.apply_mark(Mark::new()).ctxt,
+      ctxt: SyntaxContext::empty().apply_mark(Mark::new()),
       next_id: 0,
       used_names: Default::default(),
       immutable_ids: Default::default(),
@@ -219,7 +221,7 @@ impl State {
     }
 
     self.used_names.insert(name.clone());
-    Ident::new(name.into(), DUMMY_SP.with_ctxt(self.ctxt))
+    Ident::new(name.into(), DUMMY_SP, self.ctxt)
   }
 }
 

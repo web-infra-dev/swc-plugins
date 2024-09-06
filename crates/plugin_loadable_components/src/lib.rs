@@ -321,11 +321,13 @@ where
             span: DUMMY_SP,
             arg: Some(Box::new(self.replace_chunk_name(import))),
           })],
+          ..Default::default()
         }),
         is_generator: false,
         is_async: false,
         type_params: Default::default(),
         return_type: Default::default(),
+        ..Default::default()
       }),
     }
   }
@@ -364,6 +366,7 @@ where
         is_async: false,
         type_params: Default::default(),
         return_type: Default::default(),
+        ..Default::default()
       }),
     }
   }
@@ -405,6 +408,7 @@ where
         is_async: false,
         type_params: Default::default(),
         return_type: Default::default(),
+        ..Default::default()
       }),
     }
   }
@@ -440,6 +444,7 @@ where
         is_async: false,
         type_params: Default::default(),
         return_type: Default::default(),
+        ..Default::default()
       }),
     }
   }
@@ -476,6 +481,7 @@ where
         is_async: false,
         type_params: Default::default(),
         return_type: Default::default(),
+        ..Default::default()
       }),
     }
   }
@@ -555,6 +561,7 @@ where
         "-".as_arg(),
       ],
       type_args: Default::default(),
+      ..Default::default()
     })
   }
 

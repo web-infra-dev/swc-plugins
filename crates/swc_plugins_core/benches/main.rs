@@ -3,7 +3,7 @@
 use std::{env::current_dir, fs, path::Path, process::Termination, sync::Arc};
 
 use swc_core::{
-  base::{try_with_handler, Compiler},
+  base::{try_with_handler, Compiler, JsMinifyExtras},
   common::{FileName, SourceMap, GLOBALS},
 };
 use swc_plugins_core::minify;
@@ -72,7 +72,7 @@ fn swc_core_minify(bencher: &mut test::Bencher) -> impl Termination {
   let cm = Arc::new(SourceMap::new(Default::default()));
   let compiler = Compiler::new(cm.clone());
   let fm = cm.new_source_file(
-    FileName::Anon,
+    Arc::new(FileName::Anon),
     read_to_string(
       &current_dir()
         .unwrap()
@@ -92,7 +92,7 @@ fn swc_core_minify(bencher: &mut test::Bencher) -> impl Termination {
   bencher.iter(|| {
     GLOBALS.set(&Default::default(), || {
       try_with_handler(cm.clone(), Default::default(), |handler| {
-        compiler.minify(fm.clone(), handler, &config)
+        compiler.minify(fm.clone(), handler, &config, JsMinifyExtras::default())
       })
       .unwrap();
     })

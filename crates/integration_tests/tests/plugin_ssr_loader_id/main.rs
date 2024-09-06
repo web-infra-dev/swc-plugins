@@ -22,7 +22,7 @@ fn ssr_loader_id() {
         },
         &PluginContext {
           cm: cm.clone(),
-          file: cm.new_source_file(FileName::Anon, "".into()),
+          file: cm.new_source_file(Arc::new(FileName::Anon), "".into()),
           top_level_mark: Mark::new(),
           unresolved_mark: Mark::new(),
           comments: SingleThreadedComments::default(),
