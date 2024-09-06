@@ -49,8 +49,7 @@ impl VisitMut for ImportReact {
             ctxt: local_ctxt,
             span: local_span,
             sym: JsWord::from("React"),
-            optional: false,
-            ..Default::default()
+            optional: false
           },
         })],
         src: Box::new(Str {

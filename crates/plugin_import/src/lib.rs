@@ -425,8 +425,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
                   .unwrap_or(js_source.default_spec.clone())
                   .as_str(),
               ),
-              optional: false,
-              ..Default::default()
+              optional: false
             },
           })]
         } else {
