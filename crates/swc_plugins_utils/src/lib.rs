@@ -21,7 +21,7 @@ pub struct ClearMark;
 
 impl VisitMut for ClearMark {
   fn visit_mut_ident(&mut self, ident: &mut Ident) {
-    ident.span.ctxt = SyntaxContext::empty();
+    ident.ctxt = SyntaxContext::empty();
   }
 }
 
@@ -88,7 +88,7 @@ impl ChangeIdentSyntaxContext {
 impl VisitMut for ChangeIdentSyntaxContext {
   fn visit_mut_ident(&mut self, ident: &mut Ident) {
     if ident.sym == self.name {
-      ident.span = ident.span.with_ctxt(self.ctxt);
+      ident.ctxt = self.ctxt;
     }
   }
 }
@@ -428,7 +428,7 @@ pub fn match_member(expr: &Expr, template: &str) -> bool {
     if let Expr::Member(member_expr) = expr {
       match &member_expr.prop {
         MemberProp::Ident(ident) => ident.sym == *curr.last().unwrap(),
-        MemberProp::PrivateName(private_name) => private_name.id.sym == *curr.last().unwrap(),
+        MemberProp::PrivateName(private_name) => private_name.name == *curr.last().unwrap(),
         MemberProp::Computed(computed) => {
           if let Expr::Lit(lit) = computed.expr.borrow() {
             match lit {

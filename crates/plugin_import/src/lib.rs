@@ -331,7 +331,7 @@ impl<'a> VisitMut for ImportPlugin<'a> {
                 let as_name: Option<String> = imported.is_some().then(|| s.local.sym.to_string());
                 let ident: String = imported.unwrap_or_else(|| s.local.sym.to_string());
 
-                let mark = s.local.span.ctxt.as_u32();
+                let mark = s.local.ctxt.as_u32();
 
                 if ident_referenced(&s.local) {
                   let use_default_import = child_config.transform_to_default_import.unwrap_or(true);
@@ -416,11 +416,8 @@ impl<'a> VisitMut for ImportPlugin<'a> {
           vec![ImportSpecifier::Default(ImportDefaultSpecifier {
             span: DUMMY_SP,
             local: Ident {
-              span: Span::new(
-                BytePos::DUMMY,
-                BytePos::DUMMY,
-                SyntaxContext::from_u32(js_source.mark),
-              ),
+              span: Span::new(BytePos::DUMMY, BytePos::DUMMY),
+              ctxt: SyntaxContext::from_u32(js_source.mark),
               sym: JsWord::from(
                 js_source
                   .as_name
@@ -439,16 +436,14 @@ impl<'a> VisitMut for ImportPlugin<'a> {
                 span: DUMMY_SP,
                 sym: JsWord::from(js_source.default_spec.as_str()),
                 optional: false,
+                ..Default::default()
               }))
             } else {
               None
             },
             local: Ident {
-              span: Span::new(
-                BytePos::DUMMY,
-                BytePos::DUMMY,
-                SyntaxContext::from_u32(js_source.mark),
-              ),
+              span: Span::new(BytePos::DUMMY, BytePos::DUMMY),
+              ctxt: SyntaxContext::from_u32(js_source.mark),
               sym: JsWord::from(
                 js_source
                   .as_name

@@ -2,7 +2,10 @@ use std::{path::PathBuf, sync::Arc};
 
 use anyhow::{anyhow, Result};
 use swc_core::{
-  base::{config::JsMinifyOptions, try_with_handler, Compiler, HandlerOpts, TransformOutput},
+  base::{
+    config::JsMinifyOptions, try_with_handler, Compiler, HandlerOpts, JsMinifyExtras,
+    TransformOutput,
+  },
   common::{
     comments::Comments, errors::ColorConfig, source_map::SourceMapGenConfig, sync::Lazy, FileName,
     Globals, SourceFile, SourceMap, GLOBALS,
@@ -33,7 +36,7 @@ pub fn minify(
     } else {
       FileName::Real(PathBuf::from(filename))
     };
-    let fm = cm.new_source_file(filename, src.to_string());
+    let fm = cm.new_source_file(Arc::new(filename), src.to_string());
 
     try_with_handler(
       cm,
@@ -41,7 +44,7 @@ pub fn minify(
         color: ColorConfig::Never,
         skip_filename: false,
       },
-      |handler| COMPILER.minify(fm, handler, config),
+      |handler| COMPILER.minify(fm, handler, config, JsMinifyExtras::default()),
     )
   })
 }
@@ -50,7 +53,7 @@ pub fn minify_css(config: &CssMinifyOptions, filename: &str, src: &str) -> Resul
   GLOBALS.set(&Globals::default(), || {
     let cm = Arc::new(SourceMap::default());
 
-    let fm = cm.new_source_file(FileName::Real(filename.into()), src.into());
+    let fm = cm.new_source_file(Arc::new(FileName::Real(filename.into())), src.into());
 
     let mut ast = parse(filename, fm, None)?;
     swc_minify_css(&mut ast, Default::default());

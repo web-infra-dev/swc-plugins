@@ -69,7 +69,7 @@ where
             FileName::Real(PathBuf::from(filename.clone()))
           };
 
-          let fm = cm.new_source_file(cm_filename, code.to_string());
+          let fm = cm.new_source_file(Arc::new(cm_filename), code.to_string());
 
           let mut swc_config = swc_config.clone();
           swc_config.config.input_source_map = input_source_map.map(config::InputSourceMap::Str);

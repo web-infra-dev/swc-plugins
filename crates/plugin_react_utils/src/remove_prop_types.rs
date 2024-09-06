@@ -10,7 +10,7 @@ use swc_core::{
     ast::{
       AssignExpr, BlockStmt, Class, ClassDecl, ClassExpr, ClassMember, ClassProp, Decl,
       DefaultDecl, ExportDecl, ExportDefaultDecl, ExportDefaultExpr, Expr, ExprStmt, FnDecl, Id,
-      Ident, ImportDecl, ImportSpecifier, Module, ModuleDecl, ModuleItem, PropName,
+      Ident, IdentName, ImportDecl, ImportSpecifier, Module, ModuleDecl, ModuleItem, PropName,
       SimpleAssignTarget, Stmt, VarDecl,
     },
     atoms::JsWord,
@@ -224,7 +224,7 @@ where
           if !property.is_static {
             continue;
           }
-          if property.key.id.sym == PROP_TYPES {
+          if property.key.name == PROP_TYPES {
             removal = Some((idx, property.value.clone()));
             break;
           }
@@ -241,7 +241,7 @@ where
         Mode::Wrap => {
           class.body[removal_idx] = ClassMember::ClassProp(ClassProp {
             span: DUMMY_SP,
-            key: PropName::Ident(Ident::new(JsWord::from(PROP_TYPES), DUMMY_SP)),
+            key: PropName::Ident(IdentName::new(JsWord::from(PROP_TYPES), DUMMY_SP)),
             value: Some(quote!(
               r#"process.env.NODE_ENV !== "production" ? $obj : {}"# as Box<Expr>,
               obj: Expr = old_val.map(|item| *item).unwrap_or(quote!("{}" as Expr))
@@ -276,7 +276,7 @@ where
           } else {
             class.body[removal_idx] = ClassMember::ClassProp(ClassProp {
               span: DUMMY_SP,
-              key: PropName::Ident(Ident::new(JsWord::from(PROP_TYPES), DUMMY_SP)),
+              key: PropName::Ident(IdentName::new(JsWord::from(PROP_TYPES), DUMMY_SP)),
               value: Some(quote!(
                 r#"process.env.NODE_ENV !== "production" ? $obj : void 0"# as Box<Expr>,
                 obj: Expr = old_val.map(|item| *item).unwrap_or(quote!("{}" as Expr))

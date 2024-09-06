@@ -428,6 +428,10 @@ export interface EnvConfig {
    * Enable all transforms
    */
   forceAllTransforms?: boolean;
+  /**
+   * Enable bugfix passes.
+   */
+  bugfixes?: boolean;
 }
 export interface JscConfig {
   loose?: boolean;

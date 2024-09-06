@@ -2,8 +2,8 @@ use swc_core::{
   common::DUMMY_SP,
   ecma::{
     ast::{
-      AssignExpr, AssignOp, AssignTarget, BinExpr, BinaryOp, BindingIdent, Expr, Ident, JSXAttr,
-      JSXAttrName, JSXElement, JSXElementChild, JSXElementName, JSXExpr, JSXExprContainer,
+      AssignExpr, AssignOp, AssignTarget, BinExpr, BinaryOp, BindingIdent, Expr, Ident, IdentName,
+      JSXAttr, JSXAttrName, JSXElement, JSXElementChild, JSXElementName, JSXExpr, JSXExprContainer,
       SimpleAssignTarget, SpreadElement,
     },
     visit::{noop_visit_mut_type, VisitMut, VisitMutWith},
@@ -181,7 +181,7 @@ impl<'a> VisitMut for Immutable<'a> {
   noop_visit_mut_type!();
 
   fn visit_mut_jsx_attr(&mut self, attr: &mut JSXAttr) {
-    if let JSXAttrName::Ident(Ident { sym, .. }) = &attr.name
+    if let JSXAttrName::Ident(IdentName { sym, .. }) = &attr.name
       && sym == "ref"
     {
       self.immutable = false
